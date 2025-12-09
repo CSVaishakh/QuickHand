@@ -18,6 +18,11 @@
     "postgres": "^3.4.7"
   },
   "scripts": {
-    "dev": "bun run --hot index.ts"
+    "dev": "bun run --hot index.ts",
+    "db:start": "docker compose QuickHand-postgres",
+    "db:stop": "docker stop QuickHand-postgres",
+    "db:shell": "docker exec -it QuickHand-postgres psql -U user -d QuickHand-DB",
+    "db:generate": "bun drizzle-kit generate --config src/db/drizzle.config.ts",
+    "db:push": "bun drizzle-kit push --config src/db/drizzle.config.ts"
   }
 }
