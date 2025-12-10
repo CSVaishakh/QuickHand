@@ -1,6 +1,6 @@
-import { betterAuth, string } from "better-auth";
+import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "../../db";
+import { db } from "../db";
 
 export const  auth = betterAuth({
     database: drizzleAdapter(db,{
@@ -8,13 +8,14 @@ export const  auth = betterAuth({
     }),
     emailAndPassword: {
         enabled: true,
+        autoSignIn: false,  
     },
     user: {
         additionalFields: {
             role: {
                 type: "string",
                 required: true,
-                input: false,
+                input: true,
             },
             category: {
                 type: "string",
@@ -23,6 +24,10 @@ export const  auth = betterAuth({
                 defaultValue: null,
             },
         },
+    },
+    basePath: "/auth",
+    advanced: {
+        disableOriginCheck: true
     },
 });
 
