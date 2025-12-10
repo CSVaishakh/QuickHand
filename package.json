@@ -19,8 +19,8 @@
   },
   "scripts": {
     "dev": "bun run --hot index.ts",
-    "db:start": "docker compose QuickHand-postgres",
-    "db:stop": "docker stop QuickHand-postgres",
+    "db:start": "docker compose -f src/db/docker-compose.yml up -d postgres",
+    "db:stop": "docker compose -f src/db/docker-compose.yml stop postgres",
     "db:shell": "docker exec -it QuickHand-postgres psql -U user -d QuickHand-DB",
     "db:generate": "bun drizzle-kit generate --config src/db/drizzle.config.ts",
     "db:push": "bun drizzle-kit push --config src/db/drizzle.config.ts"
