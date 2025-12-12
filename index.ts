@@ -1,12 +1,15 @@
 import { serve } from "bun";
 import { Hono } from "hono";
-import { auth } from "./src/lib/auth";
+import { auth } from "./src/lib/auth/auth";
+import customerRouter from "./src/routes/customer.router";
 
 const app = new Hono();
 
 app.on(["POST", "GET"], "/auth/*", (c) => auth.handler(c.req.raw));
 
-app.get('/', (c) => c.text('Hello World!'))
+app.get('/test', (c) => c.text('Hello World!Server is working'))
+
+app.route('/customer', customerRouter)
 
 const port = process.env.PORT
 
