@@ -11,7 +11,7 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "better-auth": "^1.4.5",
+    "better-auth": "^1.4.6",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.0",
     "hono": "^4.10.7",
@@ -23,6 +23,7 @@
     "db:stop": "docker compose -f src/db/docker-compose.yml stop postgres",
     "db:shell": "docker exec -it QuickHand-postgres psql -U user -d QuickHand-DB",
     "db:generate": "bun drizzle-kit generate --config src/db/drizzle.config.ts",
-    "db:push": "bun drizzle-kit push --config src/db/drizzle.config.ts"
+    "db:push": "bun drizzle-kit push --config src/db/drizzle.config.ts",
+    "db:reset": "docker compose -f src/db/docker-compose.yml down -v && docker compose -f src/db/docker-compose.yml up -d postgres && bun run db:generate && bun run db:push"
   }
 }
