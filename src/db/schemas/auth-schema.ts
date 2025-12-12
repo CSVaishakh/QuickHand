@@ -13,7 +13,7 @@ export const user = pgTable("user", {
     .defaultNow()
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
-  role: text("role").notNull().$type<"customer" | "handyman">(),
+  role: text("role").$type<"customer" | "handyman">(),
   category: text("category").$type<"plumber" | "electrician" | "carpenter" | "mason" | "mechanic" | "havc" | "landscaper" | "cleaning">(),
 });
 
