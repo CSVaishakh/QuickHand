@@ -1,10 +1,12 @@
 import { eq } from "drizzle-orm";
 import { db } from "../db";
-import { user } from "../db/schema";
-import { type signupRequest, type signupResponse } from "../lib/types";
+import { user as userTable} from "../db/schema";
+import { type listed_job, type signupRequest, type user, type Variables } from "../lib/types/types";
 import { Hono } from "hono";
+import { requireAuth } from "../lib/auth/auth-middleware";
+import { findRecordsInJobs, listJob } from "../lib/queries";
 
-const customerRouter = new Hono();
+const customerRouter = new Hono<{Variables: Variables}>();
 
 customerRouter.post('/sign-up', async (c) => {
     const body: signupRequest = await c.req.json();
@@ -23,15 +25,15 @@ customerRouter.post('/sign-up', async (c) => {
         })
     });
 
-    const data = await response.json() as {token: string, user: signupResponse};
+    const data = await response.json() as {token: string, user: user};
     const id  = data.user.id;
     const token = data.token;
 
     if(data) {
         const [updatedUser] = await db
-            .update(user)
+            .update(userTable)
             .set({ role: 'customer'})
-            .where(eq(user.id, id))
+            .where(eq(userTable.id, id))
             .returning()
 
         return c.json({
@@ -40,7 +42,57 @@ customerRouter.post('/sign-up', async (c) => {
         })
     }
 
-    return c.json({ });
+    return c.json({ error: 'Signup Failed' }, 400 );
 })
+
+customerRouter.get('/dashboard',requireAuth, async (c) => {
+    const user = c.var.user
+
+    const jobs = await findRecordsInJobs('customer', user.id)
+
+    const completeJobs = jobs.filter(job => job.job_status === "Completed");
+    const incompleteJobs = jobs.filter(job => job.job_status === "NotCompleted");
+
+    const completeJobRevenue = completeJobs.reduce((sum,job) => sum + job.cost, 0) 
+    const incompleteJobRevenue = incompleteJobs.reduce((sum,job) => sum + job.cost, 0)
+    
+    const handymen = jobs.map(job => job.handyman)
+
+    c.set("jobs",jobs)
+
+    return c.json({completeJobs, completeJobRevenue, incompleteJobs, incompleteJobRevenue, handymen});
+})
+
+customerRouter.get('/create-job', (c) => {
+    
+
+    return c.json({})
+})
+
+customerRouter.post('/list-job', async (c) => {
+
+    const body: listed_job = await c.req.json();
+    const { id, name, customer, pay_range, job_category} = body;
+
+    const job: listed_job = {
+        id: id,
+        name: name,
+        customer: customer,
+        pay_range: pay_range,
+        job_category: job_category
+    };
+
+    const response = await listJob(job);
+
+    if (!response){
+        return c.json({error: "Job not listed"}, 400);
+    }
+
+    return c.json({
+        message: "Job listed successfully",
+        response
+    }, 200);
+})
+
 
 export default customerRouter;
