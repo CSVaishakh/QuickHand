@@ -22,6 +22,27 @@
       "when": 1765522519966,
       "tag": "0002_steep_vengeance",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1765771714760,
+      "tag": "0003_dusty_swordsman",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1765773697948,
+      "tag": "0004_tired_puma",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1765779737703,
+      "tag": "0005_known_lyja",
+      "breakpoints": true
     }
   ]
 }
