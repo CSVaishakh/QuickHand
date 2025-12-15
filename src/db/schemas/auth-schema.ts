@@ -14,7 +14,7 @@ export const user = pgTable("user", {
     .$onUpdate(() => /* @__PURE__ */ new Date())
     .notNull(),
   role: text("role").$type<"customer" | "handyman">(),
-  category: text("category").$type<"plumber" | "electrician" | "carpenter" | "mason" | "mechanic" | "havc" | "landscaper" | "cleaning">(),
+  category: text("category").$type<"plumber" | "electrician" | "carpenter" | "mason" | "mechanic" | "havc_technician" | "landscaper" | "cleaning">(),
 });
 
 export const session = pgTable(
