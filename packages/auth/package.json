@@ -1,6 +1,12 @@
 {
-  "name": "auth",
-  "private": true,
+  "name": "@repo/auth",
+  "module": "index.ts",
+  "type": "module",
+  "dependencies": {
+    "better-auth": "^1.4.6",
+    "hono": "^4.10.7",
+    "@repo/db": "workspace:*"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   }

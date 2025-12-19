@@ -2,12 +2,16 @@
   "name": "backend",
   "module": "index.ts",
   "type": "module",
-  "private": true,
-  "devDependencies": {
-    "@types/bun": "latest",
-    "drizzle-kit": "^0.31.8"
+  "scripts": {
+    "dev": "bun run --hot index.ts"
   },
-  "peerDependencies": {
-    "typescript": "^5"
+  "dependencies": {
+    "hono": "^4.10.7",
+    "drizzle-orm": "^0.45.0",
+    "@repo/auth": "workspace:*",
+    "@repo/db": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "latest"
   }
 }

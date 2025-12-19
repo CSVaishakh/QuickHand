@@ -1,6 +1,6 @@
 import { serve } from "bun";
 import { Hono } from "hono";
-import { auth } from "./src/lib/auth/auth";
+import { auth } from "@repo/auth";
 import customerRouter from "./src/routes/customer.router";
 import handymanRouter from "./src/routes/handymanRouter";
 

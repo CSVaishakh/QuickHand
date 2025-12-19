@@ -1,4 +1,4 @@
-import type { Session } from "better-auth";
+import type { Session } from "@repo/auth";
 
 export type signupRequest = {
     name: string,

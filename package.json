@@ -1,24 +1,24 @@
 {
   "name": "quickhand-monorepo",
   "private": true,
-  "workspaces": ["apps/*", "packages/*"],
-  "dependencies": {
-    "better-auth": "^1.4.6",
-    "dotenv": "^17.2.3",
-    "drizzle-orm": "^0.45.0",
-    "hono": "^4.10.7",
-    "postgres": "^3.4.7"
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "bun run --hot apps/backend/index.ts",
+    "db:start": "docker compose -f packages/db/docker-compose.yml up -d postgres",
+    "db:stop": "docker compose -f packages/db/docker-compose.yml stop postgres",
+    "db:shell": "docker exec -it QuickHand-postgres psql -U user -d QuickHand-DB",
+    "db:generate": "bun run --cwd packages/db generate",
+    "db:push": "bun run --cwd packages/db push",
+    "db:studio": "bun run --cwd packages/db studio",
+    "db:reset": "docker compose -f packages/db/docker-compose.yml down -v && docker compose -f packages/db/docker-compose.yml up -d postgres && bun run db:generate && bun run db:push"
   },
   "devDependencies": {
     "drizzle-kit": "^0.31.8"
   },
-  "scripts": {
-    "dev": "bun run --hot apps/api/index.ts",
-    "db:start": "docker compose -f packages/db/docker-compose.yml up -d postgres",
-    "db:stop": "docker compose -f packages/db/docker-compose.yml stop postgres",
-    "db:shell": "docker exec -it QuickHand-postgres psql -U user -d QuickHand-DB",
-    "db:generate": "bun drizzle-kit generate --config packages/db/drizzle.config.ts",
-    "db:push": "bun drizzle-kit push --config packages/db/drizzle.config.ts",
-    "db:reset": "docker compose -f packages/db/docker-compose.yml down -v && docker compose -f packages/db/docker-compose.yml up -d postgres && bun run db:generate && bun run db:push"
+  "overrides": {
+    "drizzle-orm": "^0.45.0"
   }
 }
