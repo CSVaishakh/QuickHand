@@ -1,6 +1,6 @@
-import { db } from "../db";
+import { db } from "../../../../packages/db";
 import { eq } from "drizzle-orm";
-import { jobs, listed_jobs, user } from "../db/schema";
+import { jobs, listed_jobs, user } from "../../../../packages/db/schema";
 import type { listed_job } from "./types/types";
 
 export const findRecordsInJobs = async (userType: "customer" | "handyman", userId: string) => {

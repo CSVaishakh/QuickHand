@@ -1,9 +1,9 @@
 import { eq } from "drizzle-orm";
-import { db } from "../db";
-import { user as userTable } from "../db/schema" ;
+import { db } from "../../../../packages/db";
+import { user as userTable } from "../../../../packages/db/schema" ;
 import { type signupRequest, type user, type Variables } from "../lib/types/types";
 import { Hono } from "hono";
-import { requireAuth } from "../lib/auth/auth-middleware";
+import { requireAuth } from "../../../../packages/auth/auth-middleware";
 import { fetchJobs, findRecordsInJobs } from "../lib/queries";
 import { getJobCategory } from "../lib/utils";
 

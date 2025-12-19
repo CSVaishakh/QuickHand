@@ -19,16 +19,28 @@ export type user = {
     id: string 
 }
 
-export type Variables = {
-    session: Session,
-    user : user,
-    jobs: any[]
-}
-
 export type listed_job = {
     id: string,
     name: string,
     customer: string,
     pay_range: string,
     job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "cleaning"
+}
+
+export type job = {
+    id: string,
+    name: string,
+    customer: string,
+    handyman: string,
+    hired_at: Date,
+    cost: number,
+    job_status: "NotCompleted" | "Completed",
+    list_id: string,
+    job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "cleaning"
+}
+
+export type Variables = {
+    session: Session,
+    user : user,
+    jobs: job[]
 }
