@@ -1,5 +1,5 @@
 import { db, jobs, listed_jobs, user, eq } from "@repo/db";
-import type { listed_job } from "./types/types";
+import type { accepct_job, job, listed_job } from "./types/types";
 
 export const findRecordsInJobs = async (userType: "customer" | "handyman", userId: string) => {
     return await db
@@ -18,6 +18,13 @@ export const findHandyman = async (userId: string) => {
 export const listJob = async (job: listed_job) => {
     return await db
             .insert(listed_jobs)
+            .values(job)
+            .returning()
+}
+
+export const accepctJob = async (job: accepct_job) => {
+    return await db
+            .insert(jobs)
             .values(job)
             .returning()
 }

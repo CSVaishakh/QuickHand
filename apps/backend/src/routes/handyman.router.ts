@@ -1,13 +1,11 @@
 import { db, user as userTable, eq } from "@repo/db";
-import { type signupRequest, type user, type Variables } from "../lib/types/types";
+import { type accepct_job, type job, type listed_job, type signupRequest, type user, type Variables } from "../lib/types/types";
 import { Hono } from "hono";
 import { requireAuth } from "@repo/auth";
-import { fetchJobs, findRecordsInJobs } from "../lib/queries";
+import { accepctJob, fetchJobs, findRecordsInJobs } from "../lib/queries";
 import { getJobCategory } from "../lib/utils";
 
 const handymanRouter = new Hono<{Variables: Variables}>();
-
-
 
 handymanRouter.post('/sign-up', async (c) => {
     const body: signupRequest = await c.req.json();
@@ -71,6 +69,35 @@ handymanRouter.get('/jobs-available', requireAuth, async (c) => {
 
     const jobs = fetchJobs(job_category)
     return c.json({jobs}, 200)
+})
+
+handymanRouter.post('/accepct-job', requireAuth, async (c) => {
+    const user = c.var.user;
+    const req_data = await c.req.json();
+    const { list_id, job_name, customer, pay_range, job_category } = req_data;
+
+    const job: accepct_job = {
+        id: crypto.randomUUID(),
+        name: job_name,
+        customer: customer,
+        handyman: user.id,
+        cost: Number(pay_range),
+        job_status: "NotCompleted",
+        list_id: list_id,
+        job_category: job_category
+    };
+
+
+    const response = await accepctJob(job);
+
+    if(!response){
+        return c.json({error: "Job not accepcted"}, 400);
+    }
+    
+    return c.json({
+        message: "Job Accepted",
+        response
+    }, 200);
 })
 
 export default handymanRouter;

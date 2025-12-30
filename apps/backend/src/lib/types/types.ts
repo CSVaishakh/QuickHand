@@ -39,6 +39,8 @@ export type job = {
     job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "cleaning"
 }
 
+export type accepct_job = Omit<job, "hired_at">;
+
 export type Variables = {
     session: Session,
     user : user,
