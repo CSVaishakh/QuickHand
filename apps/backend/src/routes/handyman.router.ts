@@ -72,4 +72,5 @@ handymanRouter.get('/jobs-available', requireAuth, async (c) => {
     const jobs = fetchJobs(job_category)
     return c.json({jobs}, 200)
 })
+
 export default handymanRouter;

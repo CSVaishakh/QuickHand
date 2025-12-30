@@ -2,7 +2,7 @@ import { serve } from "bun";
 import { Hono } from "hono";
 import { auth } from "@repo/auth";
 import customerRouter from "./src/routes/customer.router";
-import handymanRouter from "./src/routes/handymanRouter";
+import handymanRouter from "./src/routes/handyman.router";
 
 const app = new Hono();
 
