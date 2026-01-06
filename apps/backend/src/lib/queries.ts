@@ -29,9 +29,16 @@ export const accepctJob = async (job: accepct_job) => {
             .returning()
 }
 
-export const fetchJobs = async  (job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "cleaning" ) => {
+export const fetchJobs = async  (job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep-cleaning" ) => {
     return await db
         .select()
         .from(listed_jobs)
         .where(eq(listed_jobs.job_category, job_category))
+}
+
+export const fetchHandymen = async () => {
+    return await db
+            .select()
+            .from(user)
+            .where(eq(user.role, "handyman"))
 }

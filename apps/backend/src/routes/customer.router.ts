@@ -2,7 +2,7 @@ import { db, user as userTable, eq } from "@repo/db";
 import { type listed_job, type signupRequest, type user, type Variables } from "../lib/types/types";
 import { Hono } from "hono";
 import { requireAuth } from "@repo/auth";
-import { findRecordsInJobs, listJob } from "../lib/queries";
+import { fetchHandymen, findRecordsInJobs, listJob } from "../lib/queries";
 
 const customerRouter = new Hono<{Variables: Variables}>();
 
@@ -44,7 +44,7 @@ customerRouter.post('/sign-up', async (c) => {
 })
 
 customerRouter.get('/dashboard',requireAuth, async (c) => {
-    const user = c.var.user
+    const user = c.var.user;
 
     const jobs = await findRecordsInJobs('customer', user.id)
 
@@ -59,12 +59,6 @@ customerRouter.get('/dashboard',requireAuth, async (c) => {
     c.set("jobs",jobs)
 
     return c.json({completeJobs, completeJobRevenue, incompleteJobs, incompleteJobRevenue, handymen});
-})
-
-customerRouter.get('/create-job', (c) => {
-    
-
-    return c.json({})
 })
 
 customerRouter.post('/list-job', async (c) => {
@@ -92,5 +86,25 @@ customerRouter.post('/list-job', async (c) => {
     }, 200);
 })
 
+customerRouter.post('/direct-hire', async (c) => {
+    const handymen = await fetchHandymen()
+    const handymenByCategory = handymen.reduce((acc, handyman) => {
+        if (!handyman.category) return acc;
+
+        const cat = handyman.category;
+        if(!acc[cat]){
+            acc[cat] = [];
+        }
+
+        acc[cat].push(handyman)
+
+        return acc;
+    }, {} as Record<string, typeof handymen>);
+
+    return c.json({
+        message: "All avilable handymen",
+        handymenByCategory
+    }, 200);
+})
 
 export default customerRouter;
