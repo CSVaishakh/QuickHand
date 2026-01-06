@@ -1,10 +1,10 @@
 import { defineConfig } from "drizzle-kit";
 
 export default defineConfig({
-    schema: '/home/vaishakh/Projects/QuickHand/packages/db/schema.ts',
-    out: '../../drizzle',
+    schema: './schema.ts',
+    out: './drizzle',
     dialect: 'postgresql',
     dbCredentials: {
-        url: process.env.DATABASE_URL!,
+        url: process.env.DATABASE_URL || 'postgresql://user:password@localhost:5432/QuickHand-DB',
     },
 });

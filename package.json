@@ -12,9 +12,9 @@
         "db:start": "docker compose -f packages/db/docker-compose.yml up -d postgres",
         "db:stop": "docker compose -f packages/db/docker-compose.yml stop postgres",
         "db:shell": "docker exec -it QuickHand-postgres psql -U user -d QuickHand-DB",
-        "db:generate": "bun run --cwd packages/db generate",
-        "db:push": "bun run --cwd packages/db push",
-        "db:studio": "bun run --cwd packages/db studio",
+        "db:generate": "bun --env-file=.env run --cwd packages/db generate",
+        "db:push": "bun --env-file=.env run --cwd packages/db push",
+        "db:studio": "bun --env-file=.env run --cwd packages/db studio",
         "db:reset": "docker compose -f packages/db/docker-compose.yml down -v && docker compose -f packages/db/docker-compose.yml up -d postgres && bun run db:generate && bun run db:push"
     },
     "devDependencies": {
