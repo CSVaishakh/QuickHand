@@ -15,7 +15,7 @@ export type user = {
     createdAt: Date,
     updatedAt: Date,
     role: "customer" | "handyman",
-    category: "plumber" | "electrician" | "carpenter" | "mason" | "mechanic" | "havc_technician" | "landscaper" | "deep-cleaner",
+    category: "plumber" | "electrician" | "carpenter" | "mason" | "mechanic" | "havc_technician" | "landscaper" | "deep_cleaner",
     id: string 
 }
 
@@ -24,7 +24,7 @@ export type listed_job = {
     name: string,
     customer: string,
     pay_range: string,
-    job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep-cleaning"
+    job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep_cleaning"
 }
 
 export type job = {
@@ -36,7 +36,7 @@ export type job = {
     cost: number,
     job_status: "NotCompleted" | "Completed",
     list_id: string,
-    job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep-cleaning"
+    job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep_cleaning"
 }
 
 export type accepct_job = Omit<job, "hired_at">;

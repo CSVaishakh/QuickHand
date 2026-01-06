@@ -29,7 +29,7 @@ export const accepctJob = async (job: accepct_job) => {
             .returning()
 }
 
-export const fetchJobs = async  (job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep-cleaning" ) => {
+export const fetchJobs = async  (job_category: "plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep_cleaning" ) => {
     return await db
         .select()
         .from(listed_jobs)

@@ -1,4 +1,4 @@
-export const getJobCategory = (handymanCategory: "plumber" | "electrician" | "carpenter" | "mason" | "mechanic" | "havc_technician" | "landscaper" | "cleaner" ) => {
+export const getJobCategory = (handymanCategory: "plumber" | "electrician" | "carpenter" | "mason" | "mechanic" | "havc_technician" | "landscaper" | "deep_cleaner" ) => {
     const categoryMap = {
         plumber: "plumbing",
         electrician: "electrical",
@@ -7,7 +7,7 @@ export const getJobCategory = (handymanCategory: "plumber" | "electrician" | "ca
         mechanic: "mechanical",
         havc_technician: "havc",
         landscaper: "landscaping",
-        cleaner: "cleaning"
+        deep_cleaner: "deep_cleaning"
     } as const;
 
     return categoryMap[handymanCategory]

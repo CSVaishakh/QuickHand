@@ -10,7 +10,7 @@ export const listed_jobs = pgTable("listed_jobs", {
     .references(() => user.id, { onDelete: "cascade" }),
   pay_range: text("pay_range").notNull(),
   created_at: timestamp("created_at").defaultNow().notNull(),
-  job_category: text("job_category").$type<"plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep-cleaning">().notNull()
+  job_category: text("job_category").$type<"plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep_cleaning">().notNull()
 }, (table) => [
   index("listed_jobs_customer_idx").on(table.customer),
 ]);
@@ -30,7 +30,7 @@ export const jobs = pgTable("jobs", {
     list_id: text("list_id")
       .notNull()
       .references(() => listed_jobs.id, { onDelete: "cascade" }),
-    job_category: text("worker_category").$type<"plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep-cleaning">().notNull()
+    job_category: text("worker_category").$type<"plumbing" | "electrical" | "carpentery" | "masonary" | "mechanical" | "havc" | "landscaping" | "deep_cleaning">().notNull()
 }, (table) => [
   index("jobs_customer_idx").on(table.customer),
   index("jobs_handyman_idx").on(table.handyman),
