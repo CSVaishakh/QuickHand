@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headerProps } from "@/types/props";
 
-function header( props: headerProps ) {
+function headerTemplate( props: headerProps ) {
     return(
         <section className="bg-linear-to-r from-blue-400 to-blue-300 text-black px-10 py-7 flex justify-between items-stretch">
             <div className="font-medium text-2xl ">QuickHand</div>
@@ -16,4 +16,4 @@ function header( props: headerProps ) {
     )   
 }
 
-export default header;
+export default headerTemplate;
