@@ -6,9 +6,9 @@
         "packages/*"
     ],
     "scripts": {
-        "dev": "bun run --parallel dev:backend dev:web",
+        "dev": "bun run --parallel \"dev:backend\" \"dev:web\"",
         "dev:backend": "bun run --cwd apps/backend dev",
-        "dev:web": "bun run --cwd apps/web dev",
+        "dev:web": "bun run --cwd apps/web next dev",
         "db:start": "docker compose -f packages/db/docker-compose.yml up -d postgres",
         "db:stop": "docker compose -f packages/db/docker-compose.yml stop postgres",
         "db:shell": "docker exec -it QuickHand-postgres psql -U user -d QuickHand-DB",
