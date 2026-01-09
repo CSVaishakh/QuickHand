@@ -1,5 +1,5 @@
 import { db, user as userTable, eq } from "@repo/db";
-import { type accepct_job, type job, type listed_job, type signupRequest, type user, type Variables } from "../lib/types/types";
+import { type accepct_job, type handymenSignupRequest, type job, type listed_job, type user, type Variables } from "../lib/types/types";
 import { Hono } from "hono";
 import { requireAuth } from "@repo/auth";
 import { accepctJob, fetchJobs, findRecordsInJobs } from "../lib/queries";
@@ -8,8 +8,8 @@ import { getJobCategory } from "../lib/utils";
 const handymanRouter = new Hono<{Variables: Variables}>();
 
 handymanRouter.post('/sign-up', async (c) => {
-    const body: signupRequest = await c.req.json();
-    const { email, password, name} = body;
+    const body: handymenSignupRequest = await c.req.json();
+    const { email, password, name, category} = body;
     
     const origin = new URL(c.req.url).origin;
     const response  = await fetch( `${origin}/auth/sign-up/email`, {
@@ -33,7 +33,7 @@ handymanRouter.post('/sign-up', async (c) => {
             .update(userTable)
             .set({
                 role: 'handyman',
-                category: 'plumber'
+                category: category
             })
             .where(eq(userTable.id, id))
             .returning()

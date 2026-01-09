@@ -1,10 +1,18 @@
 import type { Session } from "@repo/auth";
 
-export type signupRequest = {
+export type customerSignupRequest = {
     name: string,
     email: string, 
     password: string
     image: string,
+}
+
+export type handymenSignupRequest = {
+    name: string,
+    email: string, 
+    password: string
+    image: string,
+    category: "plumber" | "electrician" | "carpenter" | "mason" | "mechanic" | "havc_technician" | "landscaper" | "deep_cleaner"
 }
 
 export type user = {
