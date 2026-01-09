@@ -1,5 +1,5 @@
 import { db, user as userTable, eq } from "@repo/db";
-import { type listed_job, type signupRequest, type user, type Variables } from "../lib/types/types";
+import { type listed_job, type customerSignupRequest, type user, type Variables } from "../lib/types/types";
 import { Hono } from "hono";
 import { requireAuth } from "@repo/auth";
 import { fetchHandymen, findRecordsInJobs, listJob } from "../lib/queries";
@@ -7,7 +7,7 @@ import { fetchHandymen, findRecordsInJobs, listJob } from "../lib/queries";
 const customerRouter = new Hono<{Variables: Variables}>();
 
 customerRouter.post('/sign-up', async (c) => {
-    const body: signupRequest = await c.req.json();
+    const body: customerSignupRequest = await c.req.json();
     const { email, password, name} = body;
     
     const origin = new URL(c.req.url).origin;
