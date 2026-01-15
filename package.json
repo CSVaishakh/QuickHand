@@ -22,5 +22,8 @@
     },
     "overrides": {
         "drizzle-orm": "^0.45.0"
+    },
+    "dependencies": {
+        "swr": "^2.3.8"
     }
 }

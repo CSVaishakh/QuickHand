@@ -8,7 +8,7 @@ function headerTemplate( props: headerProps ) {
             <nav className="flex gap-6">
                 {
                     props.buttons.map((btn, id) => (
-                        <Link href={btn.url} key={id}><button className="text-xl font-medium px-2 trtasission-all hover:bg-blue-400 hover:border-2 hover:border-blue-400 hover:rounded-lg">{btn.buttonName}</button></Link>
+                        <Link href={btn.url} key={id}><button className="text-xl font-medium px-2 transition-all hover:bg-blue-400 hover:border-2 hover:border-blue-400 hover:rounded-lg">{btn.buttonName}</button></Link>
                     ))
                 }
             </nav>
