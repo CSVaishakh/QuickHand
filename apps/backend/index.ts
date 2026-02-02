@@ -1,10 +1,20 @@
 import { serve } from "bun";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { auth } from "@repo/auth";
 import customerRouter from "./src/routes/customer.router";
 import handymanRouter from "./src/routes/handyman.router";
 
 const app = new Hono();
+
+app.use(
+    "*",
+    cors({
+        origin: ["http://localhost:3000", "http://localhost:3001"],
+        allowMethods: ["GET", "POST", "OPTIONS"],
+        allowHeaders: ["Content-Type", "Authorization"],
+    })
+);
 
 app.on(["POST", "GET"], "/auth/*", (c) => auth.handler(c.req.raw));
 
