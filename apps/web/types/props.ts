@@ -1,7 +1,8 @@
 export type headerProps = {
-    buttons: Array<{ 
+    buttons: Array<{
         buttonName: string,
-        url: string
+        url?: string,
+        onClick?: () => void
     }>;
 }
 
