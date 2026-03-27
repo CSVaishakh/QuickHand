@@ -6,16 +6,17 @@
         "packages/*"
     ],
     "scripts": {
-        "dev": "bun run --parallel \"dev:backend\" \"dev:web\"",
+        "dev": "bun run dev:backend & bun run dev:web",
         "dev:backend": "bun run --cwd apps/backend dev",
         "dev:web": "bun run --cwd apps/web next dev",
+        "dev:full": "bun run db:start && bun run dev",
         "db:start": "docker compose -f packages/db/docker-compose.yml up -d postgres",
         "db:stop": "docker compose -f packages/db/docker-compose.yml stop postgres",
         "db:shell": "docker exec -it QuickHand-postgres psql -U user -d QuickHand-DB",
-        "db:generate": "bun --env-file=.env run --cwd packages/db generate",
-        "db:push": "bun --env-file=.env run --cwd packages/db push",
-        "db:studio": "bun --env-file=.env run --cwd packages/db studio",
-        "db:reset": "docker compose -f packages/db/docker-compose.yml down -v && docker compose -f packages/db/docker-compose.yml up -d postgres && bun run db:generate && bun run db:push"
+        "db:generate": "bun --env-file=.env.local run --cwd packages/db generate",
+        "db:push": "bun --env-file=.env.local run --cwd packages/db push",
+        "db:studio": "bun --env-file=.env.local run --cwd packages/db studio",
+        "db:reset": "docker compose -f packages/db/docker-compose.yml down -v && docker compose -f packages/db/docker-compose.yml up -d postgres && sleep 3 && bun run db:generate && bun run db:push"
     },
     "devDependencies": {
         "drizzle-kit": "^0.31.8"
@@ -24,6 +25,7 @@
         "drizzle-orm": "^0.45.0"
     },
     "dependencies": {
+        "@types/node": "^25.5.0",
         "swr": "^2.3.8"
     }
 }
