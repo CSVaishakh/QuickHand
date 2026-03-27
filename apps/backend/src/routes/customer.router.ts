@@ -23,25 +23,55 @@ customerRouter.post('/sign-up', async (c) => {
         })
     });
 
+    if (!response.ok) {
+        const error = await response.json();
+        return c.json({ error: 'Signup failed', details: error }, response.status);
+    }
+
     const data = await response.json() as {token: string, user: user};
+    
+    if (!data.user || !data.user.id) {
+        return c.json({ error: 'Invalid response from auth service' }, 500);
+    }
+
     const id  = data.user.id;
     const token = data.token;
 
-    if(data) {
-        const [updatedUser] = await db
-            .update(userTable)
-            .set({ role: 'customer'})
-            .where(eq(userTable.id, id))
-            .returning()
+    const [updatedUser] = await db
+        .update(userTable)
+        .set({ role: 'customer'})
+        .where(eq(userTable.id, id))
+        .returning()
 
-        return c.json({
-            token: data.token,
-            user : updatedUser
-        })
+    return c.json({
+        token: data.token,
+        user : updatedUser
+    });
+})
+
+customerRouter.post('/sign-in', async (c) => {
+    const { email, password } = await c.req.json();
+
+    const origin = new URL(c.req.url).origin;
+    const response = await fetch(`${origin}/auth/sign-in/email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        return c.json({ error: 'Sign in failed', details: error }, response.status as 400 | 401 | 500);
     }
 
-    return c.json({ error: 'Signup Failed' }, 400 );
-})
+    const setCookie = response.headers.get('set-cookie');
+    if (setCookie) {
+        c.header('Set-Cookie', setCookie);
+    }
+
+    const data = await response.json();
+    return c.json(data);
+});
 
 customerRouter.get('/dashboard',requireAuth, async (c) => {
     const user = c.var.user;

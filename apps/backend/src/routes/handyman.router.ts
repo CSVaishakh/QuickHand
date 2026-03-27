@@ -1,4 +1,4 @@
-import { db, user as userTable, eq } from "@repo/db";
+import { db, user as userTable, eq, ConsoleLogWriter } from "@repo/db";
 import { type accepct_job, type handymenSignupRequest, type job, type listed_job, type user, type Variables } from "../lib/types/types";
 import { Hono } from "hono";
 import { requireAuth } from "@repo/auth";
@@ -10,7 +10,7 @@ const handymanRouter = new Hono<{Variables: Variables}>();
 handymanRouter.post('/sign-up', async (c) => {
     const body: handymenSignupRequest = await c.req.json();
     const { email, password, name, category} = body;
-    
+    console.log(email)
     const origin = new URL(c.req.url).origin;
     const response  = await fetch( `${origin}/auth/sign-up/email`, {
         method: "POST",
@@ -45,6 +45,30 @@ handymanRouter.post('/sign-up', async (c) => {
     };
 
     return c.json({error: 'Signup Failed' }, 400);
+});
+
+handymanRouter.post('/sign-in', async (c) => {
+    const { email, password } = await c.req.json();
+
+    const origin = new URL(c.req.url).origin;
+    const response = await fetch(`${origin}/auth/sign-in/email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+    });
+
+    if (!response.ok) {
+        const error = await response.json();
+        return c.json({ error: 'Sign in failed', details: error }, response.status as 400 | 401 | 500);
+    }
+
+    const setCookie = response.headers.get('set-cookie');
+    if (setCookie) {
+        c.header('Set-Cookie', setCookie);
+    }
+
+    const data = await response.json();
+    return c.json(data);
 });
 
 handymanRouter.get('/dashboard',requireAuth, async (c) => {
