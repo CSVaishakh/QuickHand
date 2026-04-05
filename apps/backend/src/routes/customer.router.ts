@@ -25,7 +25,7 @@ customerRouter.post('/sign-up', async (c) => {
 
     if (!response.ok) {
         const error = await response.json();
-        return c.json({ error: 'Signup failed', details: error }, response.status);
+        return c.json({ error: 'Signup failed', details: error }, response.status as 400);
     }
 
     const data = await response.json() as {token: string, user: user};
@@ -61,7 +61,7 @@ customerRouter.post('/sign-in', async (c) => {
 
     if (!response.ok) {
         const error = await response.json();
-        return c.json({ error: 'Sign in failed', details: error }, response.status as 400 | 401 | 500);
+        return c.json({ error: 'Sign in failed', details: error }, response.status as 400);
     }
 
     const setCookie = response.headers.get('set-cookie');
