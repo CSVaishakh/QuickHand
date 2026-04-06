@@ -21,8 +21,8 @@ export default function LandingHeader(){
             return {
                 buttons: [
                     { buttonName: "About", url: "/about" },
-                    { buttonName: "Sign Up", url: "/auth" },
-                    { buttonName: "Sign In", url: "/auth" },
+                    { buttonName: "Sign Up", url: "/auth?mode=signup" },
+                    { buttonName: "Sign In", url: "/auth?mode=signin" },
                 ],
             };
         }

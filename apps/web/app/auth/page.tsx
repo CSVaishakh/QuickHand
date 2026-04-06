@@ -1,71 +1,63 @@
-'use client'
+"use client"
 
-import { useState } from "react";
-import SignInForm from "./_components/signIn/signIn";
-import SignUpForm from "./_components/signUp/signUp";
+import { useEffect, useState } from "react";
+import SignUpForm from "./_components/signup/signupform";
+import SigninForm from "./_components/signin/signinForm";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function AuthPage() {
-    const [mode, setMode] = useState<'signin' | 'signup'>('signin');
-    const [userType, setUserType] = useState<'customer' | 'handyman'>('customer');
+const getChoiceFromMode = (mode: string | null): "Signin" | "Signup" => {
+    return mode === "signup" ? "Signup" : "Signin";
+};
 
-    return (
-        <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-slate-100 flex items-center justify-center p-4">
-            <div className="w-full max-w-md">
+export default function Auth() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [choice, setChoice] = useState<"Signin" | "Signup">(
+        getChoiceFromMode(searchParams.get("mode"))
+    );
 
-                <div className="text-center mb-8">
-                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">QuickHand</h1>
-                    <p className="text-slate-500 mt-1 text-sm">Your trusted service marketplace</p>
+    useEffect(() => {
+        setChoice(getChoiceFromMode(searchParams.get("mode")));
+    }, [searchParams]);
+
+    const handleChoiceChange = (nextChoice: "Signin" | "Signup") => {
+        setChoice(nextChoice);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("mode", nextChoice === "Signup" ? "signup" : "signin");
+        router.replace(`/auth?${params.toString()}`);
+    };
+
+    return(
+        <section className="min-h-screen grid place-items-center p-4 bg-white">
+            <div className="w-full max-w-2xl rounded-xl border border-blue-300 bg-[#f8fbff] p-5 sm:p-6">
+                <h1 className="m-0 text-3xl font-bold tracking-tight text-black">QuickHand</h1>
+
+                <div className="mt-4 flex flex-wrap gap-2">
+                    <button
+                        className={`rounded-full px-4 py-2 text-sm font-semibold border transition ${choice === "Signup" ? "border-blue-400 bg-blue-400 text-black" : "border-blue-300 bg-white text-black"}`}
+                        type="button"
+                        onClick={() => { handleChoiceChange("Signup"); }}
+                        aria-pressed={choice === "Signup"}
+                    >
+                        SignUp
+                    </button>
+
+                    <button
+                        className={`rounded-full px-4 py-2 text-sm font-semibold border transition ${choice === "Signin" ? "border-blue-400 bg-blue-400 text-black" : "border-blue-300 bg-white text-black"}`}
+                        type="button"
+                        onClick={() => { handleChoiceChange("Signin"); }}
+                        aria-pressed={choice === "Signin"}
+                    >
+                        SignIn
+                    </button>
                 </div>
 
-                <div className="bg-white rounded-2xl shadow-xl overflow-hidden">
-                    <div className="h-1 bg-linear-to-r from-blue-500 to-blue-700" />
+                <p className="mt-3 text-sm text-black">{choice === "Signin" ? "Welcome back" : "Create your account"}</p>
 
-                    <div className="p-8">
-                        {/* Role tabs */}
-                        <div className="flex bg-slate-100 rounded-xl p-1 mb-6">
-                            <button
-                                onClick={() => setUserType('customer')}
-                                className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
-                                    userType === 'customer'
-                                        ? 'bg-white text-blue-600 shadow-sm'
-                                        : 'text-slate-500 hover:text-slate-700'
-                                }`}
-                            >
-                                Customer
-                            </button>
-                            <button
-                                onClick={() => setUserType('handyman')}
-                                className={`flex-1 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 ${
-                                    userType === 'handyman'
-                                        ? 'bg-white text-blue-600 shadow-sm'
-                                        : 'text-slate-500 hover:text-slate-700'
-                                }`}
-                            >
-                                Handyman
-                            </button>
-                        </div>
-
-                        <h2 className="text-xl font-bold text-slate-900 mb-6">
-                            {mode === 'signin' ? 'Welcome back' : 'Create your account'}
-                        </h2>
-
-                        {mode === 'signin'
-                            ? <SignInForm key={userType} userType={userType} />
-                            : <SignUpForm key={userType} userType={userType} />
-                        }
-
-                        <p className="text-center text-sm text-slate-500 mt-6">
-                            {mode === 'signin' ? "Don't have an account? " : "Already have an account? "}
-                            <button
-                                onClick={() => setMode(mode === 'signin' ? 'signup' : 'signin')}
-                                className="text-blue-600 font-semibold hover:underline"
-                            >
-                                {mode === 'signin' ? 'Sign up' : 'Sign in'}
-                            </button>
-                        </p>
-                    </div>
+                <div className="mt-4">
+                    {choice === "Signin" ? <SigninForm /> : <SignUpForm />}
                 </div>
             </div>
-        </div>
-    );
+        </section>
+    )
 }
