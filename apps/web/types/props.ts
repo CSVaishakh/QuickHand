@@ -9,6 +9,7 @@ export type headerProps = {
 export type footerProps = {
     buttons: Array<{
         buttonName: string,
-        url: string
+        url?: string,
+        onClick?: () => void
     }>;
 }
