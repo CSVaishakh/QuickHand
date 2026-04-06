@@ -3,18 +3,18 @@ import { footerProps } from "@/types/props";
 
 function FooterTemplate (props: footerProps) {
     return(
-        <section className="text-white py-4 px-4 flex justify-between items-center gap-4 flex-wrap mt-auto">
-            <div className="flex flex-col gap-1">
+        <section className="text-white py-4 px-4 mt-auto w-full flex flex-wrap items-center justify-between gap-6 text-center md:text-left">
+            <div className="flex flex-col items-center md:items-start gap-1 flex-1 min-w-0">
                 <h1 className="text-lg font-bold">QuickHand</h1>
                 <p className="text-xs text-gray-300">Hire handymen in the quickest fashion</p> 
                 <p className="text-xs text-gray-400">copyright@QuickHand2025</p>   
             </div>
-            <div className="flex flex-col gap-1 flex-1 text-center">
+            <div className="flex flex-col items-center gap-1 flex-1 min-w-0">
                 <h3 className="text-sm font-semibold">Contact</h3>
                 <h5 className="text-xs text-gray-300">quickhand2025@gmail.com</h5>
                 <h5 className="text-xs text-gray-300">+91 1234567890</h5>
             </div>
-            <div className="flex gap-2 ">
+            <div className="flex flex-wrap justify-center md:justify-end gap-2 flex-1 min-w-0">
                 {
                     props.buttons.map((btn, id) => (
                         btn.onClick
