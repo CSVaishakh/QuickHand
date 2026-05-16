@@ -1,46 +1,30 @@
 "use client"
 
-import HeaderTemplate from "@/components/header.template";
-import { headerProps } from "@/types/props";
+
 import { authClient, useSession } from "@/packages/auth/auth-client"
-import { useMemo } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LandingHeader(){
     const { data: session, isPending } = useSession();
     const router = useRouter();
 
-    const props = useMemo<headerProps>(() => {
-        if (isPending) {
-            return {
-                buttons: [{ buttonName: "About", url: "/about" }],
-            };
-        }
-
-        if (!session) {
-            return {
-                buttons: [
-                    { buttonName: "About", url: "/about" },
-                    { buttonName: "Sign Up", url: "/auth?mode=signup" },
-                    { buttonName: "Sign In", url: "/auth?mode=signin" },
-                ],
-            };
-        }
-
-        return {
-            buttons: [
-                { buttonName: "About", url: "/about" },
-                { buttonName: "Dashboard", url: "/dashboard" },
-                {
-                    buttonName: "Sign Out",
-                    onClick: async () => {
-                        await authClient.signOut();
-                        router.push("/auth");
-                    },
-                },
-            ],
-        };
-    }, [session, isPending, router]);
-
-    return <HeaderTemplate {...props}/>;
+    return (
+        <section className="bg-blue-400 px-5 py-5 font-semibold">
+            <div className="flex justify-between px-5">
+                <div>
+                    <span className="text-3xl">
+                        <span className="text-white">Quick</span>
+                        <span className="text-black">Hand</span>
+                    </span>
+                </div>
+                <div>
+                    <nav className="flex justify-evenly gap-4 text-xl">
+                        <button className="hover:px-3 hover:border-2  text-black hover:bg-white hover:border-black rounded-xl">Sign Up</button>
+                        <button className="hover:px-3 hover:border-2 hover:bg-black hover:border-black rounded-xl">Sign In</button>
+                        <button className="hover:px-3 hover:border-2 text-black hover:bg-white hover:border-black rounded-xl">About</button>
+                    </nav>
+                </div>
+            </div>
+        </section>
+    )
 }
