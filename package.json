@@ -19,13 +19,14 @@
         "db:reset": "docker compose -f packages/db/docker-compose.yml down -v && docker compose -f packages/db/docker-compose.yml up -d postgres && sleep 3 && bun run db:generate && bun run db:push"
     },
     "devDependencies": {
-        "drizzle-kit": "^0.31.8"
+        "drizzle-kit": "^0.31.10"
     },
     "overrides": {
         "drizzle-orm": "^0.45.0"
     },
     "dependencies": {
-        "@types/node": "^25.5.0",
-        "swr": "^2.3.8"
+        "@types/node": "^25.8.0",
+        "better-auth": "^1.6.11",
+        "swr": "^2.4.1"
     }
 }
