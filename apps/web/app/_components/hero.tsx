@@ -1,9 +1,16 @@
 "use client"
 
+import { useSession } from "@/packages/auth/auth-client";
+
 import Image from "next/image";
 import Link from "next/link";
 
+
+
 export default function LandingHero () {
+
+    const { data: session } = useSession();
+
     return(
         <section className="min-h-screen bg-blue-400">
             <div className="flex flex-col items-center justify-center p-20">    
@@ -17,18 +24,41 @@ export default function LandingHero () {
                     <span>quickest <span className="text-black">fashion.</span></span>
                 </div>
                 
-                <div className="flex flex-col w-fit items-center gap-3 text-3xl font-bold">
-                    <Link href={"/dashboard"}>
-                        <button className="w-fit border-2 rounded-xl px-5 hover:bg-white hover:text-blue-400">
-                            Find <span className="text-black">Handymen</span>
-                        </button>
-                    </Link>
-                    <Link href={"/dashboard"}>
-                        <button className="w-fit border-2 rounded-xl px-5 hover:bg-white hover:text-blue-400">
-                            Find <span className="text-black">Work</span>
-                        </button>
-                    </Link>    
-                </div>
+                {session?
+                    (
+                        session.user.role === "customer"?
+                            (
+                                <div className="flex flex-col w-fit items-center gap-3 text-3xl font-bold">
+                                    <Link href={"/dashboard"}>
+                                        <button className="w-fit border-2 rounded-xl px-5 hover:bg-white hover:text-blue-400">
+                                            Find <span className="text-black">Handymen</span>
+                                        </button>
+                                    </Link>
+                                </div>
+                            ):(
+                                <div className="flex flex-col w-fit items-center gap-3 text-3xl font-bold">
+                                    <Link href={"/dashboard"}>
+                                        <button className="w-fit border-2 rounded-xl px-5 hover:bg-white hover:text-blue-400">
+                                            Find <span className="text-black">Work</span>
+                                        </button>
+                                    </Link>
+                                </div>
+                            )
+                    ):(
+                        <div className="flex flex-col w-fit items-center gap-3 text-3xl font-bold">
+                            <Link href={"/dashboard"}>
+                                <button className="w-fit border-2 rounded-xl px-5 hover:bg-white hover:text-blue-400">
+                                    Find <span className="text-black">Handymen</span>
+                                </button>
+                            </Link>
+                            <Link href={"/dashboard"}>
+                                <button className="w-fit border-2 rounded-xl px-5 hover:bg-white hover:text-blue-400">
+                                    Find <span className="text-black">Work</span>
+                                </button>
+                            </Link>    
+                        </div>
+                    )
+                }
             </div>
         </section>
     )
