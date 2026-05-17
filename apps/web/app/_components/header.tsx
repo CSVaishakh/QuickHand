@@ -1,12 +1,11 @@
 "use client"
 
 
-import { authClient, useSession } from "@/packages/auth/auth-client"
-import { useRouter } from "next/navigation";
+import { useSession } from "@/packages/auth/auth-client"
+import Link from "next/link";
 
 export default function LandingHeader(){
-    const { data: session, isPending } = useSession();
-    const router = useRouter();
+    const { data: session } = useSession();
 
     return (
         <section className="bg-blue-400 px-5 py-5 font-semibold">
@@ -17,13 +16,47 @@ export default function LandingHeader(){
                         <span className="text-black">Hand</span>
                     </span>
                 </div>
-                <div>
-                    <nav className="flex justify-evenly gap-4 text-xl">
-                        <button className="hover:px-3 hover:border-2  text-black hover:bg-white hover:border-black rounded-xl">Sign Up</button>
-                        <button className="hover:px-3 hover:border-2 hover:bg-black hover:border-black rounded-xl">Sign In</button>
-                        <button className="hover:px-3 hover:border-2 text-black hover:bg-white hover:border-black rounded-xl">About</button>
-                    </nav>
-                </div>
+                { session?
+                    ( 
+                        <div>
+                            <nav className="flex justify-evenly gap-4 text-xl">
+                                <Link href={"/auth/profile"}>
+                                    <button className="hover:px-3 hover:border-2  text-black hover:bg-white hover:border-black rounded-xl">
+                                        {session.user.name ?? "Profile"}
+                                    </button>
+                                </Link>
+                                
+                                <Link href={"/about"}>
+                                    <button className="hover:px-3 hover:border-2 text-black hover:bg-white hover:border-black rounded-xl">
+                                        About
+                                    </button>
+                                </Link>
+                            </nav> 
+                        </div>
+                    ):(
+                       <div>
+                            <nav className="flex justify-evenly gap-4 text-xl">
+                                <Link href={"/auth#signup"}>
+                                    <button className="hover:px-3 hover:border-2  text-black hover:bg-white hover:border-black rounded-xl">
+                                        Sign Up
+                                    </button>
+                                </Link>
+                                
+                                <Link href={"/auth#signin"}>
+                                    <button className="hover:px-3 hover:border-2 hover:bg-black hover:border-black rounded-xl">
+                                        Sign In
+                                    </button>
+                                </Link>
+                                
+                                <Link href={"/about"}>
+                                    <button className="hover:px-3 hover:border-2 text-black hover:bg-white hover:border-black rounded-xl">
+                                        About
+                                    </button>
+                                </Link>
+                            </nav>
+                        </div> 
+                    )
+                }
             </div>
         </section>
     )
