@@ -3,12 +3,20 @@ import { type listed_job, type customerSignupRequest, type user, type Variables 
 import { Hono } from "hono";
 import { requireAuth } from "@repo/auth";
 import { fetchHandymen, findRecordsInJobs, listJob } from "../lib/queries";
+import { customerListedjobSchema, customerSigninSchema, customerSignupSchema } from "../lib/schemas/customer.schema";
+import { error } from "next/dist/build/output/log";
+import { z } from "better-auth";
 
 const customerRouter = new Hono<{Variables: Variables}>();
 
 customerRouter.post('/sign-up', async (c) => {
-    const body: customerSignupRequest = await c.req.json();
-    const { email, password, name} = body;
+    const raw = await c.req.json();
+
+    const result = customerSignupSchema.safeParse(raw);
+    if(!result.success){
+        return c.json({ error: z.treeifyError(result.error) }, 400)
+    }
+    const { email, password, name, image} = result.data;
     
     const origin = new URL(c.req.url).origin;
     const response  = await fetch( `${origin}/auth/sign-up/email`, {
@@ -19,7 +27,8 @@ customerRouter.post('/sign-up', async (c) => {
         body: JSON.stringify({
             email,
             password,
-            name
+            name,
+            image
         })
     });
 
@@ -50,8 +59,14 @@ customerRouter.post('/sign-up', async (c) => {
 })
 
 customerRouter.post('/sign-in', async (c) => {
-    const { email, password } = await c.req.json();
+    const raw = await c.req.json();
 
+    const result = customerSigninSchema.safeParse(raw)
+    if(!result.success){
+        return c.json({ error: z.treeifyError(result.error) }, 400)
+    }
+    const { email, password } = result.data
+    
     const origin = new URL(c.req.url).origin;
     const response = await fetch(`${origin}/auth/sign-in/email`, {
         method: 'POST',
@@ -93,8 +108,13 @@ customerRouter.get('/dashboard',requireAuth, async (c) => {
 
 customerRouter.post('/list-job', async (c) => {
 
-    const body: listed_job = await c.req.json();
-    const { id, name, customer, pay_range, job_category} = body;
+    const raw = await c.req.json();
+
+    const result = customerListedjobSchema.safeParse(raw)
+    if(!result.success){
+        return c.json({ error: z.treeifyError(result.error) }, 400)
+    }
+    const { id, name, customer, pay_range, job_category} = result.data;
 
     const job: listed_job = {
         id: id,

@@ -4,13 +4,21 @@ import { Hono } from "hono";
 import { requireAuth } from "@repo/auth";
 import { accepctJob, fetchJobs, findRecordsInJobs } from "../lib/queries";
 import { getJobCategory } from "../lib/utils";
+import { handymanAccepctjobSchema, handymanSigninSchema, handymanSignupSchema } from "../lib/schemas/handyman.schema";
+import { z } from "zod";
 
 const handymanRouter = new Hono<{Variables: Variables}>();
 
 handymanRouter.post('/sign-up', async (c) => {
-    const body: handymenSignupRequest = await c.req.json();
-    const { email, password, name, category} = body;
+    const raw = await c.req.json();
+
+    const result = handymanSignupSchema.safeParse(raw);
+    if(!result.success){
+        return c.json({ error: z.treeifyError(result.error) }, 400)
+    }
+    const { email, password, name, category} = result.data;
     console.log(email)
+
     const origin = new URL(c.req.url).origin;
     const response  = await fetch( `${origin}/auth/sign-up/email`, {
         method: "POST",
@@ -48,7 +56,13 @@ handymanRouter.post('/sign-up', async (c) => {
 });
 
 handymanRouter.post('/sign-in', async (c) => {
-    const { email, password } = await c.req.json();
+    const raw = await c.req.json();
+
+    const result = handymanSigninSchema.safeParse(raw)
+    if(!result.success){
+        return c.json({ error: z.treeifyError(result.error) }, 400)
+    }
+    const { email, password } = result.data;
 
     const origin = new URL(c.req.url).origin;
     const response = await fetch(`${origin}/auth/sign-in/email`, {
@@ -97,8 +111,13 @@ handymanRouter.get('/jobs-available', requireAuth, async (c) => {
 
 handymanRouter.post('/accepct-job', requireAuth, async (c) => {
     const user = c.var.user;
-    const req_data = await c.req.json();
-    const { list_id, job_name, customer, pay_range, job_category } = req_data;
+    const raw = await c.req.json();
+
+    const result = handymanAccepctjobSchema.safeParse(raw)
+    if(!result.success){
+        return c.json({ error: z.treeifyError(result.error) }, 400)
+    }
+    const { list_id, job_name, customer, pay_range, job_category } = result.data;
 
     const job: accepct_job = {
         id: crypto.randomUUID(),
