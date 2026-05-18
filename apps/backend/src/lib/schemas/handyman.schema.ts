@@ -2,14 +2,14 @@ import { z } from "zod";
 
 export const handymanSignupSchema = z.object({
   name: z.string().min(1),
-  email: z.string().email(),
+  email: z.email(),
   password: z.string().min(8),
-  image: z.string().optional(),
-  category: z.enum(["plumber", "electrician", "carpenter", "mason", "mechanic", "havc_technician", "landscaper", "deep_cleaner"]),
+  image: z.url().optional(),
+  category: z.enum(["plumber", "electrician", "carpenter", "mason", "mechanic", "hvac_technician", "landscaper", "deep_cleaner"]),
 });
 
 export const handymanSigninSchema = z.object({
-    email: z.string().min(1),
+    email: z.email(),
     password: z.string().min(8)
 })
 
@@ -21,6 +21,6 @@ export const handymanAccepctjobSchema = z.object({
     job_category: z.enum(["plumbing", "electrical", "carpentery", "masonary", "mechanical", "havc", "landscaping", "deep_cleaning"])
 })
 
-export type handymenSignupRequest = z.infer<typeof handymanSignupSchema>;
+export type handymanSignupRequest = z.infer<typeof handymanSignupSchema>;
 export type handymanSigninRequest = z.infer<typeof handymanSigninSchema>;
 export type handymanAccepctjobRequest = z.infer<typeof handymanAccepctjobSchema>;
