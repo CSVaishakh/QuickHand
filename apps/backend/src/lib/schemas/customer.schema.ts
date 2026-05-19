@@ -7,11 +7,6 @@ export const customerSignupSchema = z.object({
     image: z.url().optional()
 })
 
-export const customerSigninSchema = z.object({
-    email: z.email(),
-    password: z.string().min(8)
-})
-
 export const customerListedjobSchema = z.object({
     id: z.string(),
     name: z.string().min(1),
@@ -21,5 +16,4 @@ export const customerListedjobSchema = z.object({
 })
 
 export type customerSignupRequest = z.infer<typeof customerSignupSchema>;
-export type customerSigninRequest = z.infer<typeof customerSigninSchema>;
 export type customerListedjobRequest = z.infer<typeof customerListedjobSchema>;

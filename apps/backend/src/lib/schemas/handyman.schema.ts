@@ -8,11 +8,6 @@ export const handymanSignupSchema = z.object({
   category: z.enum(["plumber", "electrician", "carpenter", "mason", "mechanic", "hvac_technician", "landscaper", "deep_cleaner"]),
 });
 
-export const handymanSigninSchema = z.object({
-    email: z.email(),
-    password: z.string().min(8)
-})
-
 export const handymanAccepctjobSchema = z.object({
     list_id: z.string(),
     job_name: z.string().min(1),
@@ -22,5 +17,4 @@ export const handymanAccepctjobSchema = z.object({
 })
 
 export type handymanSignupRequest = z.infer<typeof handymanSignupSchema>;
-export type handymanSigninRequest = z.infer<typeof handymanSigninSchema>;
 export type handymanAccepctjobRequest = z.infer<typeof handymanAccepctjobSchema>;

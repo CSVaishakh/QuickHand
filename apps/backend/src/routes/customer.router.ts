@@ -3,7 +3,7 @@ import { type listed_job, type customerSignupRequest, type user, type Variables 
 import { Hono } from "hono";
 import { requireAuth } from "@repo/auth";
 import { fetchHandymen, findRecordsInJobs, listJob } from "../lib/queries";
-import { customerListedjobSchema, customerSigninSchema, customerSignupSchema } from "../lib/schemas/customer.schema";
+import { customerListedjobSchema, customerSignupSchema } from "../lib/schemas/customer.schema";
 import { error } from "next/dist/build/output/log";
 import { z } from "better-auth";
 
@@ -57,36 +57,6 @@ customerRouter.post('/sign-up', async (c) => {
         user : updatedUser
     });
 })
-
-customerRouter.post('/sign-in', async (c) => {
-    const raw = await c.req.json();
-
-    const result = customerSigninSchema.safeParse(raw)
-    if(!result.success){
-        return c.json({ error: z.treeifyError(result.error) }, 400)
-    }
-    const { email, password } = result.data
-    
-    const origin = new URL(c.req.url).origin;
-    const response = await fetch(`${origin}/auth/sign-in/email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        return c.json({ error: 'Sign in failed', details: error }, response.status as 400);
-    }
-
-    const setCookie = response.headers.get('set-cookie');
-    if (setCookie) {
-        c.header('Set-Cookie', setCookie);
-    }
-
-    const data = await response.json();
-    return c.json(data);
-});
 
 customerRouter.get('/dashboard',requireAuth, async (c) => {
     const user = c.var.user;
