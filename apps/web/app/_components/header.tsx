@@ -36,13 +36,13 @@ export default function LandingHeader(){
                     ):(
                        <div>
                             <nav className="flex justify-evenly gap-4 text-xl">
-                                <Link href={"/auth#signup"}>
+                                <Link href={"/auth/sign-up"}>
                                     <button className="hover:px-3 hover:border-2  text-black hover:bg-white hover:border-black rounded-xl">
                                         Sign Up
                                     </button>
                                 </Link>
                                 
-                                <Link href={"/auth#signin"}>
+                                <Link href={"/auth/sign-in"}>
                                     <button className="hover:px-3 hover:border-2 hover:bg-black hover:border-black rounded-xl">
                                         Sign In
                                     </button>
