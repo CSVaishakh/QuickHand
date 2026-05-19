@@ -4,6 +4,7 @@ import { cors } from "hono/cors";
 import { auth } from "@repo/auth";
 import customerRouter from "./src/routes/customer.router";
 import handymanRouter from "./src/routes/handyman.router";
+import commonRouter from "./src/routes/common.router";
 
 const app = new Hono();
 
@@ -23,6 +24,7 @@ app.get('/test', (c) => c.text('Hello World!Server is working'))
 
 app.route('/customer', customerRouter)
 app.route('/handyman', handymanRouter)
+app.route('/common', commonRouter)
 
 const port = process.env.PORT
 

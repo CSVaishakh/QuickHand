@@ -34,3 +34,4 @@ commonRouter.post('/sign-in', async (c) => {
     const data = await response.json();
     return c.json(data);
 });
+export default commonRouter;
