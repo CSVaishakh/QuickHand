@@ -5,7 +5,7 @@ import { requireAuth } from "@repo/auth";
 import { fetchHandymen, findRecordsInJobs, listJob } from "../lib/queries";
 import { customerListedjobSchema, customerSignupSchema } from "../lib/schemas/customer.schema";
 import { error } from "next/dist/build/output/log";
-import { z } from "better-auth";
+import { z } from "zod";
 
 const customerRouter = new Hono<{Variables: Variables}>();
 
