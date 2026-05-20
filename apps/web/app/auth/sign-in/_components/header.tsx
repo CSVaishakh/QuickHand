@@ -1,6 +1,6 @@
 "use client"
 
-export default function AuthHeader () {
+export default function SignInHeader () {
     return(
         <section className="flex justify-center bg-white px-5 py-5 rounded-xl">
             <div className="flex px-5">
