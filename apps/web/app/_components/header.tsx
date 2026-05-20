@@ -3,6 +3,7 @@
 
 import { useSession } from "@/packages/auth/auth-client"
 import Link from "next/link";
+import { UserDropdown } from "./_headerComponents/profileMenu";
 
 export default function LandingHeader(){
     const { data: session } = useSession();
@@ -20,11 +21,7 @@ export default function LandingHeader(){
                     ( 
                         <div>
                             <nav className="flex justify-evenly gap-4 text-xl">
-                                <Link href={"/auth/profile"}>
-                                    <button className="hover:px-3 hover:border-2  text-black hover:bg-white hover:border-black rounded-xl">
-                                        {session.user.name ?? "Profile"}
-                                    </button>
-                                </Link>
+                                <UserDropdown session={session} />
                                 
                                 <Link href={"/about"}>
                                     <button className="hover:px-3 hover:border-2 text-black hover:bg-white hover:border-black rounded-xl">
