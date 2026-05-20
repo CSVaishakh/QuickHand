@@ -2,15 +2,13 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { authClient } from "@/packages/auth/auth-client"
 import { handymanSignupRequest, handymanSignupSchema } from "@/lib/schemas/auth.schema";
-import { useRouter } from "next/navigation";
 
 export function HandymanSignUpForm () {
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<handymanSignupRequest>({
         resolver: zodResolver(handymanSignupSchema)
     });
-
-    const router = useRouter();
 
     const onSubmit: SubmitHandler<handymanSignupRequest> = async (data) => {
         try{
@@ -36,8 +34,12 @@ export function HandymanSignUpForm () {
 
             console.log("Signed in:", result);
             alert("Sign Up Successful, Redirecting");
-            router.push("/")
-
+            
+            await authClient.signIn.email({
+                email: data.email,
+                password: data.password,
+            });
+            window.location.assign("/") ;
         } catch (error) {
             console.error(error);
             alert("Something went wrong");

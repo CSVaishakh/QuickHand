@@ -1,36 +1,36 @@
-import { betterAuth } from "better-auth";
-import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@repo/db";
+    import { betterAuth } from "better-auth";
+    import { drizzleAdapter } from "better-auth/adapters/drizzle";
+    import { db } from "@repo/db";
 
-export const  auth = betterAuth({
-    database: drizzleAdapter(db,{
-        provider: "pg",
-    }),
+    export const  auth = betterAuth({
+        database: drizzleAdapter(db,{
+            provider: "pg",
+        }),
 
-    baseURL: process.env.BETTER_AUTH_URL,
-    
-    emailAndPassword: {
-        enabled: true,
-        autoSignIn: false,  
-    },
-    user: {
-        additionalFields: {
-            role: {
-                type: "string",
-                required: false,
-                input: false,
-            },
-            category: {
-                type: "string",
-                required: false,
-                input: false,
-                defaultValue: null,
+        baseURL: process.env.BETTER_AUTH_URL,
+        
+        emailAndPassword: {
+            enabled: true,
+            autoSignIn: true,  
+        },
+        user: {
+            additionalFields: {
+                role: {
+                    type: "string",
+                    required: false,
+                    input: false,
+                },
+                category: {
+                    type: "string",
+                    required: false,
+                    input: false,
+                    defaultValue: null,
+                },
             },
         },
-    },
-    basePath: "/auth",
-    advanced: {
-        disableOriginCheck: true
-    },
-});
+        basePath: "/auth",
+        advanced: {
+            disableOriginCheck: true
+        },
+    });
 

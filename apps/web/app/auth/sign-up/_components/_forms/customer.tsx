@@ -1,7 +1,7 @@
-"use Client"
+"use client"
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useRouter } from "next/navigation";
+import { authClient } from "@/packages/auth/auth-client"
 import { zodResolver } from "@hookform/resolvers/zod";
 import { customerSignupRequest, customerSignupSchema } from "@/lib/schemas/auth.schema";
 
@@ -9,8 +9,6 @@ export function CustomerSignUpForm () {
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<customerSignupRequest>({
         resolver: zodResolver(customerSignupSchema)
     });
-
-    const router = useRouter();
 
     const onSubmit: SubmitHandler<customerSignupRequest> = async (data) => {
         try{
@@ -34,9 +32,15 @@ export function CustomerSignUpForm () {
                 return;
             }
 
-            console.log("Signed in:", result);
+            console.log("Signed up:", result);
             alert("Sign Up Successful, Redirecting");
-            router.push("/")
+
+            
+            await authClient.signIn.email({
+                email: data.email,
+                password: data.password,
+            });
+            window.location.assign("/") ;
 
         } catch (error) {
             console.error(error);
