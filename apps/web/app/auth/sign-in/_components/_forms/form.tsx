@@ -1,7 +1,6 @@
 "use client"
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { useRouter } from "next/navigation";
 import{ zodResolver } from "@hookform/resolvers/zod";
 import { SigninRequest, SigninSchema } from "@/lib/schemas/auth.schema";
 
@@ -9,8 +8,6 @@ export function SignInFrom () {
     const { register, handleSubmit, formState: { errors, isSubmitting }} = useForm<SigninRequest>({
         resolver: zodResolver(SigninSchema)
     });
-
-    const router = useRouter();
 
     const onSubmit: SubmitHandler<SigninRequest> = async (data) => {
         try {
@@ -36,7 +33,7 @@ export function SignInFrom () {
 
             console.log("Signed in:", result);
             alert("Sign in Successful, Redirecting");
-            router.push("/")
+            window.location.assign("/")
 
         } catch (error) {
             console.error(error);

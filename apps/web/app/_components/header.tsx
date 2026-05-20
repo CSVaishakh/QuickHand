@@ -21,7 +21,9 @@ export default function LandingHeader(){
                     ( 
                         <div>
                             <nav className="flex justify-evenly gap-4 text-xl">
-                                <UserDropdown session={session} />
+                                <div className="hover:px-3 hover:border-2  text-black hover:bg-white hover:border-black rounded-xl">
+                                    <UserDropdown session={session} />
+                                </div>
                                 
                                 <Link href={"/about"}>
                                     <button className="hover:px-3 hover:border-2 text-black hover:bg-white hover:border-black rounded-xl">
