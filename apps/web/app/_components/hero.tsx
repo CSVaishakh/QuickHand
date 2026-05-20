@@ -1,6 +1,7 @@
 "use client"
 
 import { useSession } from "@/packages/auth/auth-client";
+import type { Session } from "@/packages/auth/auth-client";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +10,9 @@ import Link from "next/link";
 
 export default function LandingHero () {
 
-    const { data: session } = useSession();
+    const { data: session } = useSession() as {
+        data: Session | null;
+    };
 
     return(
         <section className="min-h-screen bg-blue-400">
