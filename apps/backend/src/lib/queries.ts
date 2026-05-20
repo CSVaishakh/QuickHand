@@ -40,5 +40,16 @@ export const fetchHandymen = async () => {
     return await db
             .select()
             .from(user)
+            
             .where(eq(user.role, "handyman"))
+}
+
+export const updateImage = async (userId: string, img: string) => {
+    return await db
+        .update(user)
+        .set({
+            image: img
+        })
+        .where(eq(user.id, userId))
+        .returning()
 }
