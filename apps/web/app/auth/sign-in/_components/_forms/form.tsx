@@ -2,6 +2,8 @@
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import{ zodResolver } from "@hookform/resolvers/zod";
+import { authClient } from "@/packages/auth/auth-client";
+
 import { SigninRequest, SigninSchema } from "@/lib/schemas/auth.schema";
 
 export function SignInFrom () {
@@ -11,36 +13,22 @@ export function SignInFrom () {
 
     const onSubmit: SubmitHandler<SigninRequest> = async (data) => {
         try {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/common/sign-in`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    credentials: "include", // important for cookies/session
-                    body: JSON.stringify(data),
-                }
-            );
 
-            const result = await response.json();
+        await authClient.signIn.email({
+            email: data.email,
+            password: data.password,
+        });
 
-            if (!response.ok) {
-                console.log(result);
-                alert(result.error || "Sign in failed");
-                return;
-            }
+        alert("Sign in successful");
 
-            console.log("Signed in:", result);
-            alert("Sign in Successful, Redirecting");
-            window.location.assign("/")
+        window.location.assign("/");
 
         } catch (error) {
             console.error(error);
-            alert("Something went wrong");
+            alert("Sign in failed");
         }
     };
-    
+        
     return(
         <form
             className="flex flex-col text-black gap-5" 

@@ -7,36 +7,6 @@ import { updateImage } from "../lib/queries";
 
 const commonRouter = new Hono<{Variables: Variables}>();
 
-commonRouter.post('/sign-in', async (c) => {
-    const raw = await c.req.json();
-
-    const result = SigninSchema.safeParse(raw)
-    if(!result.success){
-        return c.json({ error: z.treeifyError(result.error) }, 400)
-    }
-    const { email, password } = result.data;
-
-    const origin = new URL(c.req.url).origin;
-    const response = await fetch(`${origin}/auth/sign-in/email`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-    });
-
-    if (!response.ok) {
-        const error = await response.json();
-        return c.json({ error: 'Sign in failed', details: error }, response.status as 400 | 401 | 500);
-    }
-
-    const setCookie = response.headers.get('set-cookie');
-    if (setCookie) {
-        c.header('Set-Cookie', setCookie);
-    }
-
-    const data = await response.json();
-    return c.json(data);
-});
-
 commonRouter.post('/update-image', async (c) => {
     const raw = await c.req.json();
 

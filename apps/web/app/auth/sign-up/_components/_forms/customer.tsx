@@ -1,7 +1,7 @@
 "use client"
 
 import { useForm, SubmitHandler } from "react-hook-form";
-import { authClient } from "@/packages/auth/auth-client"
+import { authClient } from "@/packages/auth/auth-client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { customerSignupRequest, customerSignupSchema } from "@/lib/schemas/auth.schema";
 
