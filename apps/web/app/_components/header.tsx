@@ -1,8 +1,8 @@
 "use client"
 
-
-import { useSession } from "@/packages/auth/auth-client"
 import Link from "next/link";
+
+import { useSession } from "@/packages/auth/auth-client";
 import { UserDropdown } from "./_headerComponents/profileMenu";
 
 export default function LandingHeader(){
