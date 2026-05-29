@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect } from "react";
+
 import { useSession } from "@/packages/auth/auth-client";
 import type { Session } from "@/packages/auth/auth-client";
 
@@ -13,6 +15,15 @@ export default function LandingHero () {
     const { data: session } = useSession() as {
         data: Session | null;
     };
+
+    useEffect(() => {
+        if (session) {
+            sessionStorage.setItem(
+                "session",
+                JSON.stringify(session)
+            );
+        }
+    },[session])
 
     return(
         <section className="min-h-screen bg-blue-400">
