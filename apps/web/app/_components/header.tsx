@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import { useSession } from "@/packages/auth/auth-client";
-import { UserDropdown } from "./_headerComponents/profileMenu";
+import { ProfileDropdown } from "@/components/profileDropdown"
 
 export default function LandingHeader(){
     const { data: session } = useSession();
@@ -22,7 +22,7 @@ export default function LandingHeader(){
                         <div>
                             <nav className="flex justify-evenly gap-4 text-xl">
                                 <div className="hover:px-3 hover:border-2  text-black hover:bg-white hover:border-black rounded-xl">
-                                    <UserDropdown session={session} />
+                                    <ProfileDropdown session={session} />
                                 </div>
                                 
                                 <Link href={"/about"}>

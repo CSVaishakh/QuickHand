@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { authClient } from "@/packages/auth/auth-client";
 
-type UserDropdownProps = {
+type ProfileDropdownProps = {
   session: {
     user: {
       name?: string | null;
@@ -13,7 +13,7 @@ type UserDropdownProps = {
   };
 };
 
-export function UserDropdown({ session }: UserDropdownProps) {
+export function ProfileDropdown({ session }: ProfileDropdownProps) {
   return (
     <details className="relative text-black">
       <summary className="flex items-center gap-2 cursor-pointer list-none [&::-webkit-details-marker]:hidden">
