@@ -7,7 +7,7 @@ import SignUpHero from "./_components/hero";
 export default function SignIn() {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center bg-blue-400">
-        <main className="aspect-14/16 w-120 bg-white border-4 border-black rounded-2xl shadow-2xl flex flex-col ">
+        <main className="aspect-13/16 w-140 bg-white border-4 border-black rounded-2xl shadow-2xl flex flex-col ">
             <SignUpHeader/>
             <div className="px-4 font-semibold">
                 <Link href={"/"}>

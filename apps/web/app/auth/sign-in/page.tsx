@@ -7,7 +7,7 @@ import SignInHero from "./_components/hero";
 export default function SignIn() {
   return (
     <section className="min-h-screen flex flex-col items-center justify-center bg-blue-400">
-        <main className="aspect-12/16 w-90 bg-white border-4 border-black rounded-2xl shadow-2xl flex flex-col ">
+        <main className="aspect-16/17 w-120 bg-white border-4 border-black rounded-2xl shadow-2xl flex flex-col justify-center">
             <SignInHeader/>
             <div className="px-4">
                 <Link href={"/"}>

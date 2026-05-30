@@ -1,12 +1,18 @@
 "use client"
 
+import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+
 import { authClient } from "@/packages/auth/auth-client"
 import { handymanSignupRequest, handymanSignupSchema } from "@/lib/schemas/auth.schema";
 
 export function HandymanSignUpForm () {
-    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<handymanSignupRequest>({
+    
+    const [showPassword, setShowPassword] = useState<boolean>(false);
+    
+    const { register, watch, handleSubmit, formState: { errors, isSubmitting } } = useForm<handymanSignupRequest>({
         resolver: zodResolver(handymanSignupSchema)
     });
 
@@ -44,28 +50,39 @@ export function HandymanSignUpForm () {
             console.error(error);
             alert("Something went wrong");
         }
-
     }
+
+    const password = watch("password");
 
     return(
         <form 
-            className="flex flex-col text-black gap-5 font-semibold"
+            className="flex flex-col text-black text-xl gap-5"
             onSubmit={ handleSubmit(onSubmit) }
         >
-            <div className="px-3">
-                <h1>Name</h1>
+            <div className="flex flex-col gap-1 px-3">
+                <label 
+                htmlFor="name"
+                className="font-semibold"
+                >
+                    Name
+                </label>
                 <input 
-                    className="border-2 border-black rounded-lg px-2" 
+                    className="border-2 border-black rounded-lg px-2 py-1" 
                     { ...register("name") } type="name"
                     placeholder="Full Name"
                 />
                 {errors.name && <p>{errors.name.message}</p>}
             </div>
             
-            <div className="px-3">
-                <h1>Email</h1>
+            <div className="flex flex-col gap-1 px-3">
+                <label 
+                    htmlFor="email"
+                    className="font-semibold"
+                >
+                    Email
+                </label>
                 <input 
-                    className="border-2 border-black rounded-lg px-2" 
+                    className="border-2 border-black rounded-lg px-2 py-1" 
                     {...register("email")} 
                     type="email" 
                     placeholder="example@gmail.com"
@@ -73,12 +90,38 @@ export function HandymanSignUpForm () {
                 {errors.email && <p>{errors.email.message}</p>}
              </div>
 
-            <div className="px-3">
-                <h1>Password</h1>
+            <div className="px-3 py-1 gap-1">
+                <div className="flex justify-between">
+                    <label 
+                        htmlFor="password"
+                        className="font-semibold"
+                    >
+                        Password
+                    </label>
+                    {password !== "" &&
+                        ( showPassword ? 
+                            (
+                                <button
+                                    type="button"
+                                    onClick={(() => {setShowPassword(false)})}
+                                >
+                                    Hide Password
+                                </button>
+                            ):(
+                                <button
+                                    type="button"
+                                    onClick={(() => {setShowPassword(true)})}
+                                >
+                                    Show Password
+                                </button>
+                            )
+                        )
+                    }
+                </div>
                 <input 
-                    className="border-2 border-black rounded-lg px-2" 
+                    className="border-2 border-black rounded-lg px-2 py-1" 
                     {...register("password")} 
-                    type="password" 
+                    type={showPassword ? "text" : "password"} 
                     placeholder="example@123"
                 />
                 {errors.password && <p>{errors.password.message}</p>}
@@ -86,7 +129,7 @@ export function HandymanSignUpForm () {
 
             <div className="px-3">
                 <select 
-                    className="border-2 border-black rounded-lg px-9.5 py-1"
+                    className="border-2 border-black rounded-lg px-15 py-2"
                     { ...register("category")}
                 >
                     <option value="">Select Category</option>
