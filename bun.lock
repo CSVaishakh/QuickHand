@@ -5,10 +5,10 @@
     "": {
       "name": "backend",
       "dependencies": {
-        "@hookform/resolvers": "^5.2.2",
+        "@hookform/resolvers": "^5.4.0",
         "@types/node": "^25.9.1",
         "better-auth": "^1.6.11",
-        "react-hook-form": "^7.76.0",
+        "react-hook-form": "^7.76.1",
         "swr": "^2.4.1",
         "zod": "^4.4.3",
       },
