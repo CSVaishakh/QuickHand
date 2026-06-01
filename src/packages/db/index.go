@@ -1,14 +1,14 @@
 package db
 
 import (
-
 	"github.com/CSVaishakh/QuickHand/src/packages/db/src"
+	"gorm.io/gorm"
 
 	"log"
 	"os"
 )
 
-var DB *src.DB;
+var db *gorm.DB;
 
 func Init () {
 
@@ -19,5 +19,5 @@ func Init () {
 		log.Fatal("databse connection failed")
 	}
 
-	DB = connection;
+	db = connection;
 }

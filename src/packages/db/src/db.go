@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func New (url string) (*DB, error) {
+func New (url string) (*gorm.DB, error) {
 	connection, err := gorm.Open(
 		postgres.Open(url),
 		&gorm.Config{},
@@ -15,7 +15,5 @@ func New (url string) (*DB, error) {
 		return nil, err;
 	}
 
-	return &DB{
-		DB: connection,
-	}, nil
+	return connection,nil
 }
