@@ -5,19 +5,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type clientRepository struct {
+type ClientRepository struct {
 	db *gorm.DB
 }
 
 func NewClientRepository (
 	db *gorm.DB,
-) *clientRepository {
-	return  &clientRepository{
+) *ClientRepository {
+	return  &ClientRepository{
 		db: db,
 	}
 }
 
-func (repo *clientRepository) CreateUser (
+func (repo *ClientRepository) CreateUser (
 		user *models.Client,
 	) error {
 

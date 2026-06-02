@@ -8,9 +8,7 @@ import (
 	"os"
 )
 
-var db *gorm.DB;
-
-func Init () {
+func Init () (db *gorm.DB){
 
 	db_url := os.Getenv("DATABASE_URL")
 	connection, err :=  src.New(db_url)
@@ -20,4 +18,6 @@ func Init () {
 	}
 
 	db = connection;
+
+	return db
 }

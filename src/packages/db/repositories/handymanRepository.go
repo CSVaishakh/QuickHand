@@ -5,19 +5,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type handymenRepository struct {
+type HandymenRepository struct {
 	db *gorm.DB
 }
 
 func NewHandymenRepository(
 	db *gorm.DB,
-) *handymenRepository {
-		return &handymenRepository{
+) *HandymenRepository {
+		return &HandymenRepository{
 			db: db,
 		}
 }
 
-func (repo *handymenRepository) CreateUser (
+func (repo *HandymenRepository) CreateUser (
 	user *models.Handyman,
 ) error {
 

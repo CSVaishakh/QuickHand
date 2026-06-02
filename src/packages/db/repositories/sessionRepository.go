@@ -5,19 +5,19 @@ import (
 	"gorm.io/gorm"
 )
 
-type sessionRepository struct {
+type SessionRepository struct {
 	db *gorm.DB
 }
 
 func NewSessionRepository(
 	db *gorm.DB,
-) *sessionRepository {
-	return &sessionRepository{
+) *SessionRepository {
+	return &SessionRepository{
 		db: db,
 	}
 }
 
-func (repo *sessionRepository) CreateSession (
+func (repo *SessionRepository) CreateSession (
 	session *models.Session,
 	) error {
 	return repo.db.Create(session).Error
