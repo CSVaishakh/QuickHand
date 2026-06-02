@@ -1,7 +1,6 @@
 module github.com/CSVaishakh/QuickHand/src/packages/db
 
 go 1.26.3
-
 require (
 	github.com/golang-migrate/migrate/v4 v4.19.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

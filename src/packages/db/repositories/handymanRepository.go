@@ -6,18 +6,27 @@ import (
 )
 
 type handymenRepository struct {
-	userRepository
+	db *gorm.DB
+}
+
+func NewHandymenRepository(
+	db *gorm.DB,
+) *handymenRepository {
+		return &handymenRepository{
+			db: db,
+		}
 }
 
 func (repo *handymenRepository) CreateUser (
-		db *gorm.DB,
-		user *models.Handyman,
-	) error {
+	user *models.Handyman,
+) error {
 
-	return db.Transaction(
+	return repo.db.Transaction(
 		func(tx *gorm.DB) error {
 
-			err:= repo.userRepository.CreateUser(tx, &user.User)
+			
+
+			err:= tx.Create(&user.User).Error
 			if err != nil {
 				return err
 			}

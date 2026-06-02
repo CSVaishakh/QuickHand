@@ -6,13 +6,20 @@ import (
 )
 
 type clientRepository struct {
-	userRepository
+	db *gorm.DB
+}
+
+func NewClientRepository (
+	db *gorm.DB,
+) *clientRepository {
+	return  &clientRepository{
+		db: db,
+	}
 }
 
 func (repo *clientRepository) CreateUser (
-		db *gorm.DB,
 		user *models.Client,
 	) error {
 
-	return repo.userRepository.CreateUser(db, &user.User)
+	return repo.db.Create(&user.User).Error
 }
