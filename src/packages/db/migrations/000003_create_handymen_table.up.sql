@@ -18,6 +18,6 @@ CREATE TABLE handymen (
 
     CONSTRAINT fk_handymen_user
         FOREIGN KEY (user_id)
-        REFERENCES users(id)
+        REFERENCES users(user_id)
         ON DELETE CASCADE
 );
