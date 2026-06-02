@@ -13,8 +13,6 @@ type Session struct {
 
 	TokenHash string `gorm:"column:token_hash"`
 
-	ExpiresAt time.Time `gorm:"column:expires_at"`
-
 	Revoked bool `gorm:"column:revoked"`
 
 	CreatedAt time.Time `gorm:"column:created_at;autoCreateTime"`

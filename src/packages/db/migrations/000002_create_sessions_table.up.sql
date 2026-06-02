@@ -5,8 +5,6 @@ CREATE TABLE sessions (
 
     token_hash TEXT NOT NULL UNIQUE,
 
-    expires_at TIMESTAMPTZ NOT NULL,
-
     revoked BOOLEAN NOT NULL DEFAULT FALSE,
 
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
