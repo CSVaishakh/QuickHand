@@ -10,13 +10,13 @@ type handymenRepository struct {
 }
 
 func (repo *handymenRepository) CreateUser (
-	db *gorm.DB,
-	user *models.Handyman,
+		db *gorm.DB,
+		user *models.Handyman,
 	) error {
 
 	return db.Transaction(
 		func(tx *gorm.DB) error {
-	
+
 			err:= repo.userRepository.CreateUser(tx, &user.User)
 			if err != nil {
 				return err
