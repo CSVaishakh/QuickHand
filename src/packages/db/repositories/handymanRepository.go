@@ -46,3 +46,20 @@ func (repo *HandymenRepository) CreateUser (
 	)
 		
 }
+
+func (repo *HandymenRepository) GetByEmail (
+	email string,
+) (bool,error){
+	var count int64
+
+	res := repo.db.Raw(
+		"SELECT count(*) FROM users WHERE email = ?", 
+		email,
+	).Scan(&count)
+	
+	if res.Error != nil {
+		return false, res.Error
+	}
+
+	return count > 0, nil
+}
