@@ -1,7 +1,10 @@
 package repositories
 
 import (
+	"errors"
+
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
+	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -21,4 +24,45 @@ func (repo *SessionRepository) CreateSession (
 	session *models.Session,
 	) error {
 	return repo.db.Create(session).Error
+}
+
+func (repo *SessionRepository) GetSession (
+	tokenHash string,
+) (*models.Session, error) {
+	var session models.Session
+
+	err := repo.db.
+			Where("token_hash = ?", tokenHash).
+			First(&session).
+			Error
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, err
+	}
+
+	if err != nil {
+		return nil, nil
+	}
+
+	return &session, nil
+}
+
+func (repo *SessionRepository) RevokeSession (
+	tokenHash string,
+) (*models.Session, error) {
+	var session models.Session
+
+	err := repo.db.Raw("UPDATE sessions SET revoked = TRUE WHERE token_hash = ? RETURNING *",
+		tokenHash,
+	).Scan(&session).Error
+
+	if err != nil {
+		return nil, err
+	}
+
+	if session.ID == uuid.Nil {
+    	return nil, errors.New("session not found")
+	}
+
+	return &session, nil
 }
