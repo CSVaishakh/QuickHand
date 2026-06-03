@@ -27,10 +27,11 @@ func (repo *ClientRepository) CreateUser (
 
 func (repo *ClientRepository) GetByEmail (
 	email string,
+	tx *gorm.DB,
 ) (bool,error){
 	var count int64
 
-	res := repo.db.Raw(
+	res := tx.Raw(
 		"SELECT count(*) FROM users WHERE email = ?", 
 		email,
 	).Scan(&count)
