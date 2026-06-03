@@ -19,40 +19,39 @@ func NewHandymenRepository(
 
 func (repo *HandymenRepository) CreateUser (
 	user *models.Handyman,
+	tx *gorm.DB,
 ) error {
+	err:= tx.Create(&user.User).Error
+	if err != nil {
+		return err
+	}
 
-	return repo.db.Transaction(
-		func(tx *gorm.DB) error {
+	return nil
+}
 
-			
+func (repo *HandymenRepository) AddHandymenType( 
+	user *models.Handyman,
+	tx *gorm.DB,
+) error {
+		err := tx.Exec(
+				"INSERT INTO handymen (user_id, type) VALUES (?, ?)",
+				user.UserID,
+				user.Type,
+			).Error
 
-			err:= tx.Create(&user.User).Error
-			if err != nil {
-				return err
-			}
-
-			err = tx.Exec(
-					"INSERT INTO handymen (user_id, type) VALUES (?, ?)",
-					user.UserID,
-					user.Type,
-				).Error
-
-			if err!= nil {
-				return err
-			}
-
-			return nil
-		},
-	)
-		
+		if err!= nil {
+			return err
+		}
+		return nil
 }
 
 func (repo *HandymenRepository) GetByEmail (
 	email string,
+	tx *gorm.DB,
 ) (bool,error){
 	var count int64
 
-	res := repo.db.Raw(
+	res := tx.Raw(
 		"SELECT count(*) FROM users WHERE email = ?", 
 		email,
 	).Scan(&count)

@@ -22,8 +22,9 @@ func NewSessionRepository(
 
 func (repo *SessionRepository) CreateSession (
 	session *models.Session,
+	tx *gorm.DB,
 	) error {
-	return repo.db.Create(session).Error
+	return tx.Create(session).Error
 }
 
 func (repo *SessionRepository) GetSession (
