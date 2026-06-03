@@ -114,3 +114,111 @@ func (s *AuthService) HandymanSignUp (req HandymanSignUpReq) error {
 	})
 }
 
+func (s *AuthService) ClientSignUp (req ClientSignUpReq) error {
+	return s.db.Transaction( func (tx *gorm.DB) error {
+		// Checking for exisitng user
+		userExists, err := s.clientRepository.GetByEmail(req.Email)
+
+		if err != nil {
+			return err
+		}
+
+		if userExists {
+			return errors.New("User with email exists")
+		}
+
+		// Password hashing
+		hashedPass, err := bcrypt.GenerateFromPassword(
+			[]byte(req.Password),
+			bcrypt.DefaultCost,
+		)
+
+		if err != nil {
+			return err
+		}
+
+		// Creating the user object
+		user := &models.Client{
+			User: models.User{
+				FirstName:    req.FirstName,
+				LastName:     req.LastName,
+				Email:        req.Email,
+				PasswordHash: string(hashedPass),
+				Role:         models.ClientRole,
+				PhoneNumber:  req.PhoneNumber,
+				Img:          req.Img,
+			},
+		}
+
+		//Creating the client user
+		err = s.clientRepository.CreateUser(user, tx)
+		if err != nil {
+			return errors.New("user not created: " + err.Error())
+		}
+
+		// Create the session object
+		token, err:= s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role))	//Generate JWT Token
+		if err != nil {
+			return errors.New("Unable to genrate JWT token: " + err.Error())
+		}
+
+		session:= &models.Session{
+			UserID: user.UserID,
+			TokenHash: token,
+			Revoked: false,
+		}
+
+		// creating the session
+		err = s.sessionRepository.CreateSession(session, tx)
+		if err != nil {
+			return errors.New("Session not created: " + err.Error())
+		}
+		
+		return nil
+	})
+}
+
+func (s *AuthService) SignOut(tokenHash string) error {
+	claims, err := s.jwtService.VerifyJWT(tokenHash)
+	if err != nil {
+		return ErrInvalidToken
+	}
+
+	if claims == nil {
+		return ErrInvalidToken
+	}
+
+	session, err := s.sessionRepository.RevokeSession(tokenHash)
+	if err != nil {
+		return err
+	}
+
+	if !session.Revoked {
+		return ErrSignOutFailed
+	}
+
+	return nil
+}
+
+func (s *AuthService) VerifySession (req VerifySessionReq) (session *models.Session, err error) {
+	// validate jwt
+	claims, err := s.jwtService.VerifyJWT(req.TokenHash)
+	if err != nil {
+		return nil, ErrInvalidToken
+	}
+	if claims == nil {
+		return nil, ErrInvalidToken
+	}
+
+	// get session
+	session, err = s.sessionRepository.GetSession(req.TokenHash)
+	if err != nil {
+		return nil, err
+	}
+
+	// check revoked
+	if session.Revoked {
+		return nil, ErrInvalidSession
+	}
+	return session, nil
+}

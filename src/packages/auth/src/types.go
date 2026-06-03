@@ -49,3 +49,18 @@ type Claims struct {
 	jwt.RegisteredClaims
 }
 
+type VerifySessionReq struct {
+	TokenHash string
+}
+
+
+type ClientSignUpReq struct {
+	FirstName string
+	LastName string
+	Email string
+	Password string
+	Role UserRole
+	Type HandymanType
+	PhoneNumber string
+	Img  *string
+}

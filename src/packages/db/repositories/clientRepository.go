@@ -19,9 +19,10 @@ func NewClientRepository (
 
 func (repo *ClientRepository) CreateUser (
 		user *models.Client,
+		tx *gorm.DB,
 	) error {
 
-	return repo.db.Create(&user.User).Error
+	return tx.Create(&user.User).Error
 }
 
 func (repo *ClientRepository) GetByEmail (

@@ -38,11 +38,11 @@ func (repo *SessionRepository) GetSession (
 			Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, err
+		return nil, nil
 	}
 
 	if err != nil {
-		return nil, nil
+		return nil, err
 	}
 
 	return &session, nil
