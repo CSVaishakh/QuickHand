@@ -11,40 +11,40 @@ import (
 )
 
 var (
-		ErrInvalidToken = errors.New("invalid token")
-		ErrSignOutFailed = errors.New("sign out failed")
-		ErrSessionNotFound = errors.New("session not found")
-		ErrInvalidSession = errors.New("invalid session")
-		ErrSessionExpired = errors.New("session expired")
-		ErrDBFailed = errors.New("session expired but databse failed")
+	ErrInvalidToken    = errors.New("invalid token")
+	ErrSignOutFailed   = errors.New("sign out failed")
+	ErrSessionNotFound = errors.New("session not found")
+	ErrInvalidSession  = errors.New("invalid session")
+	ErrSessionExpired  = errors.New("session expired")
+	ErrDBFailed        = errors.New("session expired but databse failed")
 )
 
 type AuthService struct {
-	handymenRepo *repo.HandymenRepository 
-	clientRepository *repo.ClientRepository
+	handymenRepo      *repo.HandymenRepository
+	clientRepository  *repo.ClientRepository
 	sessionRepository *repo.SessionRepository
-	jwtService *JWTService
-	db *gorm.DB
+	jwtService        *JWTService
+	db                *gorm.DB
 }
 
 func NewAuthService(
-	handymenRepo *repo.HandymenRepository, 
+	handymenRepo *repo.HandymenRepository,
 	clientRepository *repo.ClientRepository,
 	sessionRepository *repo.SessionRepository,
 	jwtService *JWTService,
 	db *gorm.DB,
 ) *AuthService {
 	return &AuthService{
-		handymenRepo: handymenRepo,
-		clientRepository: clientRepository,
+		handymenRepo:      handymenRepo,
+		clientRepository:  clientRepository,
 		sessionRepository: sessionRepository,
-		jwtService: jwtService,
-		db: db,
+		jwtService:        jwtService,
+		db:                db,
 	}
 }
 
-func (s *AuthService) HandymanSignUp (req HandymanSignUpReq) error {
-	return s.db.Transaction( func (tx *gorm.DB) error {
+func (s *AuthService) HandymanSignUp(req HandymanSignUpReq) error {
+	return s.db.Transaction(func(tx *gorm.DB) error {
 		// Checking for exisitng user
 		userExists, err := s.handymenRepo.GetByEmail(req.Email, tx)
 
@@ -93,15 +93,15 @@ func (s *AuthService) HandymanSignUp (req HandymanSignUpReq) error {
 		}
 
 		// Create the session object
-		token, err:= s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role))	//Generate JWT Token
+		token, err := s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role)) //Generate JWT Token
 		if err != nil {
 			return errors.New("Unable to genrate JWT token: " + err.Error())
 		}
 
-		session:= &models.Session{
-			UserID: user.UserID,
+		session := &models.Session{
+			UserID:    user.UserID,
 			TokenHash: token,
-			Revoked: false,
+			Revoked:   false,
 		}
 
 		// creating the session
@@ -114,10 +114,10 @@ func (s *AuthService) HandymanSignUp (req HandymanSignUpReq) error {
 	})
 }
 
-func (s *AuthService) ClientSignUp (req ClientSignUpReq) error {
-	return s.db.Transaction( func (tx *gorm.DB) error {
+func (s *AuthService) ClientSignUp(req ClientSignUpReq) error {
+	return s.db.Transaction(func(tx *gorm.DB) error {
 		// Checking for exisitng user
-		userExists, err := s.clientRepository.GetByEmail(req.Email)
+		userExists, err := s.clientRepository.GetByEmail(req.Email, tx)
 
 		if err != nil {
 			return err
@@ -157,15 +157,15 @@ func (s *AuthService) ClientSignUp (req ClientSignUpReq) error {
 		}
 
 		// Create the session object
-		token, err:= s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role))	//Generate JWT Token
+		token, err := s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role)) //Generate JWT Token
 		if err != nil {
 			return errors.New("Unable to genrate JWT token: " + err.Error())
 		}
 
-		session:= &models.Session{
-			UserID: user.UserID,
+		session := &models.Session{
+			UserID:    user.UserID,
 			TokenHash: token,
-			Revoked: false,
+			Revoked:   false,
 		}
 
 		// creating the session
@@ -173,21 +173,12 @@ func (s *AuthService) ClientSignUp (req ClientSignUpReq) error {
 		if err != nil {
 			return errors.New("Session not created: " + err.Error())
 		}
-		
+
 		return nil
 	})
 }
 
 func (s *AuthService) SignOut(tokenHash string) error {
-	claims, err := s.jwtService.VerifyJWT(tokenHash)
-	if err != nil {
-		return ErrInvalidToken
-	}
-
-	if claims == nil {
-		return ErrInvalidToken
-	}
-
 	session, err := s.sessionRepository.RevokeSession(tokenHash)
 	if err != nil {
 		return err
@@ -200,7 +191,7 @@ func (s *AuthService) SignOut(tokenHash string) error {
 	return nil
 }
 
-func (s *AuthService) VerifySession (req VerifySessionReq) (session *models.Session, err error) {
+func (s *AuthService) VerifySession(req VerifySessionReq) (session *models.Session, err error) {
 	// validate jwt
 	claims, err := s.jwtService.VerifyJWT(req.TokenHash)
 	if err != nil {
@@ -214,6 +205,10 @@ func (s *AuthService) VerifySession (req VerifySessionReq) (session *models.Sess
 	session, err = s.sessionRepository.GetSession(req.TokenHash)
 	if err != nil {
 		return nil, err
+	}
+
+	if session == nil {
+		return nil, ErrSessionNotFound
 	}
 
 	// check revoked
