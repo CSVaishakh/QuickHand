@@ -2,6 +2,8 @@ package src
 
 import (
 	"errors"
+	"crypto/sha256"
+	"encoding/hex"
 
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	repo "github.com/CSVaishakh/QuickHand/src/packages/db/repositories"
@@ -11,12 +13,14 @@ import (
 )
 
 var (
+	ErrEmailAldreadyExists = errors.New("email ardeady registered")
 	ErrInvalidToken    = errors.New("invalid token")
 	ErrSignOutFailed   = errors.New("sign out failed")
 	ErrSessionNotFound = errors.New("session not found")
 	ErrInvalidSession  = errors.New("invalid session")
 	ErrSessionExpired  = errors.New("session expired")
 	ErrDBFailed        = errors.New("session expired but databse failed")
+	ErrInvalidCredentials = errors.New("invalid email or password")
 )
 
 type AuthService struct {
@@ -43,20 +47,21 @@ func NewAuthService(
 	}
 }
 
-func (s *AuthService) HandymanSignUp(req HandymanSignUpReq) error {
-	return s.db.Transaction(func(tx *gorm.DB) error {
-		// Checking for exisitng user
-		userExists, err := s.handymenRepo.GetByEmail(req.Email, tx)
+func (s *AuthService) HandymanSignUp(req HandymanSignUpReq) (string, error) {
+	var token string
+
+	err := s.db.Transaction(func(tx *gorm.DB) error {
+
+		userExists, err := s.handymenRepo.CheckByEmail(req.Email, tx)
 
 		if err != nil {
 			return err
 		}
 
 		if userExists {
-			return errors.New("User with email exists")
+			return ErrEmailAldreadyExists
 		}
 
-		// Password hashing
 		hashedPass, err := bcrypt.GenerateFromPassword(
 			[]byte(req.Password),
 			bcrypt.DefaultCost,
@@ -66,7 +71,6 @@ func (s *AuthService) HandymanSignUp(req HandymanSignUpReq) error {
 			return err
 		}
 
-		// Creating the user object
 		user := &models.Handyman{
 			User: models.User{
 				FirstName:    req.FirstName,
@@ -80,42 +84,95 @@ func (s *AuthService) HandymanSignUp(req HandymanSignUpReq) error {
 			Type: models.HandymanType(req.Type),
 		}
 
-		//Creating the handyman user
 		err = s.handymenRepo.CreateUser(user, tx)
 		if err != nil {
-			return errors.New("user not created: " + err.Error())
+			return err
 		}
 
-		//Adding the handymen type
 		err = s.handymenRepo.AddHandymenType(user, tx)
 		if err != nil {
-			return errors.New("user not created: " + err.Error())
+			return err
+		}
+		//generate JWT
+		token, err = s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role))
+		if err != nil {
+			return err
 		}
 
-		// Create the session object
-		token, err := s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role)) //Generate JWT Token
-		if err != nil {
-			return errors.New("Unable to genrate JWT token: " + err.Error())
-		}
+		hash := sha256.Sum256([]byte(token))
+		tokenHash := hex.EncodeToString(hash[:])
 
 		session := &models.Session{
 			UserID:    user.UserID,
-			TokenHash: token,
+			TokenHash: tokenHash,
 			Revoked:   false,
 		}
-
-		// creating the session
+		
+		//add session to db
 		err = s.sessionRepository.CreateSession(session, tx)
 		if err != nil {
-			return errors.New("Session not created: " + err.Error())
+			return err
 		}
 
-		return nil
+		return  nil
 	})
+
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil
 }
 
-func (s *AuthService) ClientSignUp(req ClientSignUpReq) error {
-	return s.db.Transaction(func(tx *gorm.DB) error {
+func (s *AuthService) HandymanSignIn(req SignInReq) (HandymanSignInRes, error) {
+	//get User details
+	user, err := s.handymenRepo.GetUser(req.Email, s.db)
+	if err != nil {
+		return HandymanSignInRes{}, err
+	}
+
+	if user == nil {
+		return HandymanSignInRes{}, ErrInvalidCredentials
+	}
+
+	//verifry password
+	err = bcrypt.CompareHashAndPassword(
+		[]byte(user.PasswordHash),
+		[]byte(req.Password),
+	) 
+	if err != nil {
+		return HandymanSignInRes{}, ErrInvalidCredentials
+	}
+
+	//generate JWT
+	token, err := s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role))
+	if err != nil {
+		return HandymanSignInRes{}, err
+	}
+	hash := sha256.Sum256([]byte(token))
+	tokenHash := hex.EncodeToString(hash[:])
+
+	//genrate session object
+	session := models.Session{
+		UserID:    user.UserID,
+		TokenHash: tokenHash,
+		Revoked:   false,
+	}
+
+	//add session to db
+	err = s.sessionRepository.CreateSession(&session, s.db)
+	if err != nil {
+		return HandymanSignInRes{}, err
+	}
+
+	return HandymanSignInRes{
+		Token: token,
+	}, nil
+}
+
+func (s *AuthService) ClientSignUp(req ClientSignUpReq) (string, error) {
+	var token string
+	err := s.db.Transaction(func(tx *gorm.DB) error {
 		// Checking for exisitng user
 		userExists, err := s.clientRepository.GetByEmail(req.Email, tx)
 
@@ -124,7 +181,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) error {
 		}
 
 		if userExists {
-			return errors.New("User with email exists")
+			return ErrEmailAldreadyExists
 		}
 
 		// Password hashing
@@ -153,33 +210,88 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) error {
 		//Creating the client user
 		err = s.clientRepository.CreateUser(user, tx)
 		if err != nil {
-			return errors.New("user not created: " + err.Error())
+			return err
 		}
 
 		// Create the session object
 		token, err := s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role)) //Generate JWT Token
 		if err != nil {
-			return errors.New("Unable to genrate JWT token: " + err.Error())
+			return err
 		}
+
+		hash := sha256.Sum256([]byte(token))
+		tokenHash := hex.EncodeToString(hash[:])
 
 		session := &models.Session{
 			UserID:    user.UserID,
-			TokenHash: token,
+			TokenHash: tokenHash,
 			Revoked:   false,
 		}
 
 		// creating the session
 		err = s.sessionRepository.CreateSession(session, tx)
 		if err != nil {
-			return errors.New("Session not created: " + err.Error())
+			return err
 		}
 
 		return nil
 	})
+
+	if err != nil {
+		return "", err
+	}
+
+	return token, nil 
 }
 
-func (s *AuthService) SignOut(tokenHash string) error {
-	session, err := s.sessionRepository.RevokeSession(tokenHash)
+func (s *AuthService)ClientSignIn(req SignInReq) (ClientSignInRes, error) {
+	//get User details
+	user, err := s.handymenRepo.GetUser(req.Email, s.db)
+	if err != nil {
+		return ClientSignInRes{}, err
+	}
+
+	if user == nil {
+		return ClientSignInRes{}, ErrInvalidCredentials
+	}
+
+	//verifry password
+	err = bcrypt.CompareHashAndPassword(
+		[]byte(user.PasswordHash),
+		[]byte(req.Password),
+	) 
+	if err != nil {
+		return ClientSignInRes{}, ErrInvalidCredentials
+	}
+
+	//generate JWT
+	token, err := s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role))
+	if err != nil {
+		return ClientSignInRes{}, err
+	}
+	hash := sha256.Sum256([]byte(token))
+	tokenHash := hex.EncodeToString(hash[:])
+
+	//genrate session object
+	session := models.Session{
+		UserID:    user.UserID,
+		TokenHash: tokenHash,
+		Revoked:   false,
+	}
+
+	//add session to db
+	err = s.sessionRepository.CreateSession(&session, s.db)
+	if err != nil {
+		return ClientSignInRes{}, err
+	}
+
+	return ClientSignInRes{
+		Token: token,
+	}, nil
+}
+
+func (s *AuthService) SignOut(token string) error {
+	session, err := s.sessionRepository.RevokeSession(token)
 	if err != nil {
 		return err
 	}
@@ -193,7 +305,7 @@ func (s *AuthService) SignOut(tokenHash string) error {
 
 func (s *AuthService) VerifySession(req VerifySessionReq) (session *models.Session, err error) {
 	// validate jwt
-	claims, err := s.jwtService.VerifyJWT(req.TokenHash)
+	claims, err := s.jwtService.VerifyJWT(req.Token)
 	if err != nil {
 		return nil, ErrInvalidToken
 	}
@@ -202,7 +314,10 @@ func (s *AuthService) VerifySession(req VerifySessionReq) (session *models.Sessi
 	}
 
 	// get session
-	session, err = s.sessionRepository.GetSession(req.TokenHash)
+	hash := sha256.Sum256([]byte(req.Token))
+	tokenHash := hex.EncodeToString(hash[:])
+
+	session, err = s.sessionRepository.GetSession(tokenHash)
 	if err != nil {
 		return nil, err
 	}

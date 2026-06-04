@@ -1,9 +1,10 @@
 package src
 
 import (
-	"github.com/golang-jwt/jwt/v5"
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
+	"github.com/golang-jwt/jwt/v5"
 )
+
 type UserRole string
 type HandymanType string
 
@@ -24,19 +25,19 @@ const (
 )
 
 type HandymanSignUpReq struct {
-	FirstName string
-	LastName string
-	Email string
-	Password string
-	Role UserRole
-	Type HandymanType
+	FirstName   string
+	LastName    string
+	Email       string
+	Password    string
+	Role        UserRole
+	Type        HandymanType
 	PhoneNumber string
-	Img  *string
+	Img         *string
 }
 
 type HandymanSignUpRes struct {
 	Session *models.Session
-    User    *models.Handyman
+	User    *models.Handyman
 }
 
 type JWTService struct {
@@ -50,17 +51,29 @@ type Claims struct {
 }
 
 type VerifySessionReq struct {
-	TokenHash string
+	Token string
 }
 
-
 type ClientSignUpReq struct {
-	FirstName string
-	LastName string
-	Email string
-	Password string
-	Role UserRole
-	Type HandymanType
+	FirstName   string
+	LastName    string
+	Email       string
+	Password    string
+	Role        UserRole
+	Type        HandymanType
 	PhoneNumber string
-	Img  *string
+	Img         *string
+}
+
+type SignInReq struct {
+	Email    string
+	Password string
+}
+
+type HandymanSignInRes struct {
+	Token string
+}
+
+type ClientSignInRes struct {
+	Token string
 }
