@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"errors"
+
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	"gorm.io/gorm"
 )
@@ -45,7 +47,7 @@ func (repo *HandymenRepository) AddHandymenType(
 		return nil
 }
 
-func (repo *HandymenRepository) GetByEmail (
+func (repo *HandymenRepository) CheckByEmail (
 	email string,
 	tx *gorm.DB,
 ) (bool,error){
@@ -61,4 +63,35 @@ func (repo *HandymenRepository) GetByEmail (
 	}
 
 	return count > 0, nil
+}
+
+func (repo *HandymenRepository) GetUser(
+	email string,
+	tx *gorm.DB,
+) (*models.Handyman, error) {
+	var user models.Handyman
+
+	err := tx.
+		Table("users").
+		Select(`
+			users.*,
+			handymen.handyman_type AS type
+		`).
+		Joins(`
+			JOIN handymen
+			ON handymen.user_id = users.user_id
+		`).
+		Where("users.email = ?", email).
+		Take(&user).
+		Error
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
