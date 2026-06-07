@@ -63,7 +63,7 @@ func (s *AuthService) ForgotPassowrd(req ForgotPasswordReq) (string, error) {
 		return "", err
 	}
 
-	if userExists {
+	if !userExists {
 		return "", ErrUserDoesNotExist
 	}
 
