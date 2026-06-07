@@ -13,4 +13,5 @@ var (
 	ErrDBFailed        = errors.New("session expired but databse failed")
 	ErrInvalidCredentials = errors.New("invalid email or password")
 	ErrUserDoesNotExist = errors.New("user with email dopes not exist")
+	ErrInvalidOTP = errors.New("otp is is invalid")
 )

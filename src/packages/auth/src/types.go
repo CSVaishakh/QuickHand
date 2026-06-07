@@ -40,9 +40,7 @@ type HandymanSignUpRes struct {
 	User    *models.Handyman
 }
 
-type JWTService struct {
-	secret []byte
-}
+
 
 type Claims struct {
 	UserID string
@@ -78,11 +76,27 @@ type ClientSignInRes struct {
 	Token string
 }
 
-// type ForgotPasswordReq struct {
-// 	Email string
-// }
+type ForgotPasswordReq struct {
+	Email string
+}
+type OtpJWT_Claims struct{
+	OtpHash string
+	Email string
+	jwt.RegisteredClaims
+}
 
-// type OtpVerificationReq struct {
-// 	OtpHash string
-// 	Token string
-// }
+type OtpVerificationReq struct {
+	Email string
+	Otp string
+	Token string
+}
+
+type ResetJWT_Claims struct{
+	Email string
+	jwt.RegisteredClaims
+}
+
+type ResetPasswordReq struct {
+	Token string
+	NewPassword string
+}
