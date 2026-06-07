@@ -21,7 +21,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (string, error) {
 		}
 
 		if userExists {
-			return ErrEmailAldreadyExists
+			return ErrEmailAlreadyExists
 		}
 
 		// Password hashing

@@ -22,7 +22,7 @@ func (s *AuthService) HandymanSignUp(req HandymanSignUpReq) (string, error) {
 		}
 
 		if userExists {
-			return ErrEmailAldreadyExists
+			return ErrEmailAlreadyExists
 		}
 
 		hashedPass, err := bcrypt.GenerateFromPassword(
