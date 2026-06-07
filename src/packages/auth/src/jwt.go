@@ -65,3 +65,26 @@ func (s *JWTService) VerifyJWT(
 
     return claims, nil
 }
+
+func (s *JWTService) GenerateResetPAsswordJWT (
+	UserID string,
+	Role UserRole,
+	Email string,
+) (string, error) {
+	claims := Claims{
+		UserID: UserID,
+		Role: Role,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ExpiresAt: jwt.NewNumericDate(
+				time.Now().Add(24 * time.Hour),
+			),
+		},
+	}
+
+	token := jwt.NewWithClaims(
+		jwt.SigningMethodHS256,
+		claims,
+	)
+
+	return token.SignedString(s.secret)
+}

@@ -77,3 +77,12 @@ type HandymanSignInRes struct {
 type ClientSignInRes struct {
 	Token string
 }
+
+// type ForgotPasswordReq struct {
+// 	Email string
+// }
+
+// type OtpVerificationReq struct {
+// 	OtpHash string
+// 	Token string
+// }
