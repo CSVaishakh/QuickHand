@@ -14,16 +14,16 @@ type HandymenRepository struct {
 func NewHandymenRepository(
 	db *gorm.DB,
 ) *HandymenRepository {
-		return &HandymenRepository{
-			db: db,
-		}
+	return &HandymenRepository{
+		db: db,
+	}
 }
 
-func (repo *HandymenRepository) CreateUser (
+func (repo *HandymenRepository) CreateUser(
 	user *models.Handyman,
 	tx *gorm.DB,
 ) error {
-	err:= tx.Create(&user.User).Error
+	err := tx.Create(&user.User).Error
 	if err != nil {
 		return err
 	}
@@ -31,33 +31,33 @@ func (repo *HandymenRepository) CreateUser (
 	return nil
 }
 
-func (repo *HandymenRepository) AddHandymenType( 
+func (repo *HandymenRepository) AddHandymenType(
 	user *models.Handyman,
 	tx *gorm.DB,
 ) error {
-		err := tx.Exec(
-				"INSERT INTO handymen (user_id, type) VALUES (?, ?)",
-				user.UserID,
-				user.Type,
-			).Error
+	err := tx.Exec(
+		"INSERT INTO handymen (user_id, type) VALUES (?, ?)",
+		user.UserID,
+		user.Type,
+	).Error
 
-		if err!= nil {
-			return err
-		}
-		return nil
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
-func (repo *HandymenRepository) CheckByEmail (
+func (repo *HandymenRepository) CheckByEmail(
 	email string,
 	tx *gorm.DB,
-) (bool,error){
+) (bool, error) {
 	var count int64
 
 	res := tx.Raw(
-		"SELECT count(*) FROM users WHERE email = ?", 
+		"SELECT count(*) FROM users WHERE email = ?",
 		email,
 	).Scan(&count)
-	
+
 	if res.Error != nil {
 		return false, res.Error
 	}

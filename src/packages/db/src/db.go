@@ -5,15 +5,15 @@ import (
 	"gorm.io/gorm"
 )
 
-func New (url string) (*gorm.DB, error) {
+func New(url string) (*gorm.DB, error) {
 	connection, err := gorm.Open(
 		postgres.Open(url),
 		&gorm.Config{},
 	)
 
 	if err != nil {
-		return nil, err;
+		return nil, err
 	}
 
-	return connection,nil
+	return connection, nil
 }
