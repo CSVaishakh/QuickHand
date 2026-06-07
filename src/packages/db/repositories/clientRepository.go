@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"errors"
+
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	"gorm.io/gorm"
 )
@@ -41,4 +43,26 @@ func (repo *ClientRepository) GetByEmail (
 	}
 
 	return count > 0, nil
+}
+
+func (repo *ClientRepository) GetUser(
+	email string,
+	tx *gorm.DB,
+) (*models.Client, error) {
+	var user models.Client
+
+	err := tx.
+		Where("email = ?", email).
+		Take(&user).
+		Error
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, nil
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
 }
