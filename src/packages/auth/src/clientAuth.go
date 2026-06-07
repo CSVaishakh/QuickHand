@@ -54,7 +54,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (string, error) {
 		}
 
 		// Create the session object
-		token, err := s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role)) //Generate JWT Token
+		token, err = s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role)) //Generate JWT Token
 		if err != nil {
 			return err
 		}
@@ -86,7 +86,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (string, error) {
 
 func (s *AuthService)ClientSignIn(req SignInReq) (ClientSignInRes, error) {
 	//get User details
-	user, err := s.handymenRepo.GetUser(req.Email, s.db)
+	user, err := s.clientRepository.GetUser(req.Email, s.db)
 	if err != nil {
 		return ClientSignInRes{}, err
 	}
@@ -129,5 +129,3 @@ func (s *AuthService)ClientSignIn(req SignInReq) (ClientSignInRes, error) {
 		Token: token,
 	}, nil
 }
-
-
