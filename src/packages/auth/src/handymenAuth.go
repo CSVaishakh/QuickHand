@@ -1,11 +1,11 @@
 package src
 
-import(
-	"gorm.io/gorm"
+import (
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 
 	"crypto/sha256"
-    "encoding/hex"
+	"encoding/hex"
 
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 )
@@ -70,14 +70,14 @@ func (s *AuthService) HandymanSignUp(req HandymanSignUpReq) (string, error) {
 			TokenHash: tokenHash,
 			Revoked:   false,
 		}
-		
+
 		//add session to db
 		err = s.sessionRepository.CreateSession(session, tx)
 		if err != nil {
 			return err
 		}
 
-		return  nil
+		return nil
 	})
 
 	if err != nil {
@@ -98,11 +98,11 @@ func (s *AuthService) HandymanSignIn(req SignInReq) (HandymanSignInRes, error) {
 		return HandymanSignInRes{}, ErrInvalidCredentials
 	}
 
-	//verifry password
+	//verify password
 	err = bcrypt.CompareHashAndPassword(
 		[]byte(user.PasswordHash),
 		[]byte(req.Password),
-	) 
+	)
 	if err != nil {
 		return HandymanSignInRes{}, ErrInvalidCredentials
 	}
@@ -132,4 +132,3 @@ func (s *AuthService) HandymanSignIn(req SignInReq) (HandymanSignInRes, error) {
 		Token: token,
 	}, nil
 }
-

@@ -8,16 +8,16 @@ import (
 	"os"
 )
 
-func Init () (db *gorm.DB){
+func Init() (db *gorm.DB) {
 
 	db_url := os.Getenv("DATABASE_URL")
-	connection, err :=  src.New(db_url)
+	connection, err := src.New(db_url)
 
 	if err != nil {
-		log.Fatal("databse connection failed")
+		log.Fatal("database connection failed")
 	}
 
-	db = connection;
+	db = connection
 
 	return db
 }

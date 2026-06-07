@@ -1,11 +1,11 @@
 package src
 
-import(
-	"gorm.io/gorm"
+import (
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 
 	"crypto/sha256"
-    "encoding/hex"
+	"encoding/hex"
 
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 )
@@ -13,7 +13,7 @@ import(
 func (s *AuthService) ClientSignUp(req ClientSignUpReq) (string, error) {
 	var token string
 	err := s.db.Transaction(func(tx *gorm.DB) error {
-		// Checking for exisitng user
+		// Checking for existing user
 		userExists, err := s.clientRepository.GetByEmail(req.Email, tx)
 
 		if err != nil {
@@ -81,10 +81,10 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (string, error) {
 		return "", err
 	}
 
-	return token, nil 
+	return token, nil
 }
 
-func (s *AuthService)ClientSignIn(req SignInReq) (ClientSignInRes, error) {
+func (s *AuthService) ClientSignIn(req SignInReq) (ClientSignInRes, error) {
 	//get User details
 	user, err := s.clientRepository.GetUser(req.Email, s.db)
 	if err != nil {
@@ -95,11 +95,11 @@ func (s *AuthService)ClientSignIn(req SignInReq) (ClientSignInRes, error) {
 		return ClientSignInRes{}, ErrInvalidCredentials
 	}
 
-	//verifry password
+	//verify password
 	err = bcrypt.CompareHashAndPassword(
 		[]byte(user.PasswordHash),
 		[]byte(req.Password),
-	) 
+	)
 	if err != nil {
 		return ClientSignInRes{}, ErrInvalidCredentials
 	}
