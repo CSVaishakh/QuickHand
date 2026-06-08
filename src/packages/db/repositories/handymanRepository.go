@@ -75,7 +75,7 @@ func (repo *HandymenRepository) GetUser(
 		Table("users").
 		Select(`
 			users.*,
-			handymen.handyman_type AS type
+			handymen.type AS type
 		`).
 		Joins(`
 			JOIN handymen
@@ -84,7 +84,6 @@ func (repo *HandymenRepository) GetUser(
 		Where("users.email = ?", email).
 		Take(&user).
 		Error
-
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, nil
 	}
