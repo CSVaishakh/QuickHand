@@ -1,7 +1,6 @@
 package src
 
 import (
-	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -36,14 +35,16 @@ type HandymanSignUpReq struct {
 }
 
 type HandymanSignUpRes struct {
-	Session *models.Session
-	User    *models.Handyman
+	UserID string
+	FirstName string
+	Token string
+	Role UserRole
+	Type HandymanType
 }
-
-
 
 type Claims struct {
 	UserID string
+	FirstName string
 	Role   UserRole
 	jwt.RegisteredClaims
 }
@@ -63,17 +64,31 @@ type ClientSignUpReq struct {
 	Img         *string
 }
 
+type ClientSignUpRes struct {
+	UserID string
+	FirstName string
+	Token string
+	Role UserRole
+}
+
 type SignInReq struct {
 	Email    string
 	Password string
 }
 
 type HandymanSignInRes struct {
+	UserID string
+	FirstName string
 	Token string
+	Role UserRole
+	Type HandymanType
 }
 
 type ClientSignInRes struct {
+	UserID string
+	FirstName string
 	Token string
+	Role UserRole
 }
 
 type ForgotPasswordReq struct {

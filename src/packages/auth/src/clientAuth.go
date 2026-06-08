@@ -10,8 +10,9 @@ import (
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 )
 
-func (s *AuthService) ClientSignUp(req ClientSignUpReq) (string, error) {
+func (s *AuthService) ClientSignUp(req ClientSignUpReq) (ClientSignUpRes, error) {
 	var token string
+	var user models.Client
 	err := s.db.Transaction(func(tx *gorm.DB) error {
 		// Checking for existing user
 		userExists, err := s.clientRepository.GetByEmail(req.Email, tx)
@@ -35,7 +36,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (string, error) {
 		}
 
 		// Creating the user object
-		user := &models.Client{
+		user = models.Client{
 			User: models.User{
 				FirstName:    req.FirstName,
 				LastName:     req.LastName,
@@ -48,7 +49,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (string, error) {
 		}
 
 		//Creating the client user
-		err = s.clientRepository.CreateUser(user, tx)
+		err = s.clientRepository.CreateUser(&user, tx)
 		if err != nil {
 			return err
 		}
@@ -78,10 +79,15 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (string, error) {
 	})
 
 	if err != nil {
-		return "", err
+		return ClientSignUpRes{}, err
 	}
 
-	return token, nil
+	return ClientSignUpRes{
+		UserID: user.UserID.String(),
+		FirstName: user.FirstName,
+		Token: token,
+		Role: UserRole(user.Role),
+	}, nil
 }
 
 func (s *AuthService) ClientSignIn(req SignInReq) (ClientSignInRes, error) {
@@ -126,6 +132,9 @@ func (s *AuthService) ClientSignIn(req SignInReq) (ClientSignInRes, error) {
 	}
 
 	return ClientSignInRes{
+		UserID: user.UserID.String(),
+		FirstName: user.FirstName,
 		Token: token,
+		Role: UserRole(user.Role),
 	}, nil
 }
