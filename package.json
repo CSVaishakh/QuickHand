@@ -8,8 +8,10 @@
     "turbo": "^2.9.16"
   },
   "scripts": {
-    "migrate"     :   "go run ./src/packages/db/cmd",
-    "db:start"    :   "cd src/packages/db/ && docker compose up -d",
-    "dev:server"  :   "bun db:start && cd src/apps/server/ && go run main.go" 
+    "migrate": "go run ./src/packages/db/cmd",
+    "db:start": "cd src/packages/db/ && docker compose up -d",
+    "db:stop": "cd src/packages/db/ && docker compose down",
+    "db:reset": "cd src/packages/db/ && docker compose down -v && docker compose up -d",
+    "dev:server": "bun db:start && cd src/apps/server/ && go run main.go"
   }
 }
