@@ -6,7 +6,7 @@ type Controller struct {
 	Router fiber.Router
 }
 
-func NewContoller (router fiber.Router) *Controller {
+func NewController (router fiber.Router) *Controller {
 	return &Controller{
 		Router: router,
 	}
