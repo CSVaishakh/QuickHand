@@ -10,19 +10,22 @@ import (
 )
 
 func (s *AuthService) SignOut(token string) error {
-	session, err := s.sessionRepository.RevokeSession(token)
-	if err.Error() == "session not found" {
-		return ErrSessionNotFound
-	}
+	hash := sha256.Sum256([]byte(token))
+	tokenHash := hex.EncodeToString(hash[:])
+
+	session, err := s.sessionRepository.RevokeSession(tokenHash)
 
 	if err != nil {
+		if err.Error() == "session not found" {
+			return ErrSessionNotFound
+		}
 		return err
 	}
-	
+
 	if !session.Revoked {
 		return ErrSignOutFailed
 	}
-	
+
 	return nil
 }
 
