@@ -1,6 +1,8 @@
 package middleware
 
 import (
+	"strings" 
+
 	fiber "github.com/gofiber/fiber/v3"
 	auth "github.com/CSVaishakh/QuickHand/src/packages/auth/src"
 )
@@ -10,6 +12,10 @@ func RequireAuth(
 ) fiber.Handler {
 	return func(c fiber.Ctx) error {
 		token := c.Get("Authorization")
+
+		if after, ok :=strings.CutPrefix(token, "Bearer "); ok  {
+			token = after
+		}
 
 		session, claims, err := authService.VerifySession(
 			auth.VerifySessionReq{
@@ -21,9 +27,10 @@ func RequireAuth(
 			return fiber.ErrUnauthorized
 		}
 
+		c.Locals("token", token)
 		c.Locals("session", session)
 		c.Locals("claims", claims)
 
 		return c.Next()
 	}
-}	
+}
