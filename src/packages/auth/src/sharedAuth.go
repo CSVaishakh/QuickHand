@@ -11,14 +11,18 @@ import (
 
 func (s *AuthService) SignOut(token string) error {
 	session, err := s.sessionRepository.RevokeSession(token)
+	if err.Error() == "session not found" {
+		return ErrSessionNotFound
+	}
+
 	if err != nil {
 		return err
 	}
-
+	
 	if !session.Revoked {
 		return ErrSignOutFailed
 	}
-
+	
 	return nil
 }
 
