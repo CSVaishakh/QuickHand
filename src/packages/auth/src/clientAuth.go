@@ -6,6 +6,7 @@ import (
 
 	"crypto/sha256"
 	"encoding/hex"
+	"errors"
 
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 )
@@ -15,7 +16,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (ClientSignUpRes, error)
 	var user models.Client
 	err := s.db.Transaction(func(tx *gorm.DB) error {
 		// Checking for existing user
-		userExists, err := s.clientRepository.GetByEmail(req.Email, tx)
+		userExists, err := s.clientRepo.CheckByEmail(req.Email, tx)
 
 		if err != nil {
 			return err
@@ -49,7 +50,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (ClientSignUpRes, error)
 		}
 
 		//Creating the client user
-		err = s.clientRepository.CreateUser(&user, tx)
+		err = s.clientRepo.CreateUser(&user, tx)
 		if err != nil {
 			return err
 		}
@@ -70,7 +71,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (ClientSignUpRes, error)
 		}
 
 		// creating the session
-		err = s.sessionRepository.CreateSession(session, tx)
+		err = s.sessionRepo.CreateSession(session, tx)
 		if err != nil {
 			return err
 		}
@@ -92,13 +93,13 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (ClientSignUpRes, error)
 
 func (s *AuthService) ClientSignIn(req SignInReq) (ClientSignInRes, error) {
 	//get User details
-	user, err := s.clientRepository.GetUser(req.Email, s.db)
-	if err != nil {
-		return ClientSignInRes{}, err
+	user, err := s.clientRepo.GetUserByEmail(req.Email, s.db)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return ClientSignInRes{}, ErrInvalidCredentials
 	}
 
-	if user == nil {
-		return ClientSignInRes{}, ErrInvalidCredentials
+	if err != nil {
+		return ClientSignInRes{}, err
 	}
 
 	//verify password
@@ -126,7 +127,7 @@ func (s *AuthService) ClientSignIn(req SignInReq) (ClientSignInRes, error) {
 	}
 
 	//add session to db
-	err = s.sessionRepository.CreateSession(&session, s.db)
+	err = s.sessionRepo.CreateSession(&session, s.db)
 	if err != nil {
 		return ClientSignInRes{}, err
 	}

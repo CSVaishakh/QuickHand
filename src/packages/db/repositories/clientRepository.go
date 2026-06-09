@@ -27,7 +27,7 @@ func (repo *ClientRepository) CreateUser (
 	return tx.Create(&user.User).Error
 }
 
-func (repo *ClientRepository) GetByEmail (
+func (repo *ClientRepository) CheckByEmail (
 	email string,
 	tx *gorm.DB,
 ) (bool,error){
@@ -45,7 +45,7 @@ func (repo *ClientRepository) GetByEmail (
 	return count > 0, nil
 }
 
-func (repo *ClientRepository) GetUser(
+func (repo *ClientRepository) GetUserByEmail(
 	email string,
 	tx *gorm.DB,
 ) (*models.Client, error) {
@@ -57,7 +57,29 @@ func (repo *ClientRepository) GetUser(
 		Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, nil
+		return nil, gorm.ErrRecordNotFound
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (repo *ClientRepository) GetUserByID(
+	UserId string,
+	tx *gorm.DB,
+) (*models.Client, error) {
+	var user models.Client
+
+	err := tx.
+		Where("user_id = ?", UserId).
+		Take(&user).
+		Error
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, gorm.ErrRecordNotFound
 	}
 
 	if err != nil {

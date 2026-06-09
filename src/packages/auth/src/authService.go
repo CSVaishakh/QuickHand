@@ -8,23 +8,23 @@ import (
 
 type AuthService struct {
 	handymenRepo      *repo.HandymenRepository
-	clientRepository  *repo.ClientRepository
-	sessionRepository *repo.SessionRepository
+	clientRepo *repo.ClientRepository
+	sessionRepo *repo.SessionRepository
 	jwtService        *JWTService
 	db                *gorm.DB
 }
 
 func NewAuthService(
 	handymenRepo *repo.HandymenRepository,
-	clientRepository *repo.ClientRepository,
-	sessionRepository *repo.SessionRepository,
+	clientRepo *repo.ClientRepository,
+	sessionRepo *repo.SessionRepository,
 	jwtService *JWTService,
 	db *gorm.DB,
 ) *AuthService {
 	return &AuthService{
 		handymenRepo:      handymenRepo,
-		clientRepository:  clientRepository,
-		sessionRepository: sessionRepository,
+		clientRepo:  clientRepo,
+		sessionRepo: sessionRepo,
 		jwtService:        jwtService,
 		db:                db,
 	}

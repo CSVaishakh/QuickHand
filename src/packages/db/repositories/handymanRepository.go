@@ -65,7 +65,7 @@ func (repo *HandymenRepository) CheckByEmail(
 	return count > 0, nil
 }
 
-func (repo *HandymenRepository) GetUser(
+func (repo *HandymenRepository) GetUserByEmail(
 	email string,
 	tx *gorm.DB,
 ) (*models.Handyman, error) {
@@ -85,7 +85,37 @@ func (repo *HandymenRepository) GetUser(
 		Take(&user).
 		Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, nil
+		return nil, gorm.ErrRecordNotFound
+	}
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &user, nil
+}
+
+func (repo *HandymenRepository) GetUserByID(
+	UserId string,
+	tx *gorm.DB,
+) (*models.Handyman, error) {
+	var user models.Handyman
+
+	err := tx.
+		Table("users").
+		Select(`
+			users.*,
+			handymen.type AS type
+		`).
+		Joins(`
+			JOIN handymen
+			ON handymen.user_id = users.user_id
+		`).
+		Where("users.user_id = ?", UserId).
+		Take(&user).
+		Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return nil, gorm.ErrRecordNotFound
 	}
 
 	if err != nil {

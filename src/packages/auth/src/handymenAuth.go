@@ -6,6 +6,7 @@
 
 		"crypto/sha256"
 		"encoding/hex"
+		"errors"
 
 		"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	)
@@ -73,7 +74,7 @@
 			}
 
 			//add session to db
-			err = s.sessionRepository.CreateSession(&session, tx)
+			err = s.sessionRepo.CreateSession(&session, tx)
 			if err != nil {
 				return err
 			}
@@ -96,13 +97,13 @@
 
 	func (s *AuthService) HandymanSignIn(req SignInReq) (HandymanSignInRes, error) {
 		//get User details
-		user, err := s.handymenRepo.GetUser(req.Email, s.db)
-		if err != nil {
-			return HandymanSignInRes{}, err
+		user, err := s.handymenRepo.GetUserByEmail(req.Email, s.db)
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return HandymanSignInRes{}, ErrInvalidCredentials
 		}
 
-		if user == nil {
-			return HandymanSignInRes{}, ErrInvalidCredentials
+		if err != nil {
+			return HandymanSignInRes{}, err
 		}
 
 		//verify password
@@ -130,7 +131,7 @@
 		}
 
 		//add session to db
-		err = s.sessionRepository.CreateSession(&session, s.db)
+		err = s.sessionRepo.CreateSession(&session, s.db)
 		if err != nil {
 			return HandymanSignInRes{}, err
 		}
