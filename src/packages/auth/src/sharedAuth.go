@@ -63,7 +63,7 @@ func (s *AuthService) VerifySession(req VerifySessionReq) (session *models.Sessi
 	return session, claims, nil
 }
 
-func (s *AuthService) ForgotPassowrd(req ForgotPasswordReq) (string, error) {
+func (s *AuthService) ForgotPassword(req ForgotPasswordReq) (string, error) {
 	//verify user exisits
 	userExists, err := s.handymenRepo.CheckByEmail(req.Email, s.db)
 	if err != nil {
