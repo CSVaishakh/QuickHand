@@ -1,6 +1,8 @@
 package src
 
 import (
+	"time"
+
 	"github.com/golang-jwt/jwt/v5"
 )
 
@@ -44,7 +46,6 @@ type HandymanSignUpRes struct {
 
 type Claims struct {
 	UserID string
-	FirstName string
 	Role   UserRole
 	jwt.RegisteredClaims
 }
@@ -114,4 +115,19 @@ type ResetJWT_Claims struct{
 type ResetPasswordReq struct {
 	Token string
 	NewPassword string
+}
+
+type GetSessionReq struct{
+	Token string
+}
+
+type GetSessionRes struct {
+	SessionId string
+	Revoked bool
+	CreatedAt time.Time
+	UserId string
+	FirstName string
+	Email string
+	Role UserRole
+	Type *HandymanType
 }

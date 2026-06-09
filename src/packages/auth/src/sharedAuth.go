@@ -7,13 +7,14 @@ import (
 
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 func (s *AuthService) SignOut(token string) error {
 	hash := sha256.Sum256([]byte(token))
 	tokenHash := hex.EncodeToString(hash[:])
 
-	session, err := s.sessionRepository.RevokeSession(tokenHash)
+	session, err := s.sessionRepo.RevokeSession(tokenHash)
 
 	if err != nil {
 		if err.Error() == "session not found" {
@@ -47,7 +48,7 @@ func (s *AuthService) VerifySession(req VerifySessionReq) (session *models.Sessi
 	hash := sha256.Sum256([]byte(req.Token))
 	tokenHash := hex.EncodeToString(hash[:])
 
-	session, err = s.sessionRepository.GetSession(tokenHash)
+	session, err = s.sessionRepo.GetSession(tokenHash)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -152,4 +153,73 @@ func (s *AuthService) ResetPassword(req ResetPasswordReq) error {
 	}
 
 	return nil
+}
+
+func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
+	claims, err := s.jwtService.VerifyJWT(req.Token)
+	if err != nil {
+		return GetSessionRes{}, err
+	}
+		
+	hash := sha256.Sum256([]byte(req.Token))
+	tokenHash := hex.EncodeToString(hash[:])
+	
+	session, err := s.sessionRepo.GetSession(tokenHash)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return GetSessionRes{}, ErrSessionNotFound
+	}
+
+	res := GetSessionRes{
+		SessionId: session.ID.String(),
+		Revoked:   session.Revoked,
+		CreatedAt: session.CreatedAt,
+	}
+
+	switch claims.Role {
+		case ClientRole:
+			user, err := s.clientRepo.GetUserByID(
+				session.UserID.String(),
+				s.db,
+			)
+
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return GetSessionRes{}, ErrInvalidCredentials
+			}
+
+			if err != nil {
+				return GetSessionRes{}, err
+			}
+
+			res.UserId = user.UserID.String()
+			res.FirstName = user.FirstName
+			res.Email = user.Email
+			res.Role = UserRole(user.Role)
+
+		case HandymanRole:
+			user, err := s.handymenRepo.GetUserByID(
+				session.UserID.String(),
+				s.db,
+			)
+
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return GetSessionRes{}, ErrInvalidCredentials
+			}
+
+			if err != nil {
+				return GetSessionRes{}, err
+			}
+
+			res.UserId = user.UserID.String()
+			res.FirstName = user.FirstName
+			res.Email = user.Email
+			res.Role = UserRole(user.Role)
+			
+			ht := HandymanType(user.Type)
+			res.Type = &ht
+
+		default:
+			return GetSessionRes{}, ErrInvalidCredentials
+	}
+
+	return res, nil
 }
