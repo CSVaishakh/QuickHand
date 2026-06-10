@@ -30,7 +30,6 @@ type HandymanSignUpReq struct {
 	LastName    string
 	Email       string
 	Password    string
-	Role        UserRole
 	Type        HandymanType
 	PhoneNumber string
 	Img         *string
@@ -59,8 +58,6 @@ type ClientSignUpReq struct {
 	LastName    string
 	Email       string
 	Password    string
-	Role        UserRole
-	Type        HandymanType
 	PhoneNumber string
 	Img         *string
 }
