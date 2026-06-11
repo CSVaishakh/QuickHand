@@ -6,7 +6,7 @@ import (
 	"github.com/CSVaishakh/QuickHand/src/apps/server/middleware"
 	auth "github.com/CSVaishakh/QuickHand/src/packages/auth/src"
 
-	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3"	
 )
 
 type AuthController struct {
@@ -231,4 +231,39 @@ func (c *AuthController) ResetPassword(ctx fiber.Ctx) error {
 	}
 
 	return ctx.SendStatus(fiber.StatusOK)
+}
+
+func (c *AuthController) GetSession(ctx fiber.Ctx) error {
+	var req auth.GetSessionReq
+
+	if err := ctx.Bind().Body(&req); err != nil {
+		return fiber.ErrBadRequest
+	}
+
+	session, err := c.AuthService.GetSession(req)
+
+	switch {
+	case errors.Is(err, auth.ErrInvalidToken):
+		return fiber.NewError(
+			fiber.StatusUnauthorized,
+			err.Error(),
+		)
+
+	case errors.Is(err, auth.ErrSessionNotFound):
+		return fiber.NewError(
+			fiber.StatusUnauthorized,
+			err.Error(),
+		)
+
+	case errors.Is(err, auth.ErrInvalidCredentials):
+		return fiber.NewError(
+			fiber.StatusUnauthorized,
+			err.Error(),
+		)
+
+	case err != nil:
+		return fiber.ErrInternalServerError
+	}
+
+	return ctx.Status(fiber.StatusOK).JSON(session)
 }

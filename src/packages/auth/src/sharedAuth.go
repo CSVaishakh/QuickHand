@@ -160,12 +160,21 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 	if err != nil {
 		return GetSessionRes{}, err
 	}
-		
+
 	hash := sha256.Sum256([]byte(req.Token))
 	tokenHash := hex.EncodeToString(hash[:])
-	
+
 	session, err := s.sessionRepo.GetSession(tokenHash)
+
 	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return GetSessionRes{}, ErrSessionNotFound
+	}
+
+	if err != nil {
+		return GetSessionRes{}, err
+	}
+
+	if session.Revoked {
 		return GetSessionRes{}, ErrSessionNotFound
 	}
 
@@ -176,49 +185,49 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 	}
 
 	switch claims.Role {
-		case ClientRole:
-			user, err := s.clientRepo.GetUserByID(
-				session.UserID.String(),
-				s.db,
-			)
+	case ClientRole:
+		user, err := s.clientRepo.GetUserByID(
+			session.UserID.String(),
+			s.db,
+		)
 
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				return GetSessionRes{}, ErrInvalidCredentials
-			}
-
-			if err != nil {
-				return GetSessionRes{}, err
-			}
-
-			res.UserId = user.UserID.String()
-			res.FirstName = user.FirstName
-			res.Email = user.Email
-			res.Role = UserRole(user.Role)
-
-		case HandymanRole:
-			user, err := s.handymenRepo.GetUserByID(
-				session.UserID.String(),
-				s.db,
-			)
-
-			if errors.Is(err, gorm.ErrRecordNotFound) {
-				return GetSessionRes{}, ErrInvalidCredentials
-			}
-
-			if err != nil {
-				return GetSessionRes{}, err
-			}
-
-			res.UserId = user.UserID.String()
-			res.FirstName = user.FirstName
-			res.Email = user.Email
-			res.Role = UserRole(user.Role)
-			
-			ht := HandymanType(user.Type)
-			res.Type = &ht
-
-		default:
+		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return GetSessionRes{}, ErrInvalidCredentials
+		}
+
+		if err != nil {
+			return GetSessionRes{}, err
+		}
+
+		res.UserId = user.UserID.String()
+		res.FirstName = user.FirstName
+		res.Email = user.Email
+		res.Role = UserRole(user.Role)
+
+	case HandymanRole:
+		user, err := s.handymenRepo.GetUserByID(
+			session.UserID.String(),
+			s.db,
+		)
+
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return GetSessionRes{}, ErrInvalidCredentials
+		}
+
+		if err != nil {
+			return GetSessionRes{}, err
+		}
+
+		res.UserId = user.UserID.String()
+		res.FirstName = user.FirstName
+		res.Email = user.Email
+		res.Role = UserRole(user.Role)
+
+		ht := HandymanType(user.Type)
+		res.Type = &ht
+
+	default:
+		return GetSessionRes{}, ErrInvalidCredentials
 	}
 
 	return res, nil
