@@ -5,12 +5,10 @@ import (
 	"gorm.io/gorm"
 
 	"log"
-	"os"
 )
 
-func Init() (db *gorm.DB) {
+func Init(db_url string) (db *gorm.DB) {
 
-	db_url := os.Getenv("DATABASE_URL")
 	connection, err := src.New(db_url)
 
 	if err != nil {

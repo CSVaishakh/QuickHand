@@ -20,7 +20,8 @@ func main() {
 	}
 
 	// Initialize database
-	db := DB.Init()
+	db_url := os.Getenv("DATABASE_URL")
+	db := DB.Init(db_url)
 
 	// Repositories
 	handymenRepo := repositories.NewHandymenRepository(db)
