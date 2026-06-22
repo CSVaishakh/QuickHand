@@ -20,9 +20,9 @@ func NewClientRepository (
 }
 
 func (repo *ClientRepository) CreateUser (
-		user *models.Client,
-		tx *gorm.DB,
-	) error {
+	user *models.Client,
+	tx *gorm.DB,
+) error {
 
 	return tx.Create(&user.User).Error
 }
