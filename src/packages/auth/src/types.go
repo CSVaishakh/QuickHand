@@ -26,26 +26,26 @@ const (
 )
 
 type HandymanSignUpReq struct {
-	FirstName   string
-	LastName    string
-	Email       string
-	Password    string
-	Type        HandymanType
-	PhoneNumber string
-	Img         *string
+	FirstName   	string
+	LastName    	string
+	Email       	string
+	Password    	string
+	Type       		HandymanType
+	PhoneNumber 	string
+	Img         	*string
 }
 
 type HandymanSignUpRes struct {
-	UserID string
-	FirstName string
-	Token string
-	Role UserRole
-	Type HandymanType
+	UserID 		string
+	FirstName 	string
+	Token 		string
+	Role 		UserRole
+	Type 		HandymanType
 }
 
 type Claims struct {
-	UserID string
-	Role   UserRole
+	UserID 	string
+	Role   	UserRole
 	jwt.RegisteredClaims
 }
 
@@ -54,64 +54,64 @@ type VerifySessionReq struct {
 }
 
 type ClientSignUpReq struct {
-	FirstName   string
-	LastName    string
-	Email       string
-	Password    string
-	PhoneNumber string
-	Img         *string
+	FirstName   	string
+	LastName    	string
+	Email       	string
+	Password    	string
+	PhoneNumber 	string
+	Img         	*string
 }
 
 type ClientSignUpRes struct {
-	UserID string
-	FirstName string
-	Token string
-	Role UserRole
+	UserID 		string
+	FirstName 	string
+	Token 		string
+	Role 		UserRole
 }
 
 type SignInReq struct {
-	Email    string
-	Password string
+	Email    	string
+	Password 	string
 }
 
 type HandymanSignInRes struct {
-	UserID string
-	FirstName string
-	Token string
-	Role UserRole
-	Type HandymanType
+	UserID 		string
+	FirstName 	string
+	Token 		string
+	Role		UserRole
+	Type 		HandymanType
 }
 
 type ClientSignInRes struct {
-	UserID string
-	FirstName string
-	Token string
-	Role UserRole
+	UserID 		string
+	FirstName 	string
+	Token 		string
+	Role 		UserRole
 }
 
 type ForgotPasswordReq struct {
 	Email string
 }
 type OtpJWT_Claims struct{
-	OtpHash string
-	Email string
+	OtpHash 	string
+	Email 		string
 	jwt.RegisteredClaims
 }
 
 type OtpVerificationReq struct {
-	Email string
-	Otp string
-	Token string
+	Email 	string
+	Otp 	string
+	Token 	string
 }
 
 type ResetJWT_Claims struct{
-	Email string
+	Email 	string
 	jwt.RegisteredClaims
 }
 
 type ResetPasswordReq struct {
-	Token string
-	NewPassword string
+	Token		 	string
+	NewPassword 	string
 }
 
 type GetSessionReq struct{
@@ -119,12 +119,12 @@ type GetSessionReq struct{
 }
 
 type GetSessionRes struct {
-	SessionId string
-	Revoked bool
-	CreatedAt time.Time
-	UserId string
-	FirstName string
-	Email string
-	Role UserRole
-	Type *HandymanType
+	SessionId 	string
+	Revoked 	bool
+	CreatedAt 	time.Time
+	UserId 		string
+	FirstName 	string
+	Email 		string
+	Role 		UserRole
+	Type 		*HandymanType
 }

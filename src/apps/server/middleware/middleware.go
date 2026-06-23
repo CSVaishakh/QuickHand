@@ -13,7 +13,7 @@ func RequireAuth(
 	return func(c fiber.Ctx) error {
 		token := c.Get("Authorization")
 
-		if after, ok :=strings.CutPrefix(token, "Bearer "); ok  {
+		if after, ok := strings.CutPrefix(token, "Bearer "); ok  {
 			token = after
 		}
 
