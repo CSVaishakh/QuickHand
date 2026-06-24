@@ -17,7 +17,7 @@
 
 		err := s.db.Transaction(func(tx *gorm.DB) error {
 
-			userExists, err := s.handymenRepo.CheckByEmail(req.Email, tx)
+			userExists, err := s.userRepo.CheckByEmail(req.Email, tx)
 
 			if err != nil {
 				return err
@@ -49,7 +49,7 @@
 				Type: models.HandymanType(req.Type),
 			}
 
-			err = s.handymenRepo.CreateUser(&user, tx)
+			err = s.userRepo.CreateUser(&user.User, tx)
 			if err != nil {
 				return err
 			}
@@ -97,7 +97,7 @@
 
 	func (s *AuthService) HandymanSignIn(req SignInReq) (HandymanSignInRes, error) {
 		//get User details
-		user, err := s.handymenRepo.GetUserByEmail(req.Email, s.db)
+		user, err := s.handymenRepo.GetByEmail(req.Email, s.db)
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return HandymanSignInRes{}, ErrInvalidCredentials
 		}

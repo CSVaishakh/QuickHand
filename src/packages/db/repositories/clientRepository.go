@@ -19,33 +19,7 @@ func NewClientRepository (
 	}
 }
 
-func (repo *ClientRepository) CreateUser (
-	user *models.Client,
-	tx *gorm.DB,
-) error {
-
-	return tx.Create(&user.User).Error
-}
-
-func (repo *ClientRepository) CheckByEmail (
-	email string,
-	tx *gorm.DB,
-) (bool,error){
-	var count int64
-
-	res := tx.Raw(
-		"SELECT count(*) FROM users WHERE email = ?", 
-		email,
-	).Scan(&count)
-	
-	if res.Error != nil {
-		return false, res.Error
-	}
-
-	return count > 0, nil
-}
-
-func (repo *ClientRepository) GetUserByEmail(
+func (repo *ClientRepository) GetByEmail(
 	email string,
 	tx *gorm.DB,
 ) (*models.Client, error) {
@@ -67,7 +41,7 @@ func (repo *ClientRepository) GetUserByEmail(
 	return &user, nil
 }
 
-func (repo *ClientRepository) GetUserByID(
+func (repo *ClientRepository) GetByUserID(
 	UserId string,
 	tx *gorm.DB,
 ) (*models.Client, error) {

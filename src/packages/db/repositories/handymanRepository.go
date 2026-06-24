@@ -19,18 +19,6 @@ func NewHandymenRepository(
 	}
 }
 
-func (repo *HandymenRepository) CreateUser(
-	user *models.Handyman,
-	tx *gorm.DB,
-) error {
-	err := tx.Create(&user.User).Error
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 func (repo *HandymenRepository) AddHandymenType(
 	user *models.Handyman,
 	tx *gorm.DB,
@@ -47,25 +35,7 @@ func (repo *HandymenRepository) AddHandymenType(
 	return nil
 }
 
-func (repo *HandymenRepository) CheckByEmail(
-	email string,
-	tx *gorm.DB,
-) (bool, error) {
-	var count int64
-
-	res := tx.Raw(
-		"SELECT count(*) FROM users WHERE email = ?",
-		email,
-	).Scan(&count)
-
-	if res.Error != nil {
-		return false, res.Error
-	}
-
-	return count > 0, nil
-}
-
-func (repo *HandymenRepository) GetUserByEmail(
+func (repo *HandymenRepository) GetByEmail(
 	email string,
 	tx *gorm.DB,
 ) (*models.Handyman, error) {
@@ -95,7 +65,7 @@ func (repo *HandymenRepository) GetUserByEmail(
 	return &user, nil
 }
 
-func (repo *HandymenRepository) GetUserByID(
+func (repo *HandymenRepository) GetByUserID(
 	UserId string,
 	tx *gorm.DB,
 ) (*models.Handyman, error) {

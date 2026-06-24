@@ -66,7 +66,7 @@ func (s *AuthService) VerifySession(req VerifySessionReq) (session *models.Sessi
 
 func (s *AuthService) ForgotPassword(req ForgotPasswordReq) (string, error) {
 	//verify user exisits
-	userExists, err := s.handymenRepo.CheckByEmail(req.Email, s.db)
+	userExists, err := s.userRepo.CheckByEmail(req.Email, s.db)
 	if err != nil {
 		return "", err
 	}
@@ -186,7 +186,7 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 
 	switch claims.Role {
 	case ClientRole:
-		user, err := s.clientRepo.GetUserByID(
+		user, err := s.clientRepo.GetByUserID(
 			session.UserID.String(),
 			s.db,
 		)
@@ -205,7 +205,7 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 		res.Role = UserRole(user.Role)
 
 	case HandymanRole:
-		user, err := s.handymenRepo.GetUserByID(
+		user, err := s.handymenRepo.GetByUserID(
 			session.UserID.String(),
 			s.db,
 		)

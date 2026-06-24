@@ -24,6 +24,7 @@ func main() {
 	db := DB.Init(db_url)
 
 	// Repositories
+	userRepo := repositories.NewUserRepository(db)
 	handymenRepo := repositories.NewHandymenRepository(db)
 	clientRepo := repositories.NewClientRepository(db)
 	sessionRepo := repositories.NewSessionRepository(db)
@@ -34,6 +35,7 @@ func main() {
 	)
 
 	authService := auth.NewAuthService(
+		userRepo,
 		handymenRepo,
 		clientRepo,
 		sessionRepo,

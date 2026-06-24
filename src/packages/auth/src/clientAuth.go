@@ -16,7 +16,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (ClientSignUpRes, error)
 	var user models.Client
 	err := s.db.Transaction(func(tx *gorm.DB) error {
 		// Checking for existing user
-		userExists, err := s.clientRepo.CheckByEmail(req.Email, tx)
+		userExists, err := s.userRepo.CheckByEmail(req.Email, tx)
 
 		if err != nil {
 			return err
@@ -50,7 +50,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (ClientSignUpRes, error)
 		}
 
 		//Creating the client user
-		err = s.clientRepo.CreateUser(&user, tx)
+		err = s.userRepo.CreateUser(&user.User, tx)
 		if err != nil {
 			return err
 		}
@@ -93,7 +93,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (ClientSignUpRes, error)
 
 func (s *AuthService) ClientSignIn(req SignInReq) (ClientSignInRes, error) {
 	//get User details
-	user, err := s.clientRepo.GetUserByEmail(req.Email, s.db)
+	user, err := s.clientRepo.GetByEmail(req.Email, s.db)
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return ClientSignInRes{}, ErrInvalidCredentials
 	}
