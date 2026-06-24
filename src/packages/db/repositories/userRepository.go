@@ -47,3 +47,21 @@ func (repo *UserRepository) CheckByEmail(
 
 	return count > 0, nil
 }
+
+func (repo *UserRepository) CheckByUserID(
+	UserId string,
+	tx *gorm.DB,
+) (bool, error) {
+	var count int64
+
+	res := tx.Raw(
+		"SELECT count(*) FROM users WHERE user_id = ?",
+		UserId,
+	).Scan(&count)
+
+	if res.Error != nil {
+		return false, res.Error
+	}
+
+	return count > 0, nil
+}
