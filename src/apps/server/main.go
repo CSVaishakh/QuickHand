@@ -5,6 +5,7 @@ import (
 	"os"
 
 	controllers "github.com/CSVaishakh/QuickHand/src/apps/server/controllers"
+	"github.com/CSVaishakh/QuickHand/src/apps/server/services/addressService"
 	auth "github.com/CSVaishakh/QuickHand/src/packages/auth/src"
 	DB "github.com/CSVaishakh/QuickHand/src/packages/db"
 	repositories "github.com/CSVaishakh/QuickHand/src/packages/db/repositories"
@@ -24,10 +25,11 @@ func main() {
 	db := DB.Init(db_url)
 
 	// Repositories
-	userRepo := repositories.NewUserRepository(db)
-	handymenRepo := repositories.NewHandymenRepository(db)
-	clientRepo := repositories.NewClientRepository(db)
-	sessionRepo := repositories.NewSessionRepository(db)
+	userRepo 		:= repositories.NewUserRepository(db)
+	handymenRepo 	:= repositories.NewHandymenRepository(db)
+	clientRepo 		:= repositories.NewClientRepository(db)
+	sessionRepo 	:= repositories.NewSessionRepository(db)
+	addresRepo 		:= repositories.NewAddressRepository(db)
 
 	// Services
 	jwtService := auth.NewJWTService(
@@ -43,6 +45,11 @@ func main() {
 		db,
 	)
 
+	addressService := addressService.NewAddressService(
+		addresRepo,
+		db,
+	)
+
 	// Fiber app
 	app := fiber.New()
 
@@ -52,7 +59,15 @@ func main() {
 		authService,
 	)
 
+	addressController := controllers.NewAddressController(
+		app,
+		addressService,
+		authService,
+	)
+
+	//Route Regsitrations
 	authController.RegisterRoutes()
+	addressController.RegisterRoutes()
 
 	// Health check
 	app.Get("/", func(c fiber.Ctx) error {

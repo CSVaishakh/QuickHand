@@ -58,3 +58,26 @@ func (repo *AddressRepository) GetAddresses(
 
 	return addresses, nil
 }
+
+func (repo *AddressRepository) GetByAddressID(
+	AddressID string,
+	tx *gorm.DB,
+)(models.Address, error) {
+	var address models.Address
+
+	id, err := uuid.Parse(AddressID)
+	if err != nil {
+		return models.Address{}, err
+	}
+
+	err = tx.
+		Where("address_id = ?", id).
+		First(&address).
+		Error
+
+	if err != nil {
+		return models.Address{}, err
+	}
+
+	return address, nil	
+}
