@@ -4,14 +4,14 @@ export enum Role {
 }
 
 export enum HandymanType {
-  PLUMBER = "plumber",
-  ELECTRICIAN = "electrician",
-  CARPENTER = "carpenter",
-  MASON = "mason",
-  MECHANIC = "mechanic",
-  HVAC_TECHNICIAN = "hvac_technician",
-  LANDSCAPER = "landscaper",
-  DEEP_CLEANER = "deep_cleaner",
+   PLUMBER = "plumber",
+   ELECTRICIAN = "electrician",
+   CARPENTER = "carpenter",
+   MASON = "mason",
+   MECHANIC = "mechanic",
+   HVAC_TECHNICIAN = "hvac_technician",
+   LANDSCAPER = "landscaper",
+   DEEP_CLEANER = "deep_cleaner",
 }
 
 export interface SignInRequest {
