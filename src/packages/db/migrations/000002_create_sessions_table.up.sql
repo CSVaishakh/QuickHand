@@ -1,5 +1,5 @@
 CREATE TABLE sessions (
-    id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    session_id    UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id       UUID NOT NULL,
     token_hash    TEXT NOT NULL UNIQUE,
     revoked       BOOLEAN NOT NULL DEFAULT FALSE,

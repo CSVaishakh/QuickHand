@@ -179,7 +179,7 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 	}
 
 	res := GetSessionRes{
-		SessionId: session.ID.String(),
+		SessionId: session.SessionID.String(),
 		Revoked:   session.Revoked,
 		CreatedAt: session.CreatedAt,
 	}

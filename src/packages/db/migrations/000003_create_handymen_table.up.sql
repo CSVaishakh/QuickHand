@@ -10,9 +10,9 @@ CREATE TYPE handyman_type AS ENUM (
 );
 
 CREATE TABLE handymen (
-    id         BIGSERIAL PRIMARY KEY,
-    user_id    UUID NOT NULL UNIQUE,
-    type       handyman_type NOT NULL,
+    handymen_id   UUID PRIMARY KEY,
+    user_id       UUID NOT NULL UNIQUE,
+    type          handyman_type NOT NULL,
 
     CONSTRAINT fk_handymen_user
       FOREIGN KEY (user_id)

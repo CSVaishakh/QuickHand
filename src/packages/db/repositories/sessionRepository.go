@@ -61,7 +61,7 @@ func (repo *SessionRepository) RevokeSession (
 		return nil, err
 	}
 
-	if session.ID == uuid.Nil {
+	if session.SessionID == uuid.Nil {
     	return nil, errors.New("session not found")
 	}
 
