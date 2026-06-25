@@ -94,3 +94,24 @@ func (repo *HandymenRepository) GetByUserID(
 
 	return &user, nil
 }
+
+func (repo *HandymenRepository) GetAllByType(
+    handymanType models.HandymanType,
+    tx *gorm.DB,
+) ([]models.Handyman, error) {
+
+    var handymen []models.Handyman
+
+    err := tx.
+        Table("handymen").
+        Select(`
+            users.*,
+            handymen.type
+        `).
+        Joins("JOIN users ON users.user_id = handymen.user_id").
+        Where("handymen.type = ?", handymanType).
+        Find(&handymen).
+        Error
+
+    return handymen, err
+}
