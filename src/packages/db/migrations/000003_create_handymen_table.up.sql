@@ -10,14 +10,12 @@ CREATE TYPE handyman_type AS ENUM (
 );
 
 CREATE TABLE handymen (
-    id BIGSERIAL PRIMARY KEY,
-
-    user_id UUID NOT NULL UNIQUE,
-
-    type handyman_type NOT NULL,
+    id         BIGSERIAL PRIMARY KEY,
+    user_id    UUID NOT NULL UNIQUE,
+    type       handyman_type NOT NULL,
 
     CONSTRAINT fk_handymen_user
-        FOREIGN KEY (user_id)
-        REFERENCES users(user_id)
-        ON DELETE CASCADE
+      FOREIGN KEY (user_id)
+      REFERENCES users(user_id)
+      ON DELETE CASCADE
 );
