@@ -27,7 +27,6 @@ func RequireAuth(
 			return fiber.ErrUnauthorized
 		}
 
-		c.Locals("token", token)
 		c.Locals("session", session)
 		c.Locals("claims", claims)
 

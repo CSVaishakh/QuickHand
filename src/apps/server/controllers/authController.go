@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"errors"
+	"strings"
 
 	"github.com/CSVaishakh/QuickHand/src/apps/server/middleware"
 	auth "github.com/CSVaishakh/QuickHand/src/packages/auth/src"
@@ -44,6 +45,7 @@ func (c *AuthController) RegisterRoutes() {
 	)
 
 	authRouter.Post("/sign-out", c.SignOut)
+	authRouter.Get("/session", c.GetSession)
 }
 
 func (c *AuthController) HandymanSignUp(ctx fiber.Ctx) error {
@@ -234,11 +236,16 @@ func (c *AuthController) ResetPassword(ctx fiber.Ctx) error {
 }
 
 func (c *AuthController) GetSession(ctx fiber.Ctx) error {
-	var req auth.GetSessionReq
+	token := ctx.Get("Authorization")
 
-	if err := ctx.Bind().Body(&req); err != nil {
-		return fiber.ErrBadRequest
-	}
+   after, ok := strings.CutPrefix(token, "Bearer ")
+   if !ok {
+        return fiber.ErrUnauthorized
+   }
+
+   req := auth.GetSessionReq{
+        Token: after,
+   }
 
 	session, err := c.AuthService.GetSession(req)
 
