@@ -39,8 +39,8 @@ type HandymanSignUpRes struct {
 	UserID 		string
 	FirstName 	string
 	Token 		string
-	Role 		UserRole
-	Type 		HandymanType
+	Role 			UserRole
+	Type 			HandymanType
 }
 
 type Claims struct {
@@ -66,7 +66,7 @@ type ClientSignUpRes struct {
 	UserID 		string
 	FirstName 	string
 	Token 		string
-	Role 		UserRole
+	Role 			UserRole
 }
 
 type SignInReq struct {
@@ -78,29 +78,29 @@ type HandymanSignInRes struct {
 	UserID 		string
 	FirstName 	string
 	Token 		string
-	Role		UserRole
-	Type 		HandymanType
+	Role			UserRole
+	Type 			HandymanType
 }
 
 type ClientSignInRes struct {
 	UserID 		string
 	FirstName 	string
 	Token 		string
-	Role 		UserRole
+	Role 			UserRole
 }
 
 type ForgotPasswordReq struct {
 	Email string
 }
 type OtpJWT_Claims struct{
-	OtpHash 	string
+	OtpHash 		string
 	Email 		string
 	jwt.RegisteredClaims
 }
 
 type OtpVerificationReq struct {
 	Email 	string
-	Otp 	string
+	Otp 		string
 	Token 	string
 }
 
@@ -110,7 +110,7 @@ type ResetJWT_Claims struct{
 }
 
 type ResetPasswordReq struct {
-	Token		 	string
+	Token		 		string
 	NewPassword 	string
 }
 
@@ -120,11 +120,11 @@ type GetSessionReq struct{
 
 type GetSessionRes struct {
 	SessionId 	string
-	Revoked 	bool
+	Revoked 		bool
 	CreatedAt 	time.Time
 	UserId 		string
 	FirstName 	string
 	Email 		string
-	Role 		UserRole
-	Type 		*HandymanType
+	Role 			UserRole
+	Type 			*HandymanType
 }

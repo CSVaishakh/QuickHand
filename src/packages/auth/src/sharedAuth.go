@@ -185,49 +185,49 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 	}
 
 	switch claims.Role {
-	case ClientRole:
-		user, err := s.clientRepo.GetByUserID(
-			session.UserID.String(),
-			s.db,
-		)
-
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		case ClientRole:
+			user, err := s.clientRepo.GetByUserID(
+				session.UserID.String(),
+				s.db,
+			)
+	
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return GetSessionRes{}, ErrInvalidCredentials
+			}
+	
+			if err != nil {
+				return GetSessionRes{}, err
+			}
+	
+			res.UserId = user.UserID.String()
+			res.FirstName = user.FirstName
+			res.Email = user.Email
+			res.Role = UserRole(user.Role)
+	
+		case HandymanRole:
+			user, err := s.handymenRepo.GetByUserID(
+				session.UserID.String(),
+				s.db,
+			)
+	
+			if errors.Is(err, gorm.ErrRecordNotFound) {
+				return GetSessionRes{}, ErrInvalidCredentials
+			}
+	
+			if err != nil {
+				return GetSessionRes{}, err
+			}
+	
+			res.UserId = user.UserID.String()
+			res.FirstName = user.FirstName
+			res.Email = user.Email
+			res.Role = UserRole(user.Role)
+	
+			ht := HandymanType(user.Type)
+			res.Type = &ht
+	
+		default:
 			return GetSessionRes{}, ErrInvalidCredentials
-		}
-
-		if err != nil {
-			return GetSessionRes{}, err
-		}
-
-		res.UserId = user.UserID.String()
-		res.FirstName = user.FirstName
-		res.Email = user.Email
-		res.Role = UserRole(user.Role)
-
-	case HandymanRole:
-		user, err := s.handymenRepo.GetByUserID(
-			session.UserID.String(),
-			s.db,
-		)
-
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return GetSessionRes{}, ErrInvalidCredentials
-		}
-
-		if err != nil {
-			return GetSessionRes{}, err
-		}
-
-		res.UserId = user.UserID.String()
-		res.FirstName = user.FirstName
-		res.Email = user.Email
-		res.Role = UserRole(user.Role)
-
-		ht := HandymanType(user.Type)
-		res.Type = &ht
-
-	default:
-		return GetSessionRes{}, ErrInvalidCredentials
 	}
 
 	return res, nil
