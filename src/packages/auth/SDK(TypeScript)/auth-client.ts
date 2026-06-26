@@ -1,4 +1,4 @@
-import { Role, type ClientSignUpReq, type HandymanSignUpReq, type SignInRequest } from "./types";
+import { UserRole, type ClientSignUpReq, type HandymanSignUpReq, type SignInReq } from "./types";
 
 export interface AuthClientConfig {
     baseURL: string;
@@ -16,11 +16,11 @@ export class AuthClient {
         } as Required<AuthClientConfig>
     }
 
-   SignIn(data: SignInRequest){
+   SignIn(data: SignInReq){
       var url = ""
-      if (data.role === Role.HANDYMAN){
+      if (data.role === UserRole.HANDYMAN){
          url = `${this.config.baseURL}${this.config.baseRoute}/handyman/sign-in`
-      }else if (data.role == Role.CUSTOMER){
+      }else if (data.role == UserRole.CUSTOMER){
          url = `${this.config.baseURL}${this.config.baseRoute}/client/sign-in`
       }
       return fetch(

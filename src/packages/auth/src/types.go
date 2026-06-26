@@ -43,16 +43,6 @@ type HandymanSignUpRes struct {
 	Type 			HandymanType
 }
 
-type Claims struct {
-	UserID 	string
-	Role   	UserRole
-	jwt.RegisteredClaims
-}
-
-type VerifySessionReq struct {
-	Token string
-}
-
 type ClientSignUpReq struct {
 	FirstName   	string
 	LastName    	string
@@ -87,6 +77,16 @@ type ClientSignInRes struct {
 	FirstName 	string
 	Token 		string
 	Role 			UserRole
+}
+
+type Claims struct {
+	UserID 	string
+	Role   	UserRole
+	jwt.RegisteredClaims
+}
+
+type VerifySessionReq struct {
+	Token string
 }
 
 type ForgotPasswordReq struct {
