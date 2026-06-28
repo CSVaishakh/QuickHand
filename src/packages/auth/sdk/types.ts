@@ -16,7 +16,7 @@ export enum HandymanType {
 
 export interface SignInReq {
    email:      string
-   passowrd:   string
+   password:   string
    role:       UserRole
 }
 

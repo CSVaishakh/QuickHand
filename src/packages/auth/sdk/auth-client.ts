@@ -48,7 +48,7 @@ export class AuthClient {
       )
    }
     
-   CustomerSignUp(data: ClientSignUpReq){
+   ClientSignUp(data: ClientSignUpReq){
       return fetch(
          `${this.config.baseURL}${this.config.baseRoute}/client/sign-up`,
          {
