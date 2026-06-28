@@ -5,10 +5,13 @@
     "target": "ES2022",
     "jsx": "react-jsx",
     "module": "ESNext",
+    "baseUrl": ".",
     "paths": {
-      "#/*": ["./src/*"],
-      "@/*": ["./src/*"]
-    },
+          "#/*": ["./src/*"],
+          "@/*": ["./src/*"],
+          "@auth/sdk": ["../../packages/auth/sdk/index.ts"],
+          "@components/*": ["./src/components/*"]
+      },
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "types": ["vite/client"],
 
