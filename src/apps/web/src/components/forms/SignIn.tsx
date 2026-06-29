@@ -50,11 +50,11 @@ function SignInForm() {
                   {...register("email")}
                   placeholder="Email"
                   type="email"
-                  className="border-2 border-black text-black bg-white"
+                  className="border-2 border-black rounded-xl text-black bg-white"
                />
                <div>
                   {errors.email && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.email.message}
                      </p>
                   )}
@@ -66,11 +66,11 @@ function SignInForm() {
                   {...register("password")}
                   type="password"
                   placeholder="Password"
-                  className="border-2 border-black text-black bg-white"
+                  className="border-2 border-black rounded-xl text-black bg-white"
                />
                <div>
                   {errors.password && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.password.message}
                      </p>
                   )}

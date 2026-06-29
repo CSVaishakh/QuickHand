@@ -66,11 +66,11 @@ function HandymanSignUpForm() {
                <input
                   {...register("firstName")}
                   placeholder="First Name"
-                  className="border-2 border-black text-black bg-white"
+                  className="border-2 border-black rounded-xl text-black bg-white"
                />
                <div>
                   {errors.firstName && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.firstName.message}
                      </p>
                   )}
@@ -81,11 +81,11 @@ function HandymanSignUpForm() {
                <input
                   {...register("lastName")}
                   placeholder="Last Name"
-                  className="border-2 border-black text-black bg-white"
+                  className="border-2 border-black rounded-xl text-black bg-white"
                />
                <div>
                   {errors.lastName && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.lastName.message}
                      </p>
                   )}
@@ -97,11 +97,11 @@ function HandymanSignUpForm() {
                   {...register("email")}
                   type="email"
                   placeholder="Email"
-                  className="border-2 border-black text-black bg-white"
+                  className="border-2 border-black rounded-xl text-black bg-white"
                />
                <div>
                   {errors.email && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.email.message}
                      </p>
                   )}
@@ -113,11 +113,11 @@ function HandymanSignUpForm() {
                   {...register("password")}
                   type="password"
                   placeholder="Password"
-                  className="border-2 border-black text-black bg-white"
+                  className="border-2 border-black rounded-xl text-black bg-white"
                />
                <div>
                   {errors.password && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.password.message}
                      </p>
                   )}
@@ -135,11 +135,11 @@ function HandymanSignUpForm() {
                    })
                  }
                >
-                 <SelectTrigger className="w-53 border-2 border-black">
+                 <SelectTrigger className="w-53 border-2 border-black rounded-xl">
                    <SelectValue placeholder="Select Handyman Type" />
                  </SelectTrigger>
                
-                 <SelectContent className="border-2 border-black">
+                 <SelectContent className="border-2 border-black rounded-xl">
                    <SelectGroup>
                      {Object.values(HandymanType).map((type) => (
                        <SelectItem key={type} value={type}>
@@ -152,7 +152,7 @@ function HandymanSignUpForm() {
 
                <div>
                   {errors.type && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.type.message}
                      </p>
                   )}

@@ -4,7 +4,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate } from "@tanstack/react-router"
 
 import type { ClientSignUpReq } from "#/types/types"
-import { ClientSignUpReqSchema, ClientSignUpResSchema } from "#/schemas/schemas"
+import {
+   ClientSignUpReqSchema,
+   ClientSignUpResSchema,
+} from "#/schemas/schemas"
 import { Button } from "@components/ui/button"
 
 import { authClient } from "#/auth-client"
@@ -47,11 +50,11 @@ function ClientSignUpForm () {
                   {...register("firstName")}
                   placeholder="First Name"
                   type="first_name"
-                  className="border-2 border-black text-black bg-white"
+                  className="border-2 border-black rounded-xl text-black bg-white"
                />
                <div>
                   {errors.firstName && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.firstName.message}
                      </p>
                   )}
@@ -63,11 +66,11 @@ function ClientSignUpForm () {
                   {...register("lastName")}
                   placeholder="Last Name"
                   type="last_name"
-                  className="border-2 border-black text-black bg-white"
+                  className="border-2 border-black rounded-xl text-black bg-white"
                />
                <div>
                   {errors.lastName && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.lastName.message}
                      </p>
                   )}
@@ -79,11 +82,11 @@ function ClientSignUpForm () {
                   {...register("email")}
                   placeholder="Email"
                   type="email"
-                  className="border-2 border-black text-black bg-white"
+                  className="border-2 border-black rounded-xl text-black bg-white"
                />
                <div>
                   {errors.email && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.email.message}
                      </p>
                   )}
@@ -95,11 +98,11 @@ function ClientSignUpForm () {
                   {...register("password")}
                   type="password"
                   placeholder="Password"
-                  className="border-2 border-black text-black bg-white"
+                  className="border-2 border-black rounded-xl text-black bg-white"
                />
                <div>
                   {errors.password && (
-                     <p className="boder-2 border-black bg-red-500 text-white">
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
                         {errors.password.message}
                      </p>
                   )}
