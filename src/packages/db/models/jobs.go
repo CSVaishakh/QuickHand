@@ -37,12 +37,13 @@ const (
 
 type Job struct {
 	JobID       uuid.UUID      `gorm:"column:job_id"`
-	UserID      uuid.UUID      `gorm:"column:user_id"`
+	ClientID      uuid.UUID     `gorm:"column:client_id"`
 	HandymanID  *uuid.UUID     `gorm:"column:handyman_id"`
 	JobType     JobType        `gorm:"column:job_type"`
 	HireType    HireType       `gorm:"column:hire_type"`
 	Description string         `gorm:"column:description"`
 	Budget      float64        `gorm:"column:budget"`
+	CreatedAt	time.Time		`gorm:"column:created_at"`
 	DeadlineAt  time.Time      `gorm:"column:deadline_at"`
 	Urgency     UrgencyLevel   `gorm:"column:urgency"`
 }

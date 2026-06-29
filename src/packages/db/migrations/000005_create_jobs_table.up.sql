@@ -22,13 +22,14 @@ CREATE TYPE urgency_levels AS ENUM (
 );
 
 CREATE TABLE jobs (
-   user_id           UUID NOT NULL,
-   handyman_id       UUID NULL,
    job_id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-   job_type          job_types NOT NULL,
+   client_id          UUID NOT NULL,
+   handyman_id       UUID NULL,
    hire_type         hire_types NOT NULL,
+   job_type          job_types NOT NULL,
    description       VARCHAR(150) NOT NULL,
    budget            NUMERIC(10,2),
+   created_at        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
    deadline_at       TIMESTAMP NOT NULL,
    urgency           urgency_levels NOT NULL,
 
