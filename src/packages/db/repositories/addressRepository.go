@@ -1,11 +1,9 @@
 package repositories
 
 import (
-
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 
 	"github.com/google/uuid"
-
 	"gorm.io/gorm"
 	
 )
