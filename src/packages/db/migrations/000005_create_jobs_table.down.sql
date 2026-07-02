@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS jobs;
+DROP TYPE IF EXISTS job_types;
+DROP TYPE IF EXISTS hire_types;
