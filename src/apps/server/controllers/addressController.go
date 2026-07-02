@@ -81,9 +81,9 @@ func (c *AddressController) UpdateAddress(ctx fiber.Ctx) error {
 
 	res, err := c.AddressService.UpdateAddress(req)
 
-	if errors.Is(err, addressService.ErrAddressUpdateFailed) {
+	if errors.Is(err, addressService.ErrAddressNotFoundForUser) {
 		return fiber.NewError(
-			fiber.StatusConflict,
+			fiber.StatusForbidden,
 			err.Error(),
 		)
 	}

@@ -4,6 +4,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
+	"time"
 
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	"golang.org/x/crypto/bcrypt"
@@ -61,6 +62,11 @@ func (s *AuthService) VerifySession(req VerifySessionReq) (session *models.Sessi
 	if session.Revoked {
 		return nil, nil, ErrInvalidSession
 	}
+
+	if claims.ExpiresAt.Before(time.Now()) {
+		return nil, nil, ErrSessionExpired
+	}
+	
 	return session, claims, nil
 }
 
@@ -139,17 +145,14 @@ func (s *AuthService) ResetPassword(req ResetPasswordReq) error {
 		return err
 	}
 
-	result := s.db.
-		Model(&models.User{}).
-		Where("email = ?", claims.Email).
-		Update("password_hash", string(hashedPass))
+	err = s.userRepo.ResetPassword(hashedPass, claims.Email, s.db)
 
-	if result.Error != nil {
-		return result.Error
+	if errors.Is(err, gorm.ErrRecordNotFound){
+		return ErrUserDoesNotExist
 	}
 
-	if result.RowsAffected == 0 {
-		return ErrUserDoesNotExist
+	if err != nil {
+		return err
 	}
 
 	return nil

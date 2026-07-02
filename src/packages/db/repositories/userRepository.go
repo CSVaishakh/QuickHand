@@ -1,6 +1,8 @@
 package repositories
 
 import (
+	"errors"
+	
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	
 	"gorm.io/gorm"
@@ -65,4 +67,26 @@ func (repo *UserRepository) CheckByUserID(
 	}
 
 	return count > 0, nil
+}
+
+func (repo *UserRepository) ResetPassword(
+	HashedPass []byte,
+	Email string,
+	tx *gorm.DB,
+)(error){
+	var user models.User
+	err := tx.Raw(
+		"UPDATE users SET password_hash = ? where email = ?",
+		HashedPass, Email,
+	).Scan(&user)
+
+	if errors.Is(err.Error, gorm.ErrRecordNotFound){
+		return gorm.ErrRecordNotFound
+	}
+	
+	if err != nil {
+		return err.Error
+	}
+
+	return nil
 }

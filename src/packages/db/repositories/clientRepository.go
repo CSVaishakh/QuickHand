@@ -27,6 +27,7 @@ func (repo *ClientRepository) GetByEmail(
 	var user models.Client
 
 	err := tx.
+		Table("users").
 		Where("email = ?", email).
 		Take(&user).
 		Error
@@ -49,6 +50,7 @@ func (repo *ClientRepository) GetByUserID(
 	var user models.Client
 
 	err := tx.
+		Table("users").
 		Where("user_id = ?", UserId).
 		Take(&user).
 		Error
