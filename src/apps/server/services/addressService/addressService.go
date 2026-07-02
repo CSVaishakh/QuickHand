@@ -55,22 +55,23 @@ func (s *AddressService) UpdateAddress (req UpdateAddressReq) (UpdateAddressRes,
 		Country: req.Country,
 		Pincode: req.Pincode,
 	}
-	err := s.addressRepo.UpdateAddress(&address,s.db)
-	if err != nil {
-		return UpdateAddressRes{}, err
-	}
 
 	address_retrived, err := s.addressRepo.GetByAddressID(req.AddressID, s.db)
 	if err != nil {
 		return UpdateAddressRes{}, err
 	}
+
+	if address_retrived.UserID != address.UserID {
+		return UpdateAddressRes{}, ErrAddressNotFoundForUser
+	}
 	
-	if address != address_retrived {
-		return UpdateAddressRes{}, ErrAddressUpdateFailed
+	err = s.addressRepo.UpdateAddress(&address,s.db)
+	if err != nil {
+		return UpdateAddressRes{}, err
 	}
 	
 	return UpdateAddressRes{
-		Address:	address_retrived,
+		Address:	address,
 	}, nil
 }
 

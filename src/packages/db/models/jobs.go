@@ -36,8 +36,8 @@ const (
 )
 
 type Job struct {
-	JobID       uuid.UUID      `gorm:"column:job_id"`
-	ClientID      uuid.UUID     `gorm:"column:client_id"`
+	JobID       uuid.UUID      `gorm:"column:job_id;type:uuid;default:gen_random_uuid();primaryKey"`
+	ClientID    uuid.UUID     	`gorm:"column:client_id"`
 	HandymanID  *uuid.UUID     `gorm:"column:handyman_id"`
 	JobType     JobType        `gorm:"column:job_type"`
 	HireType    HireType       `gorm:"column:hire_type"`
