@@ -79,6 +79,22 @@ function ClientSignUpForm () {
 
             <div>
                <input
+                  {...register("phone_number")}
+                  placeholder="Phone Number"
+                  type="phone_number"
+                  className="border-2 border-black rounded-xl text-black bg-white"
+               />
+               <div>
+                  {errors.phone_number && (
+                     <p className="boder-2 border-black rounded-xl bg-red-500 text-white">
+                        {errors.phone_number.message}
+                     </p>
+                  )}
+               </div>  
+            </div>
+
+            <div>
+               <input
                   {...register("email")}
                   placeholder="Email"
                   type="email"

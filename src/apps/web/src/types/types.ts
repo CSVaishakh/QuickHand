@@ -23,6 +23,7 @@ export interface SignInReq {
 export interface HandymanSignUpReq {
     firstName:    string
     lastName:     string
+    phone_number: string
     email:        string
     password:     string
     type:         HandymanType
@@ -31,6 +32,7 @@ export interface HandymanSignUpReq {
 export interface ClientSignUpReq {
     firstName:    string
     lastName:     string
+    phone_number: string
     email:        string
     password:     string
 }

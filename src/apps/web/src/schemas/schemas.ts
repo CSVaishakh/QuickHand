@@ -26,6 +26,7 @@ export const SignInReqSchema = z.object({
 export const HandymanSignUpReqSchema = z.object({
    firstName:     z.string().min(1).max(25),
    lastName:      z.string().min(1).max(25),
+   phone_number:  z.string().min(1).max(10),
    email:         z.email(),
    password:      z.string().min(8),
    type:         HandymanTypeSchema,
@@ -33,7 +34,8 @@ export const HandymanSignUpReqSchema = z.object({
 
 export const ClientSignUpReqSchema = z.object({
    firstName:     z.string().min(1).max(25),
-   lastName:      z.string().min(1).max(25),
+   lastName: z.string().min(1).max(25),
+   phone_number:  z.string().min(1).max(10),
    email:         z.email(),
    password:      z.string().min(8),
 })
