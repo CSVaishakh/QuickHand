@@ -29,7 +29,7 @@ func main() {
 	handymenRepo 	:= repositories.NewHandymenRepository(db)
 	clientRepo 		:= repositories.NewClientRepository(db)
 	sessionRepo 	:= repositories.NewSessionRepository(db)
-	addresRepo 		:= repositories.NewAddressRepository(db)
+	addressRepo 		:= repositories.NewAddressRepository(db)
 
 	// Services
 	jwtService := auth.NewJWTService(
@@ -46,7 +46,7 @@ func main() {
 	)
 
 	addressService := addressService.NewAddressService(
-		addresRepo,
+		addressRepo,
 		db,
 	)
 

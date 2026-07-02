@@ -33,8 +33,8 @@ CREATE TABLE jobs (
    deadline_at       TIMESTAMP NOT NULL,
    urgency           urgency_levels NOT NULL,
 
-   CONSTRAINT fk_addresses_user
-      FOREIGN KEY (user_id)
+   CONSTRAINT fk_job_user
+      FOREIGN KEY (client_id)
       REFERENCES users(user_id)
       ON DELETE CASCADE,
       

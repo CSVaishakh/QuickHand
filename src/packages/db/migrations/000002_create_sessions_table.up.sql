@@ -6,7 +6,7 @@ CREATE TABLE sessions (
     created_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 
-   CONSTRAINT fk_addresses_user
+   CONSTRAINT fk_sessions_user
       FOREIGN KEY (user_id)
       REFERENCES users(user_id)
       ON DELETE CASCADE

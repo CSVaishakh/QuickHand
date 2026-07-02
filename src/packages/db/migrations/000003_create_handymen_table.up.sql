@@ -10,7 +10,7 @@ CREATE TYPE handyman_type AS ENUM (
 );
 
 CREATE TABLE handymen (
-    handymen_id   UUID PRIMARY KEY,
+    handymen_id   UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     user_id       UUID NOT NULL UNIQUE,
     type          handyman_type NOT NULL,
 

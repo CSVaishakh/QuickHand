@@ -39,7 +39,7 @@ func (repo *SessionRepository) GetSession (
 			Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
-		return nil, nil
+		return nil, gorm.ErrRecordNotFound
 	}
 
 	if err != nil {
