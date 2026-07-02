@@ -1,10 +1,11 @@
 package src
 
 import (
-	"time"
 	"errors"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 
@@ -19,7 +20,7 @@ func NewJWTService (secret string) *JWTService {
 }
 
 func (s *JWTService) GenerateJWT (
-	UserID string,
+	UserID uuid.UUID,
 	Role UserRole,
 ) (string, error) {
 	claims := Claims{

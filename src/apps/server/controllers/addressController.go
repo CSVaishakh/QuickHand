@@ -49,11 +49,11 @@ func (c *AddressController) AddNewAddress(ctx fiber.Ctx) error {
 		return fiber.ErrBadRequest
 	}
 
-	userID, ok := ctx.Locals("user_id").(string)
+	claims, ok := ctx.Locals("claims").(*auth.Claims)
 	if !ok {
-			return fiber.ErrUnauthorized
+		return fiber.ErrUnauthorized
 	}
-	req.UserId = userID
+	req.UserId = claims.UserID
 
 	res, err := c.AddressService.AddNewAddress(req)
 
@@ -73,11 +73,11 @@ func (c *AddressController) UpdateAddress(ctx fiber.Ctx) error {
 		return fiber.ErrBadRequest
 	}
 
-	userID, ok := ctx.Locals("user_id").(string)
+	claims, ok := ctx.Locals("claims").(*auth.Claims)
 	if !ok {
-			return fiber.ErrUnauthorized
+		return fiber.ErrUnauthorized
 	}
-	req.UserId = userID
+	req.UserId = claims.UserID
 
 	res, err := c.AddressService.UpdateAddress(req)
 
@@ -99,11 +99,12 @@ func (c *AddressController) UpdateAddress(ctx fiber.Ctx) error {
 
 func (c *AddressController) GetAddress(ctx fiber.Ctx) error {
 	var req addressService.GetAddressesReq
-	userID, ok := ctx.Locals("user_id").(string)
+	
+	claims, ok := ctx.Locals("claims").(*auth.Claims)
 	if !ok {
-			return fiber.ErrUnauthorized
+		return fiber.ErrUnauthorized
 	}
-	req.UserId = userID
+	req.UserId = claims.UserID
 
 	res, err := c.AddressService.GetAddresses(req)
 

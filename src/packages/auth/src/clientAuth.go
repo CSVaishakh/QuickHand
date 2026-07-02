@@ -56,7 +56,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (ClientSignUpRes, error)
 		}
 
 		// Create the session object
-		token, err = s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role)) //Generate JWT Token
+		token, err = s.jwtService.GenerateJWT(user.UserID, UserRole(user.Role)) //Generate JWT Token
 		if err != nil {
 			return err
 		}
@@ -84,7 +84,7 @@ func (s *AuthService) ClientSignUp(req ClientSignUpReq) (ClientSignUpRes, error)
 	}
 
 	return ClientSignUpRes{
-		UserID: user.UserID.String(),
+		UserID: user.UserID,
 		FirstName: user.FirstName,
 		Token: token,
 		Role: UserRole(user.Role),
@@ -112,7 +112,7 @@ func (s *AuthService) ClientSignIn(req SignInReq) (ClientSignInRes, error) {
 	}
 
 	//generate JWT
-	token, err := s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role))
+	token, err := s.jwtService.GenerateJWT(user.UserID, UserRole(user.Role))
 	if err != nil {
 		return ClientSignInRes{}, err
 	}
@@ -133,7 +133,7 @@ func (s *AuthService) ClientSignIn(req SignInReq) (ClientSignInRes, error) {
 	}
 
 	return ClientSignInRes{
-		UserID: user.UserID.String(),
+		UserID: user.UserID,
 		FirstName: user.FirstName,
 		Token: token,
 		Role: UserRole(user.Role),

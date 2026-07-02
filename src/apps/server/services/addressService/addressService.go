@@ -3,7 +3,6 @@ package addressService
 import (
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	repo "github.com/CSVaishakh/QuickHand/src/packages/db/repositories"
-	"github.com/google/uuid"
 	"gorm.io/gorm"
 )
 
@@ -23,13 +22,9 @@ func NewAddressService (
 }
 
 func (s *AddressService) AddNewAddress(req AddAddressReq)(AddAddressRes, error){
-	id, err := uuid.Parse(req.UserId)
-	if err != nil {
-		return AddAddressRes{}, err
-	}
 	
 	address := models.Address{
-		UserID: id,
+		UserID: req.UserId,
 		HouseNo: req.HouseNo,
 		Street: req.Street,
 		City: req.City,
@@ -38,7 +33,7 @@ func (s *AddressService) AddNewAddress(req AddAddressReq)(AddAddressRes, error){
 		Pincode: req.Pincode,
 	}
 	
-	err = s.addressRepo.AddAddress(&address,s.db)
+	err := s.addressRepo.AddAddress(&address,s.db)
 	if err != nil {
 		return AddAddressRes{}, err
 	}
@@ -49,18 +44,10 @@ func (s *AddressService) AddNewAddress(req AddAddressReq)(AddAddressRes, error){
 }
 
 func (s *AddressService) UpdateAddress (req UpdateAddressReq) (UpdateAddressRes, error){
-	address_id,err := uuid.Parse(req.AddressID)
-	if err != nil {
-		return UpdateAddressRes{}, err
-	}
-	user_id, err := uuid.Parse(req.UserId)
-	if err != nil {
-		return UpdateAddressRes{}, err
-	}
 	
 	address := models.Address{
-		AddressID: address_id,
-		UserID: user_id,
+		AddressID: req.AddressID,
+		UserID: req.UserId,
 		HouseNo: req.HouseNo,
 		Street: req.Street,
 		City: req.City,
@@ -68,7 +55,7 @@ func (s *AddressService) UpdateAddress (req UpdateAddressReq) (UpdateAddressRes,
 		Country: req.Country,
 		Pincode: req.Pincode,
 	}
-	err = s.addressRepo.UpdateAddress(&address,s.db)
+	err := s.addressRepo.UpdateAddress(&address,s.db)
 	if err != nil {
 		return UpdateAddressRes{}, err
 	}

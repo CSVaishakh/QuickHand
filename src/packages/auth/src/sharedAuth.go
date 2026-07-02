@@ -179,7 +179,7 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 	}
 
 	res := GetSessionRes{
-		SessionId: session.SessionID.String(),
+		SessionId: session.SessionID,
 		Revoked:   session.Revoked,
 		CreatedAt: session.CreatedAt,
 	}
@@ -199,7 +199,7 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 				return GetSessionRes{}, err
 			}
 	
-			res.UserId = user.UserID.String()
+			res.UserId = user.UserID
 			res.FirstName = user.FirstName
 			res.Email = user.Email
 			res.Role = UserRole(user.Role)
@@ -218,7 +218,7 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 				return GetSessionRes{}, err
 			}
 	
-			res.UserId = user.UserID.String()
+			res.UserId = user.UserID
 			res.FirstName = user.FirstName
 			res.Email = user.Email
 			res.Role = UserRole(user.Role)

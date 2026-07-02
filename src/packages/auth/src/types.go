@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/google/uuid"
 )
 
 type UserRole string
@@ -36,7 +37,7 @@ type HandymanSignUpReq struct {
 }
 
 type HandymanSignUpRes struct {
-	UserID 		string
+	UserID 		uuid.UUID
 	FirstName 	string
 	Token 		string
 	Role 			UserRole
@@ -53,7 +54,7 @@ type ClientSignUpReq struct {
 }
 
 type ClientSignUpRes struct {
-	UserID 		string
+	UserID 		uuid.UUID
 	FirstName 	string
 	Token 		string
 	Role 			UserRole
@@ -65,7 +66,7 @@ type SignInReq struct {
 }
 
 type HandymanSignInRes struct {
-	UserID 		string
+	UserID 		uuid.UUID
 	FirstName 	string
 	Token 		string
 	Role			UserRole
@@ -73,14 +74,14 @@ type HandymanSignInRes struct {
 }
 
 type ClientSignInRes struct {
-	UserID 		string
+	UserID 		uuid.UUID
 	FirstName 	string
 	Token 		string
 	Role 			UserRole
 }
 
 type Claims struct {
-	UserID 	string
+	UserID 	uuid.UUID
 	Role   	UserRole
 	jwt.RegisteredClaims
 }
@@ -119,10 +120,10 @@ type GetSessionReq struct{
 }
 
 type GetSessionRes struct {
-	SessionId 	string
+	SessionId 	uuid.UUID
 	Revoked 		bool
 	CreatedAt 	time.Time
-	UserId 		string
+	UserId 		uuid.UUID
 	FirstName 	string
 	Email 		string
 	Role 			UserRole

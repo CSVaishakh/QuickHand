@@ -1,11 +1,11 @@
 package repositories
 
 import (
+
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
-	
 )
 
 type AddressRepository struct {
@@ -35,18 +35,13 @@ func (repo *AddressRepository) UpdateAddress(
 }
 
 func (repo *AddressRepository) GetAddresses(
-	userID string,
+	UserID uuid.UUID,
 	tx *gorm.DB,
 ) ([]models.Address, error) {
 	var addresses []models.Address
-
-	id, err := uuid.Parse(userID)
-	if err != nil {
-		return nil, err
-	}
-
-	err = tx.
-		Where("user_id = ?", id).
+	
+	err := tx.
+		Where("user_id = ?", UserID).
 		Find(&addresses).
 		Error
 
@@ -58,18 +53,13 @@ func (repo *AddressRepository) GetAddresses(
 }
 
 func (repo *AddressRepository) GetByAddressID(
-	AddressID string,
+	AddressID uuid.UUID,
 	tx *gorm.DB,
 )(models.Address, error) {
 	var address models.Address
 
-	id, err := uuid.Parse(AddressID)
-	if err != nil {
-		return models.Address{}, err
-	}
-
-	err = tx.
-		Where("address_id = ?", id).
+	err := tx.
+		Where("address_id = ?", AddressID).
 		First(&address).
 		Error
 

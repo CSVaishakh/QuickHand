@@ -1,9 +1,12 @@
 package addressService
 
-import "github.com/CSVaishakh/QuickHand/src/packages/db/models"
+import (
+	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
+	"github.com/google/uuid"
+)
 
 type AddAddressReq struct{
-	UserId 		string
+	UserId 		uuid.UUID
 	HouseNo 		string
 	Street  		string 
 	City    		string 
@@ -17,7 +20,7 @@ type AddAddressRes struct{
 }
 
 type GetAddressesReq struct{
-	UserId 	string
+	UserId 	uuid.UUID
 }
 
 type GetAddressesRes struct{
@@ -25,8 +28,8 @@ type GetAddressesRes struct{
 }
 
 type UpdateAddressReq struct {
-	AddressID 	string
-	UserId 		string
+	AddressID 	uuid.UUID
+	UserId 		uuid.UUID
 	HouseNo 		string
 	Street  		string 
 	City    		string 

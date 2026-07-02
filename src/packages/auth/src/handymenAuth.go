@@ -59,7 +59,7 @@
 				return err
 			}
 			//generate JWT
-			token, err = s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role))
+			token, err = s.jwtService.GenerateJWT(user.UserID, UserRole(user.Role))
 			if err != nil {
 				return err
 			}
@@ -87,7 +87,7 @@
 		}
 
 		return HandymanSignUpRes{
-			UserID: user.UserID.String(),
+			UserID: user.UserID,
 			FirstName: user.FirstName,
 			Token: token,
 			Role: UserRole(user.Role),
@@ -116,7 +116,7 @@
 		}
 
 		//generate JWT
-		token, err := s.jwtService.GenerateJWT(user.UserID.String(), UserRole(user.Role))
+		token, err := s.jwtService.GenerateJWT(user.UserID, UserRole(user.Role))
 		if err != nil {
 			return HandymanSignInRes{}, err
 		}
@@ -137,7 +137,7 @@
 		}
 
 		return HandymanSignInRes{
-			UserID: user.UserID.String(),
+			UserID: user.UserID,
 			FirstName: user.FirstName,
 			Token: token,
 			Role: UserRole(user.Role),
