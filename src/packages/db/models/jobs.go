@@ -6,7 +6,10 @@ import (
 	"github.com/google/uuid"
 )
 
-type JobType string
+type JobType 		string
+type HireType 		string
+type UrgencyLevel string
+type StatusType	string
 
 const (
 	Plumbing      JobType = "plumbing"
@@ -19,14 +22,10 @@ const (
 	DeepCleaning  JobType = "deep_cleaning"
 )
 
-type HireType string
-
 const (
 	DirectHire HireType = "direct_hire"
 	BidToGet   HireType = "bid_to_get"
 )
-
-type UrgencyLevel string
 
 const (
 	Instant            UrgencyLevel = "instant"
@@ -35,9 +34,17 @@ const (
 	Flexible           UrgencyLevel = "flexible"
 )
 
+const (
+	New			StatusType = "new"
+	Requested	StatusType = "requested"
+	Hired			StatusType = "Hired"
+	Rejected		StatusType = "rejected"
+)
+
 type Job struct {
 	JobID       uuid.UUID      `gorm:"column:job_id;type:uuid;default:gen_random_uuid();primaryKey"`
 	ClientID    uuid.UUID     	`gorm:"column:client_id"`
+	Status 		StatusType		`gorm:"column:status"`
 	HandymanID  *uuid.UUID     `gorm:"column:handyman_id"`
 	JobType     JobType        `gorm:"column:job_type"`
 	HireType    HireType       `gorm:"column:hire_type"`

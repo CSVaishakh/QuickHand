@@ -24,6 +24,7 @@ type CreateJobsRes struct {
 type AssignHandymanReq struct {
 	JobID 			uuid.UUID
 	HandymanID 		uuid.UUID
+	HandymanType 	models.HandymanType
 }
 
 type AssignHandymanRes struct{

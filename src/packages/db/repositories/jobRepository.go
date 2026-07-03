@@ -26,22 +26,51 @@ func (repo *JobRepository) CreateJob (
 	return tx.Create(job).Error
 }
 
+func (reop *JobRepository) HandymanRejected(
+	jobId uuid.UUID,
+	tx *gorm.DB,
+) error {
+	err := tx.Raw(`
+		UPDATE jobs
+		SET status = "rejected"
+		WHERE handyman_id is NULL
+		AND job_id = ?
+	`, jobId)
+
+	if err != nil {
+		return err.Error
+	}
+
+	if tx.RowsAffected == 0 {
+		return gorm.ErrRecordNotFound
+	}	
+
+	return nil
+}
+
 func (repo *JobRepository) AssignHandyman (
-	jobID uuid.UUID,
 	handymanId uuid.UUID,
+	jobID uuid.UUID,
+	jobType models.JobType,
 	tx *gorm.DB,
 )(models.Job, error){
 	var job models.Job
 
 	err := tx.Raw(`
 		UPDATE jobs
-		SET handyman_id = ?
-		WHERE job_id = ?
+		SET handyman_id = ?, status = "hired"
+		WHERE handyman_id is NULL
+		AND job_id = ?
+		AND job_type = ?
 		RETURNING *
-	`, handymanId, jobID).Scan(&job).Error
-
+	`, handymanId, jobID, jobType).Scan(&job).Error
+	
 	if err != nil {
-		return models.Job{},err
+		return models.Job{}, err
+	}
+
+	if tx.RowsAffected == 0 {
+		return models.Job{}, gorm.ErrRecordNotFound
 	}
 
 	return job, nil

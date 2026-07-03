@@ -45,17 +45,13 @@ func(s *JobService) CreateJob (req CreateJobReq) (CreateJobsRes, error) {
 }
 
 func (s *JobService) AssignHandyman(req AssignHandymanReq)(AssignHandymanRes, error){
-	job, err := s.jobRepo.AssignHandyman(req.JobID, req.HandymanID, s.db)
+	
+	job, err := s.jobRepo.AssignHandyman(req.JobID, req.HandymanID, req.HandymanType.MapJobType() ,s.db)
 	if err != nil {
-		return AssignHandymanRes{},err
+		return AssignHandymanRes{}, err
 	}
-
-	if job.HandymanID == nil {
-		return AssignHandymanRes{}, ErrFailedToAssignHandyman
-	}
-
+	
 	return AssignHandymanRes{
 		Job: job,
 	}, nil
 }
-

@@ -3,5 +3,5 @@ package jobService
 import "errors"
 
 var(
-	ErrFailedToAssignHandyman = errors.New("Failed to assign handyman")
+	ErrInvalidHandyman = errors.New("Invalid Handyman selected")
 )
