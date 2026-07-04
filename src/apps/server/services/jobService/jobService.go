@@ -43,15 +43,3 @@ func(s *JobService) CreateJob (req CreateJobReq) (CreateJobsRes, error) {
 		Job: job,
 	}, nil
 }
-
-func (s *JobService) AssignHandyman(req AssignHandymanReq)(AssignHandymanRes, error){
-	
-	job, err := s.jobRepo.AssignHandyman(req.JobID, req.HandymanID, req.HandymanType.MapJobType() ,s.db)
-	if err != nil {
-		return AssignHandymanRes{}, err
-	}
-	
-	return AssignHandymanRes{
-		Job: job,
-	}, nil
-}

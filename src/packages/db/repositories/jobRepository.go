@@ -77,7 +77,7 @@ func (repo *JobRepository) AssignHandyman (
 }
 
 func (repo *JobRepository) GetUserJobs (
-	UserID uuid.UUID,
+	userID uuid.UUID,
 	tx *gorm.DB,
 )([]models.Job, error){
 	var jobs []models.Job
@@ -87,7 +87,7 @@ func (repo *JobRepository) GetUserJobs (
 		FROM jobs
 		WHERE client_id = ?
 			OR handyman_id = ?
-	`, UserID, UserID).Scan(&jobs).Error
+	`, userID, userID).Scan(&jobs).Error
 
 	if err != nil {
 		return []models.Job{},err
