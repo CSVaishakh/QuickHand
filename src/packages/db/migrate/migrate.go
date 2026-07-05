@@ -1,24 +1,44 @@
 package migrate
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 
 	"github.com/joho/godotenv"
 )
 
-func Up() error {
+func runMigrate(args ...string) error {
 	_ = godotenv.Load("src/packages/db/.env.local")
 
-	cmd := exec.Command(
-		"migrate",
+	cmdArgs := append([]string{
 		"-path", "src/packages/db/migrations",
 		"-database", os.Getenv("DATABASE_URL"),
-		"up",
-	)
+	}, args...)
 
+	cmd := exec.Command("migrate", cmdArgs...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 
 	return cmd.Run()
+}
+
+func Up() error {
+	return runMigrate("up")
+}
+
+func Down() error {
+	return runMigrate("down")
+}
+
+func Version() error {
+	return runMigrate("version")
+}
+
+func Force(version int) error {
+	return runMigrate("force", fmt.Sprintf("%d", version))
+}
+
+func Create(name string) error {
+	return runMigrate("create", "-ext", "sql", "-dir", "src/packages/db/migrations", "-seq", name)
 }

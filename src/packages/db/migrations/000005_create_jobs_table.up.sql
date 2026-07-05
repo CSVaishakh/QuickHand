@@ -26,7 +26,7 @@ CREATE TYPE status_types AS ENUM (
    'requested',
    'hired',
    'rejected'
-)
+);
 
 CREATE TABLE jobs (
    job_id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
