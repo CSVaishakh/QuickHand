@@ -87,11 +87,11 @@ func (s *AuthService) HandymanSignUp(req HandymanSignUpReq) (HandymanSignUpRes, 
 	}
 
 	return HandymanSignUpRes{
-		UserID: user.UserID,
-		FirstName: user.FirstName,
-		Token: token,
-		Role: UserRole(user.Role),
-		Type: HandymanType(user.Type),
+		UserID: 		user.UserID,
+		FirstName: 	user.FirstName,
+		Token: 		token,
+		Role: 		UserRole(user.Role),
+		Type: 		HandymanType(user.Type),
 	}, nil
 }
 
@@ -137,10 +137,10 @@ func (s *AuthService) HandymanSignIn(req SignInReq) (HandymanSignInRes, error) {
 	}
 
 	return HandymanSignInRes{
-		UserID: user.UserID,
-		FirstName: user.FirstName,
-		Token: token,
-		Role: UserRole(user.Role),
-		Type: HandymanType(user.Type),
+		UserID: 		user.UserID,
+		FirstName: 	user.FirstName,
+		Token: 		token,
+		Role: 		UserRole(user.Role),
+		Type: 		HandymanType(user.Type),
 	}, nil
 }

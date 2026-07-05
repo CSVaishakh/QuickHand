@@ -2,10 +2,11 @@ package middleware
 
 import (
 	"strings" 
+	
+	auth "github.com/CSVaishakh/QuickHand/src/packages/auth/src"
 
 	fiber "github.com/gofiber/fiber/v3"
 	"github.com/gofiber/contrib/v3/websocket"
-	auth "github.com/CSVaishakh/QuickHand/src/packages/auth/src"
 )
 
 func RequireAuthHTTPS(

@@ -76,7 +76,7 @@ func (s *JWTService) GenerateOTP_JWT (
 ) (string, error) {
 	claims := OtpJWT_Claims{
 		OtpHash: OtpHash,
-		Email: Email,
+		Email: 	Email,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(
 				time.Now().Add(2* time.Minute),

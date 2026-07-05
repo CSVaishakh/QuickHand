@@ -7,27 +7,27 @@ import (
 )
 
 type AuthService struct {
-	userRepo 			*repo.UserRepository
+	userRepo 				*repo.UserRepository
 	handymenRepo      	*repo.HandymenRepository
-	clientRepo 			*repo.ClientRepository
-	sessionRepo 		*repo.SessionRepository
+	clientRepo 				*repo.ClientRepository
+	sessionRepo 			*repo.SessionRepository
 	jwtService        	*JWTService
 	db                	*gorm.DB
 }
 
 func NewAuthService(
-	userRepo 		*repo.UserRepository,
-	handymenRepo 	*repo.HandymenRepository,
-	clientRepo 		*repo.ClientRepository,
-	sessionRepo 	*repo.SessionRepository,
-	jwtService 		*JWTService,
-	db 				*gorm.DB,
+	userRepo 			*repo.UserRepository,
+	handymenRepo 		*repo.HandymenRepository,
+	clientRepo 			*repo.ClientRepository,
+	sessionRepo 		*repo.SessionRepository,
+	jwtService 			*JWTService,
+	db 					*gorm.DB,
 ) *AuthService {
 	return &AuthService{
-		userRepo: 			userRepo,		
+		userRepo: 				userRepo,		
 		handymenRepo:      	handymenRepo,
-		clientRepo:  		clientRepo,
-		sessionRepo: 		sessionRepo,
+		clientRepo:  			clientRepo,
+		sessionRepo: 			sessionRepo,
 		jwtService:        	jwtService,
 		db:                	db,
 	}

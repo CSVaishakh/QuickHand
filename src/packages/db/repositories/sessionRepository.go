@@ -34,9 +34,9 @@ func (repo *SessionRepository) GetSession (
 	var session models.Session
 
 	err := repo.db.
-			Where("token_hash = ?", tokenHash).
-			First(&session).
-			Error
+		Where("token_hash = ?", tokenHash).
+		First(&session).
+		Error
 
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return nil, gorm.ErrRecordNotFound

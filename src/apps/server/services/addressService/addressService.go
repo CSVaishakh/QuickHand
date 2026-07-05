@@ -8,29 +8,29 @@ import (
 
 type AddressService struct {
 	addressRepo		*repo.AddressRepository
-	db				*gorm.DB
+	db					*gorm.DB
 }
 
 func NewAddressService (
 	addressRepo 	*repo.AddressRepository,
-	db				*gorm.DB,
+	db					*gorm.DB,
 ) *AddressService{
 	return &AddressService{
-		addressRepo: addressRepo,
-		db: db,
+		addressRepo: 	addressRepo,
+		db: 				db,
 	}
 }
 
 func (s *AddressService) AddNewAddress(req AddAddressReq)(AddAddressRes, error){
 	
 	address := models.Address{
-		UserID: req.UserId,
-		HouseNo: req.HouseNo,
-		Street: req.Street,
-		City: req.City,
-		State: req.State,
-		Country: req.Country,
-		Pincode: req.Pincode,
+		UserID: 		req.UserId,
+		HouseNo: 	req.HouseNo,
+		Street: 		req.Street,
+		City: 		req.City,
+		State: 		req.State,
+		Country: 	req.Country,
+		Pincode: 	req.Pincode,
 	}
 	
 	err := s.addressRepo.AddAddress(&address,s.db)
@@ -46,14 +46,14 @@ func (s *AddressService) AddNewAddress(req AddAddressReq)(AddAddressRes, error){
 func (s *AddressService) UpdateAddress (req UpdateAddressReq) (UpdateAddressRes, error){
 	
 	address := models.Address{
-		AddressID: req.AddressID,
-		UserID: req.UserId,
-		HouseNo: req.HouseNo,
-		Street: req.Street,
-		City: req.City,
-		State: req.State,
-		Country: req.Country,
-		Pincode: req.Pincode,
+		AddressID: 	req.AddressID,
+		UserID: 		req.UserId,
+		HouseNo: 	req.HouseNo,
+		Street: 		req.Street,
+		City: 		req.City,
+		State: 		req.State,
+		Country: 	req.Country,
+		Pincode: 	req.Pincode,
 	}
 
 	address_retrived, err := s.addressRepo.GetByAddressID(req.AddressID, s.db)

@@ -16,12 +16,12 @@ type AuthController struct {
 }
 
 func NewAuthController(
-	router fiber.Router,
-	authService *auth.AuthService,
+	router 			fiber.Router,
+	authService 	*auth.AuthService,
 ) *AuthController {
 	return &AuthController{
-		Controller:  NewController(router),
-		AuthService: authService,
+		Controller:  	NewController(router),
+		AuthService: 	authService,
 	}
 }
 

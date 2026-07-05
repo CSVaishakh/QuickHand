@@ -10,19 +10,19 @@ import (
 
 type JobController struct {
 	*Controller
-	JobService *job.JobService
-	AuthService *auth.AuthService
+	JobService 		*job.JobService
+	AuthService 	*auth.AuthService
 }
 
 func NewJobController (
-	router fiber.Router,
-	jobService *job.JobService,
-	authService *auth.AuthService,
+	router 			fiber.Router,
+	jobService 		*job.JobService,
+	authService 	*auth.AuthService,
 ) *JobController {
 	return &JobController{
-		Controller: NewController(router),
-		JobService: jobService,
-		AuthService: authService,
+		Controller: 	NewController(router),
+		JobService: 	jobService,
+		AuthService: 	authService,
 	}
 }
 

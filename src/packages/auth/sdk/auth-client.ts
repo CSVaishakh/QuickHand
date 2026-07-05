@@ -1,8 +1,8 @@
 import { UserRole, type ClientSignUpReq, type HandymanSignUpReq, type SignInReq } from "./types";
 
 export interface AuthClientConfig {
-    baseURL: string;
-    baseRoute?: string;
+    baseURL:      string;
+    baseRoute?:   string;
 }
 
 export class AuthClient {

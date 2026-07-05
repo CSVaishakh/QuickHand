@@ -11,19 +11,19 @@ type UserRole string
 type HandymanType string
 
 const (
-	ClientRole   UserRole = "client"
-	HandymanRole UserRole = "handyman"
+	ClientRole   	UserRole = "client"
+	HandymanRole 	UserRole = "handyman"
 )
 
 const (
-	Plumber        HandymanType = "plumber"
-	Electrician    HandymanType = "electrician"
-	Carpenter      HandymanType = "carpenter"
-	Mason          HandymanType = "mason"
-	Mechanic       HandymanType = "mechanic"
-	HVACTechnician HandymanType = "hvac_technician"
-	Landscaper     HandymanType = "landscaper"
-	DeepCleaner    HandymanType = "deep_cleaner"
+	Plumber        	HandymanType = "plumber"
+	Electrician    	HandymanType = "electrician"
+	Carpenter     	 	HandymanType = "carpenter"
+	Mason          	HandymanType = "mason"
+	Mechanic       	HandymanType = "mechanic"
+	HVACTechnician 	HandymanType = "hvac_technician"
+	Landscaper     	HandymanType = "landscaper"
+	DeepCleaner    	HandymanType = "deep_cleaner"
 )
 
 type HandymanSignUpReq struct {
@@ -120,12 +120,12 @@ type GetSessionReq struct{
 }
 
 type GetSessionRes struct {
-	SessionId 	uuid.UUID
-	Revoked 		bool
-	CreatedAt 	time.Time
-	UserId 		uuid.UUID
-	FirstName 	string
-	Email 		string
-	Role 			UserRole
-	Type 			*HandymanType
+	SessionId 		uuid.UUID
+	Revoked 			bool
+	CreatedAt 		time.Time
+	UserId 			uuid.UUID
+	FirstName 		string
+	Email 			string
+	Role 				UserRole
+	Type 				*HandymanType
 }
