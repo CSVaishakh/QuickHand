@@ -39,7 +39,7 @@ func (c *AuthController) RegisterRoutes() {
 	authRouter.Post("/forgot-password/reset", c.ResetPassword)
 
 	authRouter.Use(
-		middleware.RequireAuth(
+		middleware.RequireAuthHTTPS(
 			c.AuthService,
 		),
 	)

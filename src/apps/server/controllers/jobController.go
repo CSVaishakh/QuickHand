@@ -31,7 +31,7 @@ func (c *JobController) RegisterRoutes() {
 	jobRouter := c.Router.Group("/job")
 
 	jobRouter.Use(
-		middleware.RequireAuth(
+		middleware.RequireAuthHTTPS(
 			c.AuthService,
 		),
 	)

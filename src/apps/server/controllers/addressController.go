@@ -32,7 +32,7 @@ func (c *AddressController) RegisterRoutes() {
 	addressRouter := c.Router.Group("/address")
 
 	addressRouter.Use(
-		middleware.RequireAuth(
+		middleware.RequireAuthHTTPS(
 			c.AuthService,
 		),
 	)
