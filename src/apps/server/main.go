@@ -1,13 +1,16 @@
 package main
-
 import (
 	"log"
 	"os"
 
-	controllers "github.com/CSVaishakh/QuickHand/src/apps/server/controllers"
-	"github.com/CSVaishakh/QuickHand/src/apps/server/services/addressService"
+	as "github.com/CSVaishakh/QuickHand/src/apps/server/services/addressService"
+
+	ctrs "github.com/CSVaishakh/QuickHand/src/apps/server/controllers"
+	
 	auth "github.com/CSVaishakh/QuickHand/src/packages/auth/src"
 	DB "github.com/CSVaishakh/QuickHand/src/packages/db"
+	// ws "github.com/CSVaishakh/QuickHand/src/packages/websockets"
+	
 	repositories "github.com/CSVaishakh/QuickHand/src/packages/db/repositories"
 
 	"github.com/gofiber/fiber/v3"
@@ -29,7 +32,7 @@ func main() {
 	handymenRepo 	:= repositories.NewHandymenRepository(db)
 	clientRepo 		:= repositories.NewClientRepository(db)
 	sessionRepo 	:= repositories.NewSessionRepository(db)
-	addressRepo 		:= repositories.NewAddressRepository(db)
+	addressRepo 	:= repositories.NewAddressRepository(db)
 
 	// Services
 	jwtService := auth.NewJWTService(
@@ -45,26 +48,27 @@ func main() {
 		db,
 	)
 
-	addressService := addressService.NewAddressService(
+	addressService := as.NewAddressService(
 		addressRepo,
 		db,
 	)
 
+	// socketService := ws.NewSocketService()
 	// Fiber app
 	app := fiber.New()
 
 	// Controllers
-	authController := controllers.NewAuthController(
+	authController := ctrs.NewAuthController(
 		app,
 		authService,
 	)
 
-	addressController := controllers.NewAddressController(
+	addressController := ctrs.NewAddressController(
 		app,
 		addressService,
 		authService,
 	)
-
+	
 	//Route Regsitrations
 	authController.RegisterRoutes()
 	addressController.RegisterRoutes()

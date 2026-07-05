@@ -1,7 +1,8 @@
-go 1.26.3
+go 1.26.4
 
 use (
 	./src/apps/server
-	./src/packages/db
 	./src/packages/auth
+	./src/packages/db
+	./src/packages/websockets
 )
