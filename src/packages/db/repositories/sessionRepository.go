@@ -21,14 +21,22 @@ func NewSessionRepository(
 	}
 }
 
-func (repo *SessionRepository) CreateSession (
-	session *models.Session,
-	tx *gorm.DB,
-	) error {
-	return tx.Create(session).Error
+func (repo *SessionRepository) WithTx(tx *gorm.DB) *SessionRepository {
+	if tx == nil {
+		return repo
+	}
+	return &SessionRepository{
+		db: tx,
+	}
 }
 
-func (repo *SessionRepository) GetSession (
+func (repo *SessionRepository) CreateSession(
+	session *models.Session,
+) error {
+	return repo.db.Create(session).Error
+}
+
+func (repo *SessionRepository) GetSession(
 	tokenHash string,
 ) (*models.Session, error) {
 	var session models.Session
@@ -49,7 +57,7 @@ func (repo *SessionRepository) GetSession (
 	return &session, nil
 }
 
-func (repo *SessionRepository) RevokeSession (
+func (repo *SessionRepository) RevokeSession(
 	tokenHash string,
 ) (*models.Session, error) {
 	var session models.Session
@@ -63,7 +71,7 @@ func (repo *SessionRepository) RevokeSession (
 	}
 
 	if session.SessionID == uuid.Nil {
-    	return nil, errors.New("session not found")
+		return nil, errors.New("session not found")
 	}
 
 	return &session, nil

@@ -12,21 +12,29 @@ type ClientRepository struct {
 	db *gorm.DB
 }
 
-func NewClientRepository (
+func NewClientRepository(
 	db *gorm.DB,
 ) *ClientRepository {
-	return  &ClientRepository{
+	return &ClientRepository{
 		db: db,
+	}
+}
+
+func (repo *ClientRepository) WithTx(tx *gorm.DB) *ClientRepository {
+	if tx == nil {
+		return repo
+	}
+	return &ClientRepository{
+		db: tx,
 	}
 }
 
 func (repo *ClientRepository) GetByEmail(
 	email string,
-	tx *gorm.DB,
 ) (*models.Client, error) {
 	var user models.Client
 
-	err := tx.
+	err := repo.db.
 		Table("users").
 		Where("email = ?", email).
 		Take(&user).
@@ -45,11 +53,10 @@ func (repo *ClientRepository) GetByEmail(
 
 func (repo *ClientRepository) GetByUserID(
 	UserId string,
-	tx *gorm.DB,
 ) (*models.Client, error) {
 	var user models.Client
 
-	err := tx.
+	err := repo.db.
 		Table("users").
 		Where("user_id = ?", UserId).
 		Take(&user).

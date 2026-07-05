@@ -20,11 +20,19 @@ func NewHandymenRepository(
 	}
 }
 
+func (repo *HandymenRepository) WithTx(tx *gorm.DB) *HandymenRepository {
+	if tx == nil {
+		return repo
+	}
+	return &HandymenRepository{
+		db: tx,
+	}
+}
+
 func (repo *HandymenRepository) AddHandymenType(
 	user *models.Handyman,
-	tx *gorm.DB,
 ) error {
-	err := tx.Exec(
+	err := repo.db.Exec(
 		"INSERT INTO handymen (user_id, type) VALUES (?, ?)",
 		user.UserID,
 		user.Type,
@@ -38,11 +46,10 @@ func (repo *HandymenRepository) AddHandymenType(
 
 func (repo *HandymenRepository) GetByEmail(
 	email string,
-	tx *gorm.DB,
 ) (*models.Handyman, error) {
 	var user models.Handyman
 
-	err := tx.
+	err := repo.db.
 		Table("users").
 		Select(`
 			users.*,
@@ -68,11 +75,10 @@ func (repo *HandymenRepository) GetByEmail(
 
 func (repo *HandymenRepository) GetByUserID(
 	UserId string,
-	tx *gorm.DB,
 ) (*models.Handyman, error) {
 	var user models.Handyman
 
-	err := tx.
+	err := repo.db.
 		Table("users").
 		Select(`
 			users.*,
@@ -97,22 +103,21 @@ func (repo *HandymenRepository) GetByUserID(
 }
 
 func (repo *HandymenRepository) GetAllByType(
-    handymanType models.HandymanType,
-    tx *gorm.DB,
+	handymanType models.HandymanType,
 ) ([]models.Handyman, error) {
 
-    var handymen []models.Handyman
+	var handymen []models.Handyman
 
-    err := tx.
-        Table("handymen").
-        Select(`
-            users.*,
-            handymen.type
-        `).
-        Joins("JOIN users ON users.user_id = handymen.user_id").
-        Where("handymen.type = ?", handymanType).
-        Find(&handymen).
-        Error
+	err := repo.db.
+		Table("handymen").
+		Select(`
+			users.*,
+			handymen.type
+		`).
+		Joins("JOIN users ON users.user_id = handymen.user_id").
+		Where("handymen.type = ?", handymanType).
+		Find(&handymen).
+		Error
 
-    return handymen, err
+	return handymen, err
 }

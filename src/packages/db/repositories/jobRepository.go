@@ -11,7 +11,7 @@ type JobRepository struct {
 	db *gorm.DB
 }
 
-func NewJobRepository (
+func NewJobRepository(
 	db *gorm.DB,
 ) *JobRepository {
 	return &JobRepository{
@@ -19,70 +19,75 @@ func NewJobRepository (
 	}
 }
 
-func (repo *JobRepository) CreateJob (
-	job 	*models.Job,
-	tx *gorm.DB,
-) error {
-	return tx.Create(job).Error
+func (repo *JobRepository) WithTx(tx *gorm.DB) *JobRepository {
+	if tx == nil {
+		return repo
+	}
+	return &JobRepository{
+		db: tx,
+	}
 }
 
-func (reop *JobRepository) HandymanRejected(
-	jobId uuid.UUID,
-	tx *gorm.DB,
+func (repo *JobRepository) CreateJob(
+	job *models.Job,
 ) error {
-	err := tx.Raw(`
+	return repo.db.Create(job).Error
+}
+
+func (repo *JobRepository) HandymanRejected(
+	jobId uuid.UUID,
+) error {
+	res := repo.db.Exec(`
 		UPDATE jobs
-		SET status = "rejected"
-		WHERE handyman_id is NULL
+		SET status = 'rejected'
+		WHERE handyman_id IS NULL
 		AND job_id = ?
 	`, jobId)
 
-	if err != nil {
-		return err.Error
+	if res.Error != nil {
+		return res.Error
 	}
 
-	if tx.RowsAffected == 0 {
+	if res.RowsAffected == 0 {
 		return gorm.ErrRecordNotFound
 	}	
 
 	return nil
 }
 
-func (repo *JobRepository) AssignHandyman (
+func (repo *JobRepository) AssignHandyman(
 	handymanId uuid.UUID,
 	jobID uuid.UUID,
 	jobType models.JobType,
-	tx *gorm.DB,
-)(models.Job, error){
+) (models.Job, error) {
 	var job models.Job
 
-	err := tx.Raw(`
+	res := repo.db.Raw(`
 		UPDATE jobs
-		SET handyman_id = ?, status = "hired"
-		WHERE handyman_id is NULL
+		SET handyman_id = ?, status = 'hired'
+		WHERE handyman_id IS NULL
 		AND job_id = ?
 		AND job_type = ?
 		RETURNING *
-	`, handymanId, jobID, jobType).Scan(&job).Error
+	`, handymanId, jobID, jobType).Scan(&job)
 	
-	if err != nil {
-		return models.Job{}, err
+	if res.Error != nil {
+		return models.Job{}, res.Error
 	}
 
-	if tx.RowsAffected == 0 {
+	if res.RowsAffected == 0 {
 		return models.Job{}, gorm.ErrRecordNotFound
 	}
 
 	return job, nil
 }
 
-func (repo *JobRepository) GetUserJobs (
+func (repo *JobRepository) GetUserJobs(
 	userID uuid.UUID,
-	tx *gorm.DB,
-)([]models.Job, error){
+) ([]models.Job, error) {
 	var jobs []models.Job
 
-	err := tx.Raw(`
+	err := repo.db.Raw(`
 		SELECT * 
 		FROM jobs
 		WHERE client_id = ?
@@ -90,20 +95,19 @@ func (repo *JobRepository) GetUserJobs (
 	`, userID, userID).Scan(&jobs).Error
 
 	if err != nil {
-		return []models.Job{},err
+		return []models.Job{}, err
 	}
 
 	return jobs, nil
 }
 
-func (repo *JobRepository) GetJobsToQuote (
+func (repo *JobRepository) GetJobsToQuote(
 	hiringType models.HireType,
 	jobType models.JobType,
-	tx *gorm.DB,
-)([]models.Job, error){
+) ([]models.Job, error) {
 	var jobsToQuote []models.Job
 
-	err := tx.Raw(`
+	err := repo.db.Raw(`
 		SELECT * 
 		FROM jobs
 		WHERE hire_type = ?

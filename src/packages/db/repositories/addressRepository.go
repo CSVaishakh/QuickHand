@@ -1,7 +1,6 @@
 package repositories
 
 import (
-
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 
 	"github.com/google/uuid"
@@ -12,7 +11,7 @@ type AddressRepository struct {
 	db *gorm.DB
 }
 
-func NewAddressRepository (
+func NewAddressRepository(
 	db *gorm.DB,
 ) *AddressRepository {
 	return &AddressRepository{
@@ -20,27 +19,33 @@ func NewAddressRepository (
 	}
 }
 
-func (repo *AddressRepository) AddAddress (
+func (repo *AddressRepository) WithTx(tx *gorm.DB) *AddressRepository {
+	if tx == nil {
+		return repo
+	}
+	return &AddressRepository{
+		db: tx,
+	}
+}
+
+func (repo *AddressRepository) AddAddress(
 	address *models.Address,
-	tx *gorm.DB,
 ) error {
-	return tx.Create(address).Error
+	return repo.db.Create(address).Error
 }
 
 func (repo *AddressRepository) UpdateAddress(
 	address *models.Address,
-	tx *gorm.DB,
 ) error {
-	return tx.Save(address).Error
+	return repo.db.Save(address).Error
 }
 
 func (repo *AddressRepository) GetAddresses(
 	UserID uuid.UUID,
-	tx *gorm.DB,
 ) ([]models.Address, error) {
 	var addresses []models.Address
 	
-	err := tx.
+	err := repo.db.
 		Where("user_id = ?", UserID).
 		Find(&addresses).
 		Error
@@ -54,11 +59,10 @@ func (repo *AddressRepository) GetAddresses(
 
 func (repo *AddressRepository) GetByAddressID(
 	AddressID uuid.UUID,
-	tx *gorm.DB,
-)(models.Address, error) {
+) (models.Address, error) {
 	var address models.Address
 
-	err := tx.
+	err := repo.db.
 		Where("address_id = ?", AddressID).
 		First(&address).
 		Error

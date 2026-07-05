@@ -34,7 +34,7 @@ func(s *JobService) CreateJob (req CreateJobReq) (CreateJobsRes, error) {
 		Urgency: req.Urgency,
 	}
 
-	err := s.jobRepo.CreateJob(&job, s.db)
+	err := s.jobRepo.CreateJob(&job)
 	if err != nil {
 		return CreateJobsRes{}, err
 	}

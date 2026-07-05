@@ -33,7 +33,7 @@ func (s *AddressService) AddNewAddress(req AddAddressReq)(AddAddressRes, error){
 		Pincode: 	req.Pincode,
 	}
 	
-	err := s.addressRepo.AddAddress(&address,s.db)
+	err := s.addressRepo.AddAddress(&address)
 	if err != nil {
 		return AddAddressRes{}, err
 	}
@@ -56,7 +56,7 @@ func (s *AddressService) UpdateAddress (req UpdateAddressReq) (UpdateAddressRes,
 		Pincode: 	req.Pincode,
 	}
 
-	address_retrived, err := s.addressRepo.GetByAddressID(req.AddressID, s.db)
+	address_retrived, err := s.addressRepo.GetByAddressID(req.AddressID)
 	if err != nil {
 		return UpdateAddressRes{}, err
 	}
@@ -65,7 +65,7 @@ func (s *AddressService) UpdateAddress (req UpdateAddressReq) (UpdateAddressRes,
 		return UpdateAddressRes{}, ErrAddressNotFoundForUser
 	}
 	
-	err = s.addressRepo.UpdateAddress(&address,s.db)
+	err = s.addressRepo.UpdateAddress(&address)
 	if err != nil {
 		return UpdateAddressRes{}, err
 	}
@@ -76,7 +76,7 @@ func (s *AddressService) UpdateAddress (req UpdateAddressReq) (UpdateAddressRes,
 }
 
 func (s *AddressService) GetAddresses(req GetAddressesReq)(GetAddressesRes, error){
-	addresses, err := s.addressRepo.GetAddresses(req.UserId, s.db)
+	addresses, err := s.addressRepo.GetAddresses(req.UserId)
 	if err != nil {
 		return GetAddressesRes{}, err
 	}

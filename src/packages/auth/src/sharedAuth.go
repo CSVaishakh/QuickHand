@@ -72,7 +72,7 @@ func (s *AuthService) VerifySession(req VerifySessionReq) (session *models.Sessi
 
 func (s *AuthService) ForgotPassword(req ForgotPasswordReq) (string, error) {
 	//verify user exisits
-	userExists, err := s.userRepo.CheckByEmail(req.Email, s.db)
+	userExists, err := s.userRepo.CheckByEmail(req.Email)
 	if err != nil {
 		return "", err
 	}
@@ -145,7 +145,7 @@ func (s *AuthService) ResetPassword(req ResetPasswordReq) error {
 		return err
 	}
 
-	err = s.userRepo.ResetPassword(hashedPass, claims.Email, s.db)
+	err = s.userRepo.ResetPassword(hashedPass, claims.Email)
 
 	if errors.Is(err, gorm.ErrRecordNotFound){
 		return ErrUserDoesNotExist
@@ -191,7 +191,6 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 		case ClientRole:
 			user, err := s.clientRepo.GetByUserID(
 				session.UserID.String(),
-				s.db,
 			)
 	
 			if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -210,7 +209,6 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 		case HandymanRole:
 			user, err := s.handymenRepo.GetByUserID(
 				session.UserID.String(),
-				s.db,
 			)
 	
 			if errors.Is(err, gorm.ErrRecordNotFound) {
