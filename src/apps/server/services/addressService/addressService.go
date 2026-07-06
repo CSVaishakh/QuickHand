@@ -3,21 +3,17 @@ package addressService
 import (
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	repo "github.com/CSVaishakh/QuickHand/src/packages/db/repositories"
-	"gorm.io/gorm"
 )
 
 type AddressService struct {
 	addressRepo		*repo.AddressRepository
-	db					*gorm.DB
 }
 
 func NewAddressService (
 	addressRepo 	*repo.AddressRepository,
-	db					*gorm.DB,
 ) *AddressService{
 	return &AddressService{
 		addressRepo: 	addressRepo,
-		db: 				db,
 	}
 }
 

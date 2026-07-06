@@ -50,7 +50,6 @@ func main() {
 
 	addressService := as.NewAddressService(
 		addressRepo,
-		db,
 	)
 
 	// socketService := ws.NewSocketService()

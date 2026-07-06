@@ -3,22 +3,17 @@ package jobService
 import (
 	"github.com/CSVaishakh/QuickHand/src/packages/db/models"
 	repo "github.com/CSVaishakh/QuickHand/src/packages/db/repositories"
-
-	"gorm.io/gorm"
 )
 
 type JobService struct{
 	jobRepo repo.JobRepository
-	db *gorm.DB
 }
 
 func NewJobService (
 	jobRepo *repo.JobRepository,
-	db *gorm.DB,
 ) *JobService {
 	return &JobService{
 		jobRepo: *jobRepo,
-		db: db,
 	}
 }
 
