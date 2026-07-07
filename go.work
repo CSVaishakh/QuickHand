@@ -1,8 +1,8 @@
 go 1.26.4
 
 use (
-	./src/apps/server
-	./src/packages/auth
-	./src/packages/db
-	./src/packages/websockets
+	./apps/server
+	./packages/auth
+	./packages/db
+	./packages/websockets
 )

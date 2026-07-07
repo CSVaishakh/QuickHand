@@ -2,26 +2,27 @@
   "name": "quickhand",
   "private": true,
   "workspaces": [
-    ""
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
     "concurrently": "^9.0.0",
     "turbo": "^2.9.16"
   },
   "scripts": {
-    "migrate": "go run ./src ./src/packages/db/cmd up",
-    "migrate:down": "go run ./src/packages/db/cmd down",
-    "migrate:version": "go run ./src/packages/db/cmd version",
-    "migrate:force": "go run ./src/packages/db/cmd force",
-    "migrate:create": "go run ./src/packages/db/cmd create",
-    "db:start": "cd src/packages/db/ && docker compose up -d",
-    "db:stop": "cd src/packages/db/ && docker compose down",
-    "db:reset": "cd src/packages/db/ && docker compose down -v && docker compose up -d",
-    "dev:server": "bun db:start && cd src/apps/server/ && go run main.go",
-    "dev:web": "cd src/apps/web && bun dev",
-    "dev": "concurrently \"bun dev:server\" \"bun dev:web\"",
-    "build:go": "go build -o ./bin/server ./src/apps/server/main.go && go build -o ./bin/migrate ./src/packages/db/cmd/main.go",
-    "build:web": "cd src/apps/web && bun run build",
-    "build": "bun run build:go && bun run build:web"
+    "migrate": "go run ./packages/db/cmd up",
+    "migrate:down": "go run ./packages/db/cmd down",
+    "migrate:version": "go run ./packages/db/cmd version",
+    "migrate:force": "go run ./packages/db/cmd force",
+    "migrate:create": "go run ./packages/db/cmd create",
+    "db:start": "cd packages/db && docker compose up -d",
+    "db:stop": "cd packages/db && docker compose down",
+    "db:reset": "cd packages/db && docker compose down -v && docker compose up -d",
+    "dev:server": "bun db:start && cd apps/server && go run main.go",
+    "dev:web": "bun --filter web dev",
+    "dev": "turbo run dev",
+    "build:go": "go build -o ./bin/server ./apps/server/main.go && go build -o ./bin/migrate ./packages/db/cmd/main.go",
+    "build:web": "bun --filter web build",
+    "build": "turbo run build && bun build:go"
   }
 }
