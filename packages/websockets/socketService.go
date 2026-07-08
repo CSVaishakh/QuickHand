@@ -21,41 +21,72 @@ func NewSocketService() *SocketService {
 func(ss *SocketService) Register (
 	userID uuid.UUID,
 	conn *websocket.Conn,
-) {
+) error {
+
+	if userID == uuid.Nil {
+		return ErrEmptyUserId
+	}
+
+	if conn == nil {
+		return ErrEmptyConnectionReference
+	}
+	
 	ss.mu.Lock()
 	defer ss.mu.Unlock()
 
+	if oldConn, exists := ss.sockets[userID]; exists {
+		_ = oldConn.Close()
+	} 
+
 	ss.sockets[userID] = conn
+
+	return nil
 }
 
 func(ss *SocketService) Unregister (
 	userID uuid.UUID,
-){
+) error {
 	ss.mu.Lock()
 	defer ss.mu.Unlock()
 
-	if conn, ok := ss.sockets[userID]; ok {
+	if userID == uuid.Nil {
+		return ErrEmptyUserId
+	}
+
+	conn, ok := ss.sockets[userID]
+
+	if conn == nil {
+		return ErrEmptyConnectionReference
+	}
+	
+	if ok {
 		conn.Close()
 		delete(ss.sockets, userID)
 	}
+
+	return nil
 }
 
 func (ss *SocketService) Send(
-	userId uuid.UUID,
+	userID uuid.UUID,
 	payload any,
-) (waiting bool, err error) {
-	ss.mu.RLock()
-	conn, ok := ss.sockets[userId]
-	ss.mu.RUnlock()
+) (err error) {
+
+	if userID == uuid.Nil {
+		return ErrEmptyUserId
+	}
 	
-	if !ok {
-		return true, nil
+	ss.mu.RLock()
+	conn, _ := ss.sockets[userID]
+	ss.mu.RUnlock()
+	if conn == nil {
+		return ErrEmptyConnectionReference
 	}
 
 	err = conn.WriteJSON(payload)
 	if err != nil {
-		return false, err
+		return err
 	}
 
-	return false, nil
+	return nil
 }
