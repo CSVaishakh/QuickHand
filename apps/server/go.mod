@@ -8,6 +8,7 @@ require (
 	github.com/gofiber/fiber/v3 v3.4.0
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
+	gorm.io/gorm v1.31.1
 )
 
 require (
@@ -20,7 +21,6 @@ require (
 	github.com/savsgio/gotils v0.0.0-20250924091648-bce9a52d7761 // indirect
 	golang.org/x/sync v0.21.0 // indirect
 	gorm.io/driver/postgres v1.6.0 // indirect
-	gorm.io/gorm v1.31.1 // indirect
 )
 
 require (

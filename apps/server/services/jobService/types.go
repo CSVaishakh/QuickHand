@@ -20,3 +20,9 @@ type CreateJobReq struct {
 type CreateJobsRes struct {
 	Job models.Job
 }
+
+type HandymanServiceReq struct{
+	ClientID  	uuid.UUID
+	JobID 		uuid.UUID
+	HandymanID	uuid.UUID
+}
