@@ -4,12 +4,12 @@ import (
 	"github.com/google/uuid"
 )
 
-type RegisterConnectionReq struct {
+type RegisterSocketReq struct {
 	UserID 	uuid.UUID
 	Conn 		*websocket.Conn
 }
 
-type UnregisterConnectionReq struct {
+type UnregisterSocketReq struct {
 	UserID 	uuid.UUID
 	Conn 		*websocket.Conn
 }

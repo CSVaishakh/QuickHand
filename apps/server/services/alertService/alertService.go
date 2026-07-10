@@ -20,7 +20,7 @@ func NewAlertService (
 	}
 }
 
-func (s *AlertService) RegisterUserConnection (req RegisterConnectionReq) error {
+func (s *AlertService) RegisterUserSocket (req RegisterSocketReq) error {
 	
 	err := s.socketService.Register(req.UserID, req.Conn)
 	if err != nil {
@@ -30,7 +30,7 @@ func (s *AlertService) RegisterUserConnection (req RegisterConnectionReq) error 
 	return nil
 }
 
-func (s *AlertService) Unregister(req UnregisterConnectionReq) error {
+func (s *AlertService) UnregisterUserSocket(req UnregisterSocketReq) error {
 
 	err := s.socketService.Unregister(req.UserID)
 	if err != nil {
