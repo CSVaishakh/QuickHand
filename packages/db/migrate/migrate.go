@@ -9,10 +9,10 @@ import (
 )
 
 func runMigrate(args ...string) error {
-	_ = godotenv.Load("src/packages/db/.env.local")
+	_ = godotenv.Load("/packages/db/.env.local")
 
 	cmdArgs := append([]string{
-		"-path", "src/packages/db/migrations",
+		"-path", "packages/db/migrations",
 		"-database", os.Getenv("DATABASE_URL"),
 	}, args...)
 
@@ -40,5 +40,5 @@ func Force(version int) error {
 }
 
 func Create(name string) error {
-	return runMigrate("create", "-ext", "sql", "-dir", "src/packages/db/migrations", "-seq", name)
+	return runMigrate("create", "-ext", "sql", "-dir", "packages/db/migrations", "-seq", name)
 }
