@@ -190,7 +190,7 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 	switch claims.Role {
 		case ClientRole:
 			user, err := s.clientRepo.GetByUserID(
-				session.UserID.String(),
+				session.UserID,
 			)
 	
 			if errors.Is(err, gorm.ErrRecordNotFound) {
@@ -208,7 +208,7 @@ func (s *AuthService) GetSession(req GetSessionReq) (GetSessionRes, error) {
 	
 		case HandymanRole:
 			user, err := s.handymenRepo.GetByUserID(
-				session.UserID.String(),
+				session.UserID,
 			)
 	
 			if errors.Is(err, gorm.ErrRecordNotFound) {

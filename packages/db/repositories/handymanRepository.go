@@ -4,7 +4,8 @@ import (
 	"errors"
 
 	"github.com/CSVaishakh/QuickHand/packages/db/models"
-	
+	"github.com/google/uuid"
+
 	"gorm.io/gorm"
 )
 
@@ -74,7 +75,7 @@ func (repo *HandymenRepository) GetByEmail(
 }
 
 func (repo *HandymenRepository) GetByUserID(
-	UserId string,
+	UserId uuid.UUID,
 ) (*models.Handyman, error) {
 	var user models.Handyman
 
