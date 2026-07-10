@@ -21,17 +21,12 @@ CREATE TYPE urgency_levels AS ENUM (
     'flexible'
 );
 
-CREATE TYPE status_types AS ENUM (
-   'new',
-   'requested',
-   'hired',
-   'rejected'
-);
+
 
 CREATE TABLE jobs (
    job_id            UUID PRIMARY KEY DEFAULT gen_random_uuid(),
    client_id         UUID NOT NULL,
-   status            status_types NOT NULL,
+   status            status_types NOT NULL DEFAULT "new",
    handyman_id       UUID NULL,
    hire_type         hire_types NOT NULL,
    job_type          job_types NOT NULL,

@@ -37,14 +37,14 @@ const (
 const (
 	New				StatusType = "new"
 	Requested		StatusType = "requested"
-	Hired				StatusType = "Hired"
+	Hired				StatusType = "hired"
 	Rejected			StatusType = "rejected"
 )
 
 type Job struct {
 	JobID       	uuid.UUID      `gorm:"column:job_id;type:uuid;default:gen_random_uuid();primaryKey"`
 	ClientID    	uuid.UUID     	`gorm:"column:client_id"`
-	Status 			StatusType		`gorm:"column:status"`
+	Status 			StatusType		`gorm:"column:status;default:new"`
 	HandymanID  	*uuid.UUID     `gorm:"column:handyman_id"`
 	JobType     	JobType        `gorm:"column:job_type"`
 	HireType    	HireType       `gorm:"column:hire_type"`

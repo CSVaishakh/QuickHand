@@ -3,7 +3,6 @@ CREATE TABLE alerts (
    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
    title       VARCHAR(255) NOT NULL,
    message     TEXT NOT NULL,
-   is_read     BOOLEAN NOT NULL DEFAULT FALSE,
 
    PRIMARY KEY (user_id, created_at),
 
