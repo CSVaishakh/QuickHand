@@ -18,50 +18,46 @@ func NewSocketService() *SocketService {
 	}
 }
 
-func(ss *SocketService) Register (
-	userID uuid.UUID,
-	conn *websocket.Conn,
-) error {
+func(ss *SocketService) Register (req RegisterReq) error {
 
-	if userID == uuid.Nil {
+	if req.UserID == uuid.Nil {
 		return ErrEmptyUserId
 	}
 
-	if conn == nil {
+	if req.Conn == nil {
 		return ErrEmptyConnectionReference
 	}
 	
 	ss.mu.Lock()
 	defer ss.mu.Unlock()
 
-	if oldConn, exists := ss.sockets[userID]; exists {
+	if oldConn, exists := ss.sockets[req.UserID]; exists {
 		_ = oldConn.Close()
 	} 
 
-	ss.sockets[userID] = conn
+	ss.sockets[req.UserID] = req.Conn
 
 	return nil
 }
 
-func(ss *SocketService) Unregister (
-	userID uuid.UUID,
-) error {
+func(ss *SocketService) Unregister (req UnregisterReq) error {
 	ss.mu.Lock()
 	defer ss.mu.Unlock()
 
-	if userID == uuid.Nil {
+	if req.UserID == uuid.Nil {
 		return ErrEmptyUserId
 	}
-
-	conn, ok := ss.sockets[userID]
+	
+	conn, ok := ss.sockets[req.UserID]
 
 	if conn == nil {
+		delete(ss.sockets, req.UserID)
 		return ErrEmptyConnectionReference
 	}
 	
 	if ok {
 		conn.Close()
-		delete(ss.sockets, userID)
+		delete(ss.sockets, req.UserID)
 	}
 
 	return nil

@@ -4,12 +4,14 @@ import (
 	"os"
 
 	as "github.com/CSVaishakh/QuickHand/apps/server/services/addressService"
+	alert "github.com/CSVaishakh/QuickHand/apps/server/services/alertService"
+	job "github.com/CSVaishakh/QuickHand/apps/server/services/jobService"
 
 	ctrs "github.com/CSVaishakh/QuickHand/apps/server/controllers"
 	
 	auth "github.com/CSVaishakh/QuickHand/packages/auth"
 	DB "github.com/CSVaishakh/QuickHand/packages/db"
-	// ws "github.com/CSVaishakh/QuickHand/packages/websockets"
+	ws "github.com/CSVaishakh/QuickHand/packages/websockets"
 	
 	repositories "github.com/CSVaishakh/QuickHand/packages/db/repositories"
 
@@ -33,6 +35,9 @@ func main() {
 	clientRepo 		:= repositories.NewClientRepository(db)
 	sessionRepo 	:= repositories.NewSessionRepository(db)
 	addressRepo 	:= repositories.NewAddressRepository(db)
+	jobRepo         := repositories.NewJobRepository(db)
+	serviceReqRepo := repositories.NewServiceRequestRepository(db)
+	alertRepo       := repositories.NewAlertRepository(db)
 
 	// Services
 	jwtService := auth.NewJWTService(
@@ -52,7 +57,20 @@ func main() {
 		addressRepo,
 	)
 
-	// socketService := ws.NewSocketService()
+	socketService := ws.NewSocketService()
+
+	alertService := alert.NewAlertService(
+		alertRepo,
+		socketService,
+	)
+
+	jobService := job.NewJobService(
+		jobRepo,
+		handymenRepo,
+		serviceReqRepo,
+		db,
+	)
+
 	// Fiber app
 	app := fiber.New()
 
@@ -67,10 +85,26 @@ func main() {
 		addressService,
 		authService,
 	)
+
+	socketController := ctrs.NewSocketController(
+		app,
+		socketService,
+		alertService,
+		authService,
+	)
+
+	jobController := ctrs.NewJobController(
+		app,
+		jobService,
+		authService,
+		alertService,
+	)
 	
-	//Route Regsitrations
+	//Route Registrations
 	authController.RegisterRoutes()
 	addressController.RegisterRoutes()
+	socketController.RegisterRoutes()
+	jobController.RegisterRoutes()
 
 	// Health check
 	app.Get("/", func(c fiber.Ctx) error {
