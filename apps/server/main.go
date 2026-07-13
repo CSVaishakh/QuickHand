@@ -62,6 +62,7 @@ func main() {
 	alertService := alert.NewAlertService(
 		alertRepo,
 		socketService,
+		db,
 	)
 
 	jobService := job.NewJobService(
